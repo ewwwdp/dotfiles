@@ -14,3 +14,9 @@ export NVM_DIR="$HOME/.nvm"
 
 # rust
 . "$HOME/.cargo/env"
+
+# JB Toolbox
+export PATH="$PATH:/home/dpper/.local/share/JetBrains/Toolbox/scripts"
+
+# Spicetify
+export PATH=$PATH:/home/dpper/.spicetify
