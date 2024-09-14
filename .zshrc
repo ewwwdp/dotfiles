@@ -16,6 +16,17 @@ rust
 zsh-syntax-highlighting
 )
 
+#fix to remove zcoredump from $HOME direcrory
+ZSH_CACHE="$HOME/.cache/zsh"
+if [[ ! -d $ZSH_CACHE ]]; then
+  mkdir -p $ZSH_CACHE
+fi
+ZSH_COMPDUMP="$ZSH_CACHE/.zcompdump-${HOST}-${ZSH_VERSION}"
+HISTFILE="$ZSH_CACHE/zsh_history"
+
 source $ZSH/oh-my-zsh.sh
 
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#6c6c6c"
+
+# bun completions
+[ -s "/home/dpper/.bun/_bun" ] && source "/home/dpper/.bun/_bun"
