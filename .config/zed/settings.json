@@ -17,5 +17,8 @@
   "inlay_hints": {
     "enabled": true
   },
-  "restore_on_startup": "last_workspace"
+  "restore_on_startup": "last_workspace",
+  "tabs": {
+    "file_icons": true
+  }
 }
