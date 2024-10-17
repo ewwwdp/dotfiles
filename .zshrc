@@ -9,7 +9,6 @@ git
 docker
 dotnet
 dnf
-bun
 gh
 zsh-autosuggestions
 rust
