@@ -1,7 +1,3 @@
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH=$BUN_INSTALL/bin:$PATH
-
 # dotnet
 export DOTNET_ROOT=$HOME/.dotnet
 export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
@@ -14,9 +10,3 @@ export NVM_DIR="$HOME/.nvm"
 
 # rust
 . "$HOME/.cargo/env"
-
-# JB Toolbox
-export PATH="$PATH:/home/dpper/.local/share/JetBrains/Toolbox/scripts"
-
-# Spicetify
-export PATH=$PATH:/home/dpper/.spicetify
