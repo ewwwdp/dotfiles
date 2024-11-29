@@ -4,7 +4,7 @@
   "ui_font_size": 15,
   "buffer_font_size": 14,
   "buffer_font_family": "JetBrains Mono",
-  "theme": "One Dark Pro",
+  "theme": "VScode Dark Plus",
   "terminal": {
     "font_family": "JetBrainsMono Nerd Font"
   },

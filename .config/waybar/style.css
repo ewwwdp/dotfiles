@@ -1,0 +1,107 @@
+* {
+    /* `otf-font-awesome` and SpaceMono Nerd Font are required to be installed for icons */
+    font-family: "Fira Sans Semibold", FontAwesome, Roboto, Helvetica, Arial,
+        sans-serif;
+    font-size: 12px;
+    transition: background-color 0.3s ease-out;
+}
+
+window#waybar {
+    background: rgba(26, 27, 38, 0.75);
+    color: #c0caf5;
+    font-family:
+        JetBrainsMono Nerd Font,
+        feather;
+    transition: background-color 0.5s;
+}
+
+.modules-left,
+.modules-center,
+.modules-right {
+    background: rgba(0, 0, 8, 0.7);
+    padding: 0 5px;
+}
+.modules-left {
+    padding: 0;
+    border-radius: 0px 12px 12px 0px;
+}
+.modules-center {
+    padding: 0 10px;
+    border-radius: 12px;
+}
+.modules-right {
+    padding: 0;
+    border-radius: 12px 0px 0px 12px;
+}
+
+
+#privacy,
+#clock,
+#battery,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#backlight,
+#network,
+#pulseaudio,
+#wireplumber,
+#custom-media,
+#tray,
+#mode,
+#idle_inhibitor,
+#scratchpad,
+#bluetooth,
+#power-profiles-daemon,
+#language,
+#custom-power,
+#custom-notification,
+#mpd {
+    padding: 0 10px;
+    border-radius: 12px;
+}
+
+#privacy:hover,
+#custom-power:hover,
+#clock:hover,
+#battery:hover,
+#cpu:hover,
+#memory:hover,
+#disk:hover,
+#temperature:hover,
+#backlight:hover,
+#network:hover,
+#pulseaudio:hover,
+#wireplumber:hover,
+#custom-media:hover,
+#tray:hover,
+#mode:hover,
+#idle_inhibitor:hover,
+#scratchpad:hover,
+#power-profiles-daemon:hover,
+#language:hover,
+#custom-notification:hover,
+#mpd:hover {
+    background: rgba(26, 27, 38, 0.9);
+}
+#workspaces button {
+    background: transparent;
+    font-family:
+        JetBrainsMono Nerd Font,
+        feather;
+    font-weight: 900;
+    font-size: 13pt;
+    color: #c0caf5;
+    border: none;
+    border-radius: 12px;
+}
+
+#workspaces button.active {
+    background: #13131d;
+}
+
+#workspaces button:hover {
+    background: #11111b;
+    color: #cdd6f4;
+    box-shadow: none;
+}

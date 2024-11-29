@@ -1,0 +1,147 @@
+{
+  "hyprland/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": true,
+    "warp-on-scroll": false,
+    "format": "{name}",
+    "format-icons": {
+      "urgent": "",
+      "active": "",
+      "default": ""
+    }
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "",
+      "deactivated": ""
+    }
+  },
+  "tray": {
+    "spacing": 4,
+    "icon-size": 15
+  },
+  "pulseaudio": {
+    "tooltip-format": "{volume}% | {desc}",
+    "format": "{icon}  {format_source}",
+    "format-bluetooth": "{icon}  {format_source}",
+    "format-bluetooth-muted": "󰟎 {icon}  {format_source}",
+    "format-muted": "󰟎  {format_source}",
+    "format-source": "",
+    "format-source-muted": "󰍭",
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "󰋎",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": [
+        "",
+        "",
+        ""
+      ]
+    },
+    "on-click-right": "~/.config/waybar/scripts/toggle-mute-mic.sh",
+    "on-click": "~/.config/waybar/scripts/toggle-mute-sound.sh",
+    "on-click-middle": "pavucontrol"
+  },
+  "network": {
+    "format-wifi": " ",
+    "format-ethernet": " ",
+    "tooltip-format": "{ifname} via {gwaddr} 󰱓",
+    "format-linked": "󰛵  {ifname} (No IP)",
+    "format": "  Disconnected",
+    "format-disconnected": "  Disconnected"
+  },
+  "hyprland/language": {
+    "format": "{}",
+    "format-en": "en",
+    "format-ru": "ru",
+    "format-uk": "uk"
+  },
+  "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{icon}  {capacity}%",
+    "format-full": "",
+    "format-charging": "󱐋 {capacity}%",
+    "format-plugged": "",
+    "format-alt": "{time}  {icon}",
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "clock": {
+    "format": "{:%H:%M}",
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    "format-alt": "{:%d-%m-%Y}"
+  },
+  "bluetooth": {
+    "format": " {status}",
+    "format-disabled": "",
+    "format-connected": "󰂱 ",
+    "tooltip-format": "{controller_alias}\t{controller_address}",
+    "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}"
+  },
+  "custom/power": {
+    "format": "󰤆",
+    "tooltip": false,
+    "on-click": "wlogout"
+  },
+  "power-profiles-daemon": {
+    "format": "{icon}",
+    "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+    "tooltip": true,
+    "format-icons": {
+      "default": "",
+      "performance": "",
+      "balanced": "",
+      "power-saver": ""
+    }
+  },
+  "privacy": {
+    "icon-spacing": 4,
+    "icon-size": 12,
+    "transition-duration": 250,
+    "modules": [
+      {
+        "type": "screenshare",
+        "tooltip": true,
+        "tooltip-icon-size": 24
+      },
+      {
+        "type": "audio-in",
+        "tooltip": true,
+        "tooltip-icon-size": 24
+      }
+    ]
+  },
+  "custom/notification": {
+    "tooltip": false,
+    "format": "{icon}",
+    "format-icons": {
+      "notification": "<span foreground='#c0caf5'><sup></sup></span>",
+      "none": "",
+      "dnd-notification": "<span foreground='#c0caf5'><sup></sup></span>",
+      "dnd-none": "",
+      "inhibited-notification": "<span foreground='#c0caf5'><sup></sup></span>",
+      "inhibited-none": "",
+      "dnd-inhibited-notification": "<span foreground='#c0caf5'><sup></sup></span>",
+      "dnd-inhibited-none": ""
+    },
+    "return-type": "json",
+    "exec-if": "which swaync-client",
+    "exec": "swaync-client -swb",
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "escape": true
+  }
+}
