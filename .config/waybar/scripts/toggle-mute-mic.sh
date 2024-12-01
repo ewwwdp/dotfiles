@@ -1,7 +1,1 @@
-#!/bin/bash
-
-# Specify the source name
-SOURCE="alsa_input.pci-0000_00_1f.3.analog-stereo"
-
-# Toggle mute
-pactl set-source-mute "$SOURCE" $((1 - $(pactl list sources | grep -A 15 "$SOURCE" | grep "Mute:" | grep -c "yes")))
+SOURCE="@DEFAULT_SOURCE@"; MUTE_STATUS=$(pactl get-source-mute "$SOURCE" | awk '{print $2}'); [ "$MUTE_STATUS" == "yes" ] && pactl set-source-mute "$SOURCE" 0 || { [ "$MUTE_STATUS" == "no" ] && pactl set-source-mute "$SOURCE" 1 || { exit 1; }; }
