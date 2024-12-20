@@ -2,9 +2,9 @@
   "autosave": "on_focus_change",
   "base_keymap": "VSCode",
   "ui_font_size": 15,
-  "buffer_font_size": 14,
-  "buffer_font_family": "JetBrains Mono",
-  "theme": "VScode Dark Plus",
+  "buffer_font_size": 13,
+  "buffer_font_family": "JetBrainsMono Nerd Font",
+  "theme": "Dark Horizon",
   "terminal": {
     "font_family": "JetBrainsMono Nerd Font"
   },
