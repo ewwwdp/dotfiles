@@ -1,7 +1,7 @@
 [general]
 live_config_reload = true
 import = [
-    "~/.config/alacritty/themes/deep_space.toml"
+    "~/.config/alacritty/themes/horizon_dark.toml"
 ]
 
 [env]
