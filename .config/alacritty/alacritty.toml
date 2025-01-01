@@ -8,7 +8,7 @@ import = [
 TERM = "xterm-256color"
 
 [window]
-decorations = "Full"
+decorations = "None"
 dynamic_padding = true
 opacity = 0.9
 startup_mode = "Windowed"
