@@ -80,8 +80,15 @@
   },
   "clock": {
     "format": "{:%H:%M}",
-    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-    "format-alt": "{:%d-%m-%Y}"
+    "tooltip-format": "<tt>{calendar}</tt>",
+    "format-alt": "{:%d-%m-%Y}",
+    "locale": "en_DK.UTF-8",
+    "calendar": {
+      "mode": "month",
+      "format": {
+        "today": "<b><u>{}</u></b>"
+      }
+    }
   },
   "bluetooth": {
     "format": " {status}",
