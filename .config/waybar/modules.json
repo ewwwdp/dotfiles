@@ -36,11 +36,7 @@
       "phone": "",
       "portable": "",
       "car": "",
-      "default": [
-        "",
-        "",
-        ""
-      ]
+      "default": ["", "", ""]
     },
     "on-click-right": "~/.config/waybar/scripts/toggle-mute-mic.sh",
     "on-click": "~/.config/waybar/scripts/toggle-mute-sound.sh",
@@ -70,13 +66,7 @@
     "format-charging": "󱐋 {capacity}%",
     "format-plugged": "",
     "format-alt": "{time}  {icon}",
-    "format-icons": [
-      "",
-      "",
-      "",
-      "",
-      ""
-    ]
+    "format-icons": ["", "", "", "", ""]
   },
   "clock": {
     "format": "{:%H:%M}",

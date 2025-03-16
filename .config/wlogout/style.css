@@ -7,44 +7,64 @@
 
 /** ********** Main Window ********** **/
 window {
-	background-color: #13141C
+    background-color: #13141c;
 }
 
 /** ********** Buttons ********** **/
 button {
-	background-color: #06060D;
-    color: #FFFFFF;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: 35%;
+    background-color: #06060d;
+    color: #ffffff;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 35%;
 }
 
-button:focus, button:active, button:hover {
-	background-color: #181923;
-	outline-style: none;
+button:focus,
+button:active,
+button:hover {
+    background-color: #181923;
+    outline-style: none;
 }
 
 /** ********** Icons ********** **/
 #lock {
-    background-image: image(url("icons/lock.png"), url("/usr/share/wlogout/icons/lock.png"));
+    background-image: image(
+        url("icons/lock.png"),
+        url("/usr/share/wlogout/icons/lock.png")
+    );
 }
 
 #logout {
-    background-image: image(url("icons/logout.png"), url("/usr/share/wlogout/icons/logout.png"));
+    background-image: image(
+        url("icons/logout.png"),
+        url("/usr/share/wlogout/icons/logout.png")
+    );
 }
 
 #suspend {
-    background-image: image(url("icons/suspend.png"), url("/usr/share/wlogout/icons/suspend.png"));
+    background-image: image(
+        url("icons/suspend.png"),
+        url("/usr/share/wlogout/icons/suspend.png")
+    );
 }
 
 #hibernate {
-    background-image: image(url("icons/hibernate.png"), url("/usr/share/wlogout/icons/hibernate.png"));
+    background-image: image(
+        url("icons/hibernate.png"),
+        url("/usr/share/wlogout/icons/hibernate.png")
+    );
 }
 
 #shutdown {
-    background-image: image(url("icons/shutdown.png"), url("/usr/share/wlogout/icons/shutdown.png"));
+    background-image: image(
+        url("icons/shutdown.png"),
+        url("/usr/share/wlogout/icons/shutdown.png")
+    );
 }
 
 #reboot {
-    background-image: image(url("icons/reboot.png"), url("/usr/share/wlogout/icons/reboot.png"));
+    background-image: image(
+        url("icons/reboot.png"),
+        url("/usr/share/wlogout/icons/reboot.png")
+    );
 }
