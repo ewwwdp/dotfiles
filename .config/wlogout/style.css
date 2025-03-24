@@ -1,16 +1,13 @@
-/** ********** Fonts ********** **/
 * {
     font-family: "JetBrains Mono", "Iosevka Nerd Font", archcraft, sans-serif;
     font-size: 14px;
     font-weight: bold;
 }
 
-/** ********** Main Window ********** **/
 window {
     background-color: #13141c;
 }
 
-/** ********** Buttons ********** **/
 button {
     background-color: #06060d;
     color: #ffffff;
@@ -26,7 +23,6 @@ button:hover {
     outline-style: none;
 }
 
-/** ********** Icons ********** **/
 #lock {
     background-image: image(
         url("icons/lock.png"),
