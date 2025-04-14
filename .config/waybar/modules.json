@@ -13,8 +13,8 @@
   "idle_inhibitor": {
     "format": "{icon}",
     "format-icons": {
-      "activated": "",
-      "deactivated": ""
+      "activated": " ",
+      "deactivated": " "
     }
   },
   "tray": {
@@ -44,7 +44,7 @@
   },
   "network": {
     "format-wifi": " ",
-    "format-ethernet": " ",
+    "format-ethernet": "\uef09 ",
     "tooltip-format": "{ifname} via {gwaddr} 󰱓",
     "format-linked": "󰛵  {ifname} (No IP)",
     "format": "  Disconnected",
@@ -100,7 +100,7 @@
     "format-icons": {
       "default": "",
       "performance": "",
-      "balanced": "",
+      "balanced": " ",
       "power-saver": ""
     }
   },

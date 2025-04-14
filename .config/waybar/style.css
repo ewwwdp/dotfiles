@@ -1,6 +1,6 @@
 * {
-    font-family: "Fira Sans Semibold", FontAwesome, Roboto, Helvetica, Arial,
-        sans-serif;
+    font-family: "Fira Sans Semibold", "JetBrainsMono Nerd Font", FontAwesome,
+        Roboto, Helvetica, Arial, sans-serif;
     font-size: 12px;
     transition: background-color 0.3s ease-out;
 }
@@ -8,9 +8,6 @@
 window#waybar {
     background: #060709;
     color: #c0caf5;
-    font-family:
-        JetBrainsMono Nerd Font,
-        feather;
     transition: background-color 0.5s;
 }
 
