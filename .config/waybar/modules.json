@@ -3,11 +3,10 @@
     "disable-scroll": true,
     "all-outputs": true,
     "warp-on-scroll": false,
-    "format": "{name}",
+    "format": "{icon}",
     "format-icons": {
-      "urgent": "",
-      "active": "",
-      "default": ""
+      "active": "\uf111",
+      "default": "\uf4aa"
     }
   },
   "idle_inhibitor": {
