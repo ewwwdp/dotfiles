@@ -3,7 +3,11 @@
     "disable-scroll": true,
     "all-outputs": true,
     "warp-on-scroll": false,
-    "format": "{name}"
+    "format": "{icon}",
+    "format-icons": {
+      "active": "\uf111",
+      "default": "\uf4aa"
+    }
   },
   "idle_inhibitor": {
     "format": "{icon}",
@@ -14,7 +18,7 @@
   },
   "tray": {
     "spacing": 4,
-    "icon-size": 15
+    "icon-size": 14
   },
   "pulseaudio": {
     "tooltip-format": "{volume}% | {desc}",
@@ -101,7 +105,7 @@
   },
   "privacy": {
     "icon-spacing": 4,
-    "icon-size": 12,
+    "icon-size": 14,
     "transition-duration": 250,
     "modules": [
       {
