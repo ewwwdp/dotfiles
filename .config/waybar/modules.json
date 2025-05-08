@@ -7,6 +7,9 @@
     "format-icons": {
       "active": "\uf111",
       "default": "\uf4aa"
+    },
+    "persistent-workspaces": {
+      "*": [1, 2, 3, 4, 5]
     }
   },
   "idle_inhibitor": {
