@@ -73,7 +73,7 @@
   "clock": {
     "format": "{:%H:%M}",
     "tooltip-format": "<tt>{calendar}</tt>",
-    "format-alt": "{:%d-%m-%Y}",
+    "format-alt": "{:%R | 󰃭 %d·%m·%y}",
     "locale": "en_DK.UTF-8",
     "calendar": {
       "mode": "month",
