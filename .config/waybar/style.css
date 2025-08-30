@@ -1,6 +1,7 @@
 * {
-    font-family: "Fira Sans Semibold", "JetBrainsMono Nerd Font", FontAwesome,
-        Roboto, Helvetica, Arial, sans-serif;
+    font-family:
+        "Fira Sans Semibold", "JetBrainsMono Nerd Font", FontAwesome, Roboto,
+        Helvetica, Arial, sans-serif;
     font-size: 12px;
     transition: background-color 0.3s ease-out;
 }
@@ -76,6 +77,14 @@ window#waybar {
 #mpd:hover {
     background: rgba(26, 27, 38, 0.9);
 }
+#workspaces button.empty {
+    background: transparent;
+    color: #5c6370;
+    border: none;
+    padding: 0 7px;
+    border-radius: 12px;
+}
+
 #workspaces button {
     background: transparent;
     color: #c0caf5;
@@ -86,6 +95,10 @@ window#waybar {
 
 #workspaces button.active {
     background: #13131d;
+    color: #c0caf5;
+    border: none;
+    padding: 0 7px;
+    border-radius: 12px;
 }
 
 #workspaces button:hover {

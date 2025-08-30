@@ -7,6 +7,7 @@
   "edit_predictions": {
     "mode": "subtle"
   },
+  "disable_ai": true,
   "features": {
     "edit_prediction_provider": "zed"
   },
@@ -15,7 +16,7 @@
   "ui_font_size": 15,
   "buffer_font_size": 13,
   "buffer_font_family": "JetBrainsMono Nerd Font",
-  "theme": "Dark Horizon",
+  "theme": "Darker Horizon Bold",
   "terminal": {
     "font_family": "JetBrainsMono Nerd Font"
   },
