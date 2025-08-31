@@ -1,1 +1,0 @@
-SOURCE="@DEFAULT_SOURCE@"; MUTE_STATUS=$(pactl get-source-mute "$SOURCE" | awk '{print $2}'); [ "$MUTE_STATUS" == "yes" ] && pactl set-source-mute "$SOURCE" 0 || { [ "$MUTE_STATUS" == "no" ] && pactl set-source-mute "$SOURCE" 1 || { exit 1; }; }

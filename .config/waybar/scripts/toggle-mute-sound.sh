@@ -1,1 +1,0 @@
-SOURCE="@DEFAULT_SINK@"; MUTE_STATUS=$(pactl get-sink-mute "$SOURCE" | awk '{print $2}'); [ "$MUTE_STATUS" == "yes" ] && pactl set-sink-mute "$SOURCE" 0 || { [ "$MUTE_STATUS" == "no" ] && pactl set-sink-mute "$SOURCE" 1 || { exit 1; }; }
