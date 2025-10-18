@@ -25,16 +25,64 @@ Item {
         }
         RowLayout {
             id: rowLayout
-
             anchors.centerIn: parent
             spacing: 5
 
-            Repeater {
-                model: SystemTray.items
+            ListModel {
+                id: sortedModel
+            }
 
+            Component.onCompleted: {
+                sortItems();
+            }
+
+            Connections {
+                target: SystemTray.items
+
+                function onObjectRemovedPost() {
+                    rowLayout.sortItems();
+                }
+                function onObjectInsertedPost() {
+                    rowLayout.sortItems();
+                }
+            }
+
+            function sortItems() {
+                sortedModel.clear();
+                let tempArray = [];
+                if (SystemTray.items && SystemTray.items.values) {
+                    const values = SystemTray.items.values;
+                    for (let i = 0; i < values.length; i++) {
+                        const item = values[i];
+                        if (item) {
+                            tempArray.push(item);
+                        }
+                    }
+                }
+
+                tempArray.sort(function (a, b) {
+                    const aId = (a && a.id) ? String(a.id) : "";
+                    const bId = (b && b.id) ? String(b.id) : "";
+                    const idCompare = aId.localeCompare(bId);
+                    if (idCompare !== 0) {
+                        return idCompare;
+                    }
+                    const aName = (a && a.tooltipTitle) ? String(a.tooltipTitle) : "";
+                    const bName = (b && b.tooltipTitle) ? String(b.tooltipTitle) : "";
+                    return aName.localeCompare(bName);
+                });
+
+                for (let i = 0; i < tempArray.length; i++) {
+                    sortedModel.append({
+                        "itemObject": tempArray[i]
+                    });
+                }
+            }
+
+            Repeater {
+                model: sortedModel
                 SysTrayItem {
                     required property SystemTrayItem modelData
-
                     bar: root.bar
                     item: modelData
                 }
