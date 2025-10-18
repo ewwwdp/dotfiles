@@ -18,6 +18,8 @@ Item {
             id: mouseArea
             hoverEnabled: true
             anchors.fill: parent
+            onEntered: balTooltip.tooltipVisible = true
+            onExited: balTooltip.tooltipVisible = false
         }
 
         StyledText {
@@ -33,5 +35,13 @@ Item {
         Behavior on color {
             animation: Appearence.animation.elementMoveFast.colorAnimation.createObject(this)
         }
+    }
+    CustomTooltip {
+        id: balTooltip
+        textFont: "monospace"
+        text: DateTime.getCalendar()
+        tooltipVisible: false
+        targetItem: root
+        positionAbove: false
     }
 }

@@ -7,6 +7,7 @@ Window {
     property bool tooltipVisible: false
     property Item targetItem: null
     property int delay: 500
+    property string textFont: Appearence.font.readFont
 
     property bool positionAbove: true
 
@@ -95,11 +96,9 @@ Window {
         id: tooltipText
         text: tooltipWindow.text
         color: "white"
-        font.family: Appearence.font.readFont
+        font.family: tooltipWindow.textFont
         font.pixelSize: 11
         anchors.centerIn: parent
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
         wrapMode: Text.Wrap
         padding: 8
         z: 2
