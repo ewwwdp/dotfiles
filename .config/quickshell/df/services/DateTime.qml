@@ -9,7 +9,6 @@ Singleton {
     id: root
     property string time: Qt.locale().toString(clock.date, "hh:mm")
     property var dateT: clock.date
-
     property string uptime: "0h, 0m"
 
     SystemClock {
@@ -17,36 +16,29 @@ Singleton {
         precision: SystemClock.Minutes
     }
 
-    FileView {
-        id: fileUptime
-
-        path: "/proc/uptime"
+    Process {
+        id: uptimeProcess
+        command: ["cat", "/proc/uptime"]
+        running: GlobalStates.sidebarOpen
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const uptimeSeconds = Number(this.text.split(" ")[0] ?? 0);
+                root.uptime = root.formatUptime(uptimeSeconds);
+            }
+        }
     }
 
-    Timer {
-        interval: 10
-        running: GlobalStates.sidebarOpen
-        repeat: true
-        onTriggered: {
-            fileUptime.reload();
-            const textUptime = fileUptime.text();
-            const uptimeSeconds = Number(textUptime.split(" ")[0] ?? 0);
-
-            // Convert seconds to days, hours, and minutes
-            const days = Math.floor(uptimeSeconds / 86400);
-            const hours = Math.floor((uptimeSeconds % 86400) / 3600);
-            const minutes = Math.floor((uptimeSeconds % 3600) / 60);
-
-            // Build the formatted uptime string
-            let formatted = "";
-            if (days > 0)
-                formatted += `${days}d`;
-            if (hours > 0)
-                formatted += `${formatted ? ", " : ""}${hours}h`;
-            if (minutes > 0 || !formatted)
-                formatted += `${formatted ? ", " : ""}${minutes}m`;
-            root.uptime = formatted;
-            interval = 3000;
-        }
+    function formatUptime(uptimeSeconds) {
+        const days = Math.floor(uptimeSeconds / 86400);
+        const hours = Math.floor((uptimeSeconds % 86400) / 3600);
+        const minutes = Math.floor((uptimeSeconds % 3600) / 60);
+        const parts = [];
+        if (days > 0)
+            parts.push(`${days}d`);
+        if (hours > 0)
+            parts.push(`${hours}h`);
+        if (minutes > 0 || parts.length === 0)
+            parts.push(`${minutes}m`);
+        return parts.join(", ");
     }
 }
