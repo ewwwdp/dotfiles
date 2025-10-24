@@ -7,17 +7,11 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Notifications
 
-/**
- * Provides extra features not in Quickshell.Services.Notifications:
- *  - Persistent storage
- *  - Popup notifications, with timeout
- *  - Notification groups by app
- */
 Singleton {
     id: root
     component Notif: QtObject {
         id: wrapper
-        required property int notificationId // Could just be `id` but it conflicts with the default prop in QtObject
+        required property int notificationId
         property Notification notification
         property list<NotificationAction> actions: notification?.actions ?? []
         property bool popup: false
@@ -82,8 +76,6 @@ Singleton {
         return JSON.stringify(list.map(notif => notifToJSON(notif)), null, 2);
     }
 
-    // Quickshell's notification IDs starts at 1 on each run, while saved notifications
-    // can already contain higher IDs. This is for avoiding id collisions
     property int idOffset
     signal initDone
     signal notify(notification: var)
@@ -112,7 +104,6 @@ Singleton {
             });
             root.list = [...root.list, newNotifObject];
 
-            // Popup
             if (!root.popupInhibited) {
                 newNotifObject.popup = true;
                 if (notification.expireTimeout != 0) {
@@ -124,8 +115,7 @@ Singleton {
             }
 
             root.notify(newNotifObject);
-            // console.log(notifToString(newNotifObject));
-            notifFileView.setText(stringifyList(root.list));
+            notifFileView.setText(root.stringifyList(root.list));
         }
     }
 
@@ -192,7 +182,7 @@ Singleton {
 
     FileView {
         id: notifFileView
-        path: Qt.resolvedUrl(filePath)
+        path: Qt.resolvedUrl(root.filePath)
         onLoaded: {
             const fileContents = notifFileView.text();
             root.list = JSON.parse(fileContents).map(notif => {
@@ -222,7 +212,7 @@ Singleton {
             if (error == FileViewError.FileNotFound) {
                 console.info("[Notifications] File not found, creating new file.");
                 root.list = [];
-                notifFileView.setText(stringifyList(root.list));
+                notifFileView.setText(root.stringifyList(root.list));
             } else {
                 console.error("[Notifications] Error loading file: " + error);
             }
