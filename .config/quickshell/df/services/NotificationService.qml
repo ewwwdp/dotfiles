@@ -61,7 +61,7 @@ Singleton {
     property bool silent: false
     property var filePath: Directories.notificationsPath
     property list<Notif> list: []
-    property var popupList: list.filter(notif => notif.popup)
+    property var popupList: list.filter(notif => notif.popup).slice(-3).reverse()
     property bool popupInhibited: GlobalStates.sidebarOpen
     Component {
         id: notifComponent

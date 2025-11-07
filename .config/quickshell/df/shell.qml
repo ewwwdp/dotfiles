@@ -6,6 +6,8 @@ import qs.modules.bar
 import qs.modules.overlay
 import qs.modules.sidebar
 import qs.modules.session
+import qs.modules.screenshot as Screenshot
+//import qs.modules.lock
 import qs.modules.notificationPopup
 
 import QtQuick
@@ -21,11 +23,6 @@ ShellRoot {
         active: true
         component: SoundOverlay {}
     }
-    // LazyLoader {
-    //     active: false
-    //     component: ReloadPopup {}
-    // }
-
     LazyLoader {
         active: true
         component: Sidebar {}
@@ -38,4 +35,13 @@ ShellRoot {
         active: true
         component: NotificationPopup {}
     }
+    LazyLoader {
+        active: true
+        component: Screenshot.Controller {}
+    }
+
+    // LazyLoader {
+    //     active: false
+    //     component: LockScreen {}
+    // }
 }

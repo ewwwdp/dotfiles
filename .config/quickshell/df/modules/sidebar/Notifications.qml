@@ -126,7 +126,7 @@ Rectangle {
             clip: true
             model: NotificationService.list.slice().reverse()
 
-            delegate: Item {
+            delegate: Notification {
                 width: notifList.width
                 height: 90
                 Notification {
@@ -148,11 +148,24 @@ Rectangle {
             visible: NotificationService.list.length === 0
             Layout.fillWidth: true
             Layout.fillHeight: true
-            StyledText {
-                text: "There is no new notifications here..."
-                font.family: Appearence.font.readFont
-                color: Appearence.colors.accentColor
+
+            ColumnLayout {
                 anchors.centerIn: parent
+                spacing: 12
+
+                StyledText {
+                    text: "🔔"
+                    font.pixelSize: 48
+                    Layout.alignment: Qt.AlignHCenter
+                }
+
+                StyledText {
+                    text: "No new notifications"
+                    font.family: Appearence.font.readFont
+                    color: "#6c7086"
+                    font.pixelSize: 14
+                    Layout.alignment: Qt.AlignHCenter
+                }
             }
         }
     }

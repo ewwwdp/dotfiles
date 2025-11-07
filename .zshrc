@@ -6,7 +6,7 @@ ZSH_THEME="robbyrussell"
 
 plugins=(
 git
-docker
+podman
 dotnet
 dnf
 gh
