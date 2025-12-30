@@ -43,7 +43,7 @@ Item {
         radius: 10
         WheelHandler {
             onWheel: event => {
-                const direction = event.angleDelta.y > 0 ? "r-1" : event.angleDelta.y < 0 ? "r+1" : null;
+                const direction = event.angleDelta.y > 0 ? "r+1" : event.angleDelta.y < 0 ? "r-1" : null;
                 if (direction)
                     Hyprland.dispatch(`workspace ${direction}`);
                 event.accepted = true;
