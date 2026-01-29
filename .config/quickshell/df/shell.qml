@@ -6,7 +6,6 @@ import qs.modules.bar
 import qs.modules.overlay
 import qs.modules.sidebar
 import qs.modules.session
-import qs.modules.screenshot as Screenshot
 //import qs.modules.lock
 import qs.modules.notificationPopup
 
@@ -25,6 +24,10 @@ ShellRoot {
     }
     LazyLoader {
         active: true
+        component: MonitorsOverlay {}
+    }
+    LazyLoader {
+        active: true
         component: Sidebar {}
     }
     LazyLoader {
@@ -35,10 +38,10 @@ ShellRoot {
         active: true
         component: NotificationPopup {}
     }
-    LazyLoader {
-        active: true
-        component: Screenshot.Controller {}
-    }
+    // LazyLoader {
+    //     active: true
+    //     component: Screenshot.Controller {}
+    // }
 
     // LazyLoader {
     //     active: false

@@ -7,5 +7,5 @@ Text {
     font {
         hintingPreference: Font.PreferFullHinting
     }
-    color: Appearance?.colors.accentColor ?? "black"
+    color: Appearence?.colors.accentColor ?? "black"
 }
