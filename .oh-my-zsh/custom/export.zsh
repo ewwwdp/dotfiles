@@ -12,3 +12,10 @@ if [ -d "$FNM_PATH" ]; then
   export PATH="$HOME/.local/share/fnm:$PATH"
   eval "`fnm env`"
 fi
+
+# bun completions
+[ -s "/home/dpper/.bun/_bun" ] && source "/home/dpper/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
