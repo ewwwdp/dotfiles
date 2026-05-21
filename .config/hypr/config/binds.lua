@@ -79,10 +79,10 @@ hl.bind(mainMod .. " + SHIFT + up", hl.dsp.window.swap({ direction = "up" }))
 hl.bind(mainMod .. " + SHIFT + down", hl.dsp.window.swap({ direction = "down" }))
 
 -- Resize active window
-hl.bind(mainMod .. " + CTRL + left", hl.dsp.window.resize({ x = -60, y = 0 }))
-hl.bind(mainMod .. " + CTRL + right", hl.dsp.window.resize({ x = 60, y = 0 }))
-hl.bind(mainMod .. " + CTRL + up", hl.dsp.window.resize({ x = 0, y = -60 }))
-hl.bind(mainMod .. " + CTRL + down", hl.dsp.window.resize({ x = 0, y = 60 }))
+hl.bind(mainMod .. " + CTRL + left", hl.dsp.window.resize({ relative = true, x = -30, y = 0 }))
+hl.bind(mainMod .. " + CTRL + right", hl.dsp.window.resize({ relative = true, x = 30, y = 0 }))
+hl.bind(mainMod .. " + CTRL + up", hl.dsp.window.resize({ relative = true, x = 0, y = -30 }))
+hl.bind(mainMod .. " + CTRL + down", hl.dsp.window.resize({ relative = true, x = 0, y = 30 }))
 
 -- Screenshots
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd(screenshot .. " -m window --clipboard-only"))
