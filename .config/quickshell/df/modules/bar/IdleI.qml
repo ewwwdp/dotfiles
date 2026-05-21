@@ -1,6 +1,7 @@
 import qs
 import QtQuick
-import Quickshell.Io
+import Quickshell
+import Quickshell.Wayland
 import qs.modules.common
 
 Item {
@@ -20,7 +21,7 @@ Item {
             hoverEnabled: true
             anchors.fill: parent
             onClicked: {
-                GlobalStates.idleInhibitorEnabled = !GlobalStates.idleInhibitorEnabled;
+                inhibit.enabled = !inhibit.enabled;
             }
             onEntered: balTooltip.tooltipVisible = true
             onExited: balTooltip.tooltipVisible = false
@@ -31,7 +32,7 @@ Item {
             font.family: Appearence.font.nerdFont
             font.pixelSize: 12
             color: Appearence.colors.accentColor
-            text: GlobalStates.idleInhibitorEnabled ? "" : ""
+            text: inhibit.enabled ? "" : ""
         }
 
         Behavior on color {
@@ -40,15 +41,20 @@ Item {
 
         CustomTooltip {
             id: balTooltip
-            text: GlobalStates.idleInhibitorEnabled ? "activated" : "deactivated"
+            text: inhibit.enabled ? "activated" : "deactivated"
             tooltipVisible: false
             targetItem: root
             positionAbove: false
         }
 
-        Process {
-            running: GlobalStates.idleInhibitorEnabled
-            command: ["systemd-inhibit", "--what=idle", "--who=quickshell", "--why=Idle inhibitor active", "--mode=block", "sleep", "inf"]
+        IdleInhibitor {
+            id: inhibit
+            window: PanelWindow {
+                implicitWidth: 0
+                implicitHeight: 0
+                color: "transparent"
+                mask: Region {}
+            }
         }
     }
 }

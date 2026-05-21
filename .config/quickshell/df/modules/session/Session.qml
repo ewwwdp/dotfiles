@@ -4,7 +4,6 @@ import Quickshell
 
 Scope {
     Loader {
-
         active: GlobalStates.isSessionOpen
         sourceComponent: WLogout {
             LogoutButton {

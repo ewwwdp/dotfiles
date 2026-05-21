@@ -15,18 +15,19 @@ Rectangle {
     border.width: 1
     border.color: "#313244"
     property var notificationService: NotificationService
-    property bool hovered: notifArea.containsMouse
+    property bool hovered: myHandler.hovered
     property var notificationData
 
-    onHoveredChanged: {
-        if (notificationData.timer) {
-            if (notificationItem.hovered) {
-                notificationData.timer.running = false;
-            } else {
-                notificationData.timer.running = true;
-            }
-        }
+    HoverHandler {
+        id: myHandler
     }
+    function updateTimerState() {
+        if (notificationData?.timer)
+            notificationData.timer.running = !hovered;
+    }
+
+    onHoveredChanged: updateTimerState()
+    Component.onCompleted: updateTimerState()
 
     // Hover effect overlay
     Rectangle {
@@ -34,7 +35,7 @@ Rectangle {
         radius: 10
         color: "#ffffff"
         opacity: parent.hovered ? 0.05 : 0
-
+        visible: parent.hovered || opacity > 0
         Behavior on opacity {
             NumberAnimation {
                 duration: 150
@@ -45,7 +46,6 @@ Rectangle {
     MouseArea {
         id: notifArea
         anchors.fill: parent
-        hoverEnabled: true
         onClicked: event => {
             if (notificationService && event.button === Qt.LeftButton) {
                 const actions = notificationItem.notificationData.actions;
@@ -61,18 +61,13 @@ Rectangle {
         anchors.margins: 14
         spacing: 14
 
-        Loader {
-            active: notificationData.appIcon.length > 0
-            asynchronous: true
-            sourceComponent: IconImage {
-                id: realAppIcon
-                width: 32
-                height: 32
-                anchors.centerIn: parent
-                source: Quickshell.iconPath(notificationData.appIcon)
-
-                smooth: true
-            }
+        IconImage {
+            id: realAppIcon
+            visible: data.appIcon?.length > 0
+            width: 32
+            height: 32
+            source: Quickshell.iconPath(data.appIcon)
+            smooth: true
         }
 
         // Enhanced content
@@ -168,9 +163,8 @@ Rectangle {
         if (!timestamp)
             return "Now";
 
-        var now = new Date();
-        var notificationTime = new Date(timestamp);
-        var diffMs = now - notificationTime;
+        const now = Date.now();
+        const diffMs = now - timestamp;
         var diffMins = Math.floor(diffMs / 60000);
 
         if (diffMins < 1)

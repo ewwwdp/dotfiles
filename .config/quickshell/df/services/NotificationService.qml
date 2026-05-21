@@ -198,7 +198,6 @@ Singleton {
                     "urgency": notif.urgency
                 });
             });
-            // Find largest notificationId
             let maxId = 0;
             root.list.forEach(notif => {
                 maxId = Math.max(maxId, notif.notificationId);

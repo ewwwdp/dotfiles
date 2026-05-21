@@ -1,16 +1,23 @@
 {
+  "cli_default_open_behavior": "existing_window",
+  "outline_panel": {
+    "dock": "left",
+  },
+  "collaboration_panel": {
+    "dock": "left",
+  },
+  "git_panel": {
+    "dock": "left",
+  },
   "project_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "show_edit_predictions": false,
   "icon_theme": "Catppuccin Mocha",
   "edit_predictions": {
-    "mode": "subtle"
+    "mode": "subtle",
   },
   "disable_ai": true,
-  "features": {
-    "edit_prediction_provider": "zed"
-  },
   "autosave": "on_focus_change",
   "base_keymap": "VSCode",
   "ui_font_size": 15,
@@ -18,19 +25,19 @@
   "buffer_font_family": "JetBrainsMono Nerd Font",
   "theme": "Darker Horizon Bold",
   "terminal": {
-    "font_family": "JetBrainsMono Nerd Font"
+    "font_family": "JetBrainsMono Nerd Font",
   },
   "git": {
     "inline_blame": {
-      "enabled": false
-    }
+      "enabled": false,
+    },
   },
   "auto_signature_help": true,
   "inlay_hints": {
-    "enabled": true
+    "enabled": true,
   },
   "restore_on_startup": "last_workspace",
   "tabs": {
-    "file_icons": true
-  }
+    "file_icons": true,
+  },
 }

@@ -155,12 +155,6 @@ Scope {
                             columnSpacing: 12
                             rowSpacing: 12
 
-                            // WiFi toggle
-                            WifiToggleMenu {}
-
-                            // Bluetooth toggle
-                            BluetoothToggleMenu {}
-
                             // DND toggle
                             PpdToggleMenu {}
                             // Freeze toggle

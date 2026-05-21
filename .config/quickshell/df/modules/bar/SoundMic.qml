@@ -8,7 +8,6 @@ Item {
     id: root
     property bool isMutedSink: Audio.sink?.audio?.muted ?? true
     property bool isMutedSource: Audio.source?.audio?.muted ?? true
-    // Update properties when audio state changes
     Connections {
         target: Audio.sink?.audio ?? null
         function onMutedChanged() {

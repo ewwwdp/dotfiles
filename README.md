@@ -1,3 +1,3 @@
 # Dotfiles from ewwdp
 
-![unknown credit](./wallpapers/black_a.png)
+![unknown credit](./wallpapers/sunflowers.png)

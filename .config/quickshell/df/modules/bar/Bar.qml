@@ -20,6 +20,7 @@ Scope {
                 exclusionMode: ExclusionMode.Normal
                 exclusiveZone: 24
                 WlrLayershell.namespace: "quickshell:bar"
+                WlrLayershell.layer: WlrLayer.Top
                 implicitHeight: 24
                 color: Appearence.colors.barBackgroundColor
                 anchors {
@@ -75,7 +76,7 @@ Scope {
                                 anchors.centerIn: rightBackground
                                 anchors.verticalCenter: rightBackground.verticalCenter
 
-                                IdleInhibitor {
+                                IdleI {
                                     Layout.fillHeight: true
                                     Layout.preferredWidth: implicitWidth
                                     Layout.alignment: Qt.AlignVCenter
@@ -88,12 +89,6 @@ Scope {
                                 }
 
                                 NetworkWidget {
-                                    Layout.fillHeight: true
-                                    Layout.preferredWidth: implicitWidth
-                                    Layout.alignment: Qt.AlignVCenter
-                                }
-
-                                BluetoothWidget {
                                     Layout.fillHeight: true
                                     Layout.preferredWidth: implicitWidth
                                     Layout.alignment: Qt.AlignVCenter
@@ -121,10 +116,9 @@ Scope {
                     }
                 }
 
-                // Center clock - positioned absolutely to stay centered
                 ClockWidget {
                     anchors.centerIn: parent
-                    z: 1 // Ensure it's above other elements
+                    z: 1
                 }
             }
         }

@@ -8,19 +8,17 @@ Item {
     implicitWidth: innerItem.implicitWidth
     implicitHeight: 20
     Rectangle {
+        property bool hovered: mouseArea.hovered
         width: innerItem.width + 16
         height: innerItem.height + 6
-        color: mouseArea.containsMouse ? Appearence.colors.hoverColor : Appearence.colors.pureBlackColor
+        color: hovered ? Appearence.colors.hoverColor : Appearence.colors.pureBlackColor
         radius: 10
         anchors.centerIn: parent
 
-        MouseArea {
+        HoverHandler {
             id: mouseArea
-            hoverEnabled: true
-            anchors.fill: parent
-            onEntered: balTooltip.tooltipVisible = true
-            onExited: balTooltip.tooltipVisible = false
         }
+        onHoveredChanged: balTooltip.tooltipVisible = hovered
 
         StyledText {
             id: innerItem

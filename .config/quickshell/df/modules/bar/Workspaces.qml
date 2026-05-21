@@ -45,7 +45,7 @@ Item {
             onWheel: event => {
                 const direction = event.angleDelta.y > 0 ? "r+1" : event.angleDelta.y < 0 ? "r-1" : null;
                 if (direction)
-                    Hyprland.dispatch(`workspace ${direction}`);
+                    Hyprland.dispatch(`hl.dispatch(hl.dsp.focus({ workspace = "${direction}" }))`);
                 event.accepted = true;
             }
 
@@ -79,7 +79,7 @@ Item {
                 MouseArea {
                     hoverEnabled: true
                     anchors.fill: parent
-                    onClicked: Hyprland.dispatch(`workspace ${workspaceId}`)
+                    onClicked: Hyprland.dispatch(`hl.dispatch(hl.dsp.focus({ workspace = ${workspaceId} }))`)
                     onHoveredChanged: rect.isHovered = !rect.isHovered
                 }
 

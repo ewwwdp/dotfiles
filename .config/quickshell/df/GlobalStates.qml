@@ -11,6 +11,4 @@ Singleton {
     property bool isSessionOpen: false
     property bool dndEnabled: false
     property bool gamemodeEnabled: false
-    property bool wifiEnabled: false
-    property bool idleInhibitorEnabled: false
 }
