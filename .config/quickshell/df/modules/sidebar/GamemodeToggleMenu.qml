@@ -27,9 +27,9 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         onClicked: event => {
+            event.accepted = true;
             Quickshell.execDetached(["sh", "-c", `${Quickshell.shellDir}/scripts/gamemode.sh`]);
             GlobalStates.gamemodeEnabled = !GlobalStates.gamemodeEnabled;
-            event.accepted = true;
         }
     }
 

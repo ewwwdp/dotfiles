@@ -31,8 +31,8 @@ Singleton {
 
     function update() {
         let devices = Bluetooth.defaultAdapter?.devices?.values.filter(d => d.connected) || {};
-        if (devices.length > 0) {
-            connectedDevicesText = devices.map(d => `${d.name || d.deviceName} (${d.address})`).join("\n");
+        if (Bluetooth.defaultAdapter && devices.length > 0) {
+            connectedDevicesText = devices.map(d => `${d.name || d.deviceName} - ${d.address}`).join("\n");
             materialSymbol = "󰂱";
         } else if (root.ready) {
             connectedDevicesText = "enabled";

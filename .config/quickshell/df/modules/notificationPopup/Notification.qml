@@ -47,12 +47,12 @@ Rectangle {
         id: notifArea
         anchors.fill: parent
         onClicked: event => {
+            event.accepted = true;
             if (notificationService && event.button === Qt.LeftButton) {
                 const actions = notificationItem.notificationData.actions;
                 if (actions?.length > 0)
                     notificationService.attemptInvokeAction(notificationItem.notificationData.notificationId, "default");
             }
-            event.accepted = true;
         }
     }
 
@@ -63,10 +63,10 @@ Rectangle {
 
         IconImage {
             id: realAppIcon
-            visible: data.appIcon?.length > 0
+            visible: notificationData?.appIcon?.length > 0
             width: 32
             height: 32
-            source: Quickshell.iconPath(data.appIcon)
+            source: notificationData?.appIcon ? Quickshell.iconPath(notificationData.appIcon) : ""
             smooth: true
         }
 
@@ -79,7 +79,7 @@ Rectangle {
                 Layout.fillWidth: true
 
                 StyledText {
-                    text: notificationData.appName || "App"
+                    text: notificationData?.appName || "App"
                     color: "#cdd6f4"
                     font.pixelSize: 14
                     font.family: Appearence.font.readFont
@@ -91,7 +91,7 @@ Rectangle {
                 }
 
                 StyledText {
-                    text: formatTimestamp(notificationData.time)
+                    text: notificationData?.time ? formatTimestamp(notificationData.time) : "Now"
                     color: "#6c7086"
                     font.pixelSize: 10
                     font.family: Appearence.font.readFont
@@ -100,18 +100,17 @@ Rectangle {
             }
 
             StyledText {
-                text: notificationData.summary || "Notification"
+                text: notificationData?.summary || "Notification"
                 color: "#cdd6f4"
                 font.pixelSize: 12
                 font.weight: Font.Medium
                 font.family: Appearence.font.readFont
                 Layout.fillWidth: true
                 wrapMode: Text.WordWrap
-                maximumLineCount: 2
             }
 
             StyledText {
-                text: notificationData.body || ""
+                text: notificationData?.body || ""
                 color: "#9399b2"
                 font.pixelSize: 12
                 Layout.fillWidth: true

@@ -36,6 +36,7 @@ Item {
         anchors.centerIn: parent
         WheelHandler {
             onWheel: event => {
+                event.accepted = true;
                 const step = 0.01;
                 if (event.angleDelta.y > 0) {
                     Audio.sink.audio.volume = Math.min(Audio.sink.audio.volume + step, 1);
@@ -43,7 +44,6 @@ Item {
                 if (event.angleDelta.y < 0) {
                     Audio.sink.audio.volume -= step;
                 }
-                event.accepted = true;
             }
             acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
         }

@@ -20,7 +20,7 @@ Singleton {
         property string body: notification?.body ?? ""
         property string image: notification?.image ?? ""
         property string summary: notification?.summary ?? ""
-        property double time
+        required property double time
         property string urgency: notification?.urgency.toString() ?? "normal"
         property Timer timer
 
@@ -43,9 +43,6 @@ Singleton {
             "time": notif.time,
             "urgency": notif.urgency
         };
-    }
-    function notifToString(notif) {
-        return JSON.stringify(notifToJSON(notif), null, 2);
     }
 
     component NotifTimer: Timer {
@@ -146,7 +143,7 @@ Singleton {
 
     function timeoutNotification(id) {
         const index = root.list.findIndex(notif => notif.notificationId === id);
-        if (root.list[index] != null)
+        if (root.list[index] !== null)
             root.list[index].popup = false;
         root.timeout(id);
     }

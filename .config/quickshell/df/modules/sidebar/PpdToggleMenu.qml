@@ -31,6 +31,7 @@ Rectangle {
         hoverEnabled: true
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         onClicked: event => {
+            event.accepted = true;
             if (PowerProfiles.hasPerformanceProfile) {
                 switch (PowerProfiles.profile) {
                 case PowerProfile.PowerSaver:

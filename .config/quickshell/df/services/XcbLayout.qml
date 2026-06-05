@@ -68,7 +68,7 @@ Singleton {
                     root.needsLayoutRefresh = false;
                     fetchLayoutsProc.running = true;
                 }
-                if (root.layoutCodes.length <= 1)
+                if (root.layoutCodes.length < 1)
                     return;
 
                 const dataString = event.data;

@@ -8,7 +8,6 @@ import qs.modules.common
 Scope {
     id: bar
     Variants {
-        // For each monitor
         model: Quickshell.screens
         LazyLoader {
             id: barLoader
@@ -35,23 +34,20 @@ Scope {
                     anchors.fill: parent
                     color: Appearence.colors.barBackgroundColor
 
-                    // --- Left + Right modules in a layout
                     RowLayout {
                         anchors.fill: parent
                         anchors.leftMargin: 6
                         anchors.rightMargin: 6
 
-                        // Left side - Workspaces
                         Workspaces {
                             barRoot: barRoot
                             Layout.fillHeight: true
                             Layout.preferredWidth: implicitWidth
                         }
 
-                        // Center spacer - allows clock to be centered
                         Item {
                             Layout.fillWidth: true
-                            Layout.minimumWidth: 0
+                            Layout.minimumWidth: 10
                         }
 
                         Item {
@@ -59,20 +55,18 @@ Scope {
                             Layout.minimumWidth: rightSideLayout.implicitWidth
                             Layout.maximumWidth: barBackground.width * 0.45
 
-                            // Background rectangle
                             Rectangle {
                                 id: rightBackground
                                 anchors.centerIn: parent
                                 color: Appearence.colors.pureBlackColor
                                 width: rightSideLayout.implicitWidth + 22
-                                height: parent.height // Leave small margin from top/bottom
+                                height: parent.height - 4
                                 radius: height / 2
                             }
 
-                            // Right side content
                             RowLayout {
                                 id: rightSideLayout
-                                spacing: 16  // Slightly increased spacing for better visual separation
+                                spacing: 16
                                 anchors.centerIn: rightBackground
                                 anchors.verticalCenter: rightBackground.verticalCenter
 
@@ -81,25 +75,21 @@ Scope {
                                     Layout.preferredWidth: implicitWidth
                                     Layout.alignment: Qt.AlignVCenter
                                 }
-
                                 SoundMic {
                                     Layout.fillHeight: true
                                     Layout.preferredWidth: implicitWidth
                                     Layout.alignment: Qt.AlignVCenter
                                 }
-
                                 NetworkWidget {
                                     Layout.fillHeight: true
                                     Layout.preferredWidth: implicitWidth
                                     Layout.alignment: Qt.AlignVCenter
                                 }
-
                                 LangLayout {
                                     Layout.fillHeight: true
                                     Layout.preferredWidth: implicitWidth
                                     Layout.alignment: Qt.AlignVCenter
                                 }
-
                                 SysTray {
                                     bar: barRoot
                                     Layout.fillHeight: true

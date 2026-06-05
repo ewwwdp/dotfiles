@@ -43,10 +43,10 @@ Item {
         radius: 10
         WheelHandler {
             onWheel: event => {
+                event.accepted = true;
                 const direction = event.angleDelta.y > 0 ? "r+1" : event.angleDelta.y < 0 ? "r-1" : null;
                 if (direction)
                     Hyprland.dispatch(`hl.dispatch(hl.dsp.focus({ workspace = "${direction}" }))`);
-                event.accepted = true;
             }
 
             acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
@@ -90,7 +90,7 @@ Item {
                     anchors.centerIn: parent
                     radius: workspaceButtonWidth / 2
                     border.color: {
-                        if (rect.isActive | rect.isOccupied)
+                        if (rect.isActive || rect.isOccupied)
                             return Appearence.colors.accentColor;
                         return root.occupiedColor;
                     }

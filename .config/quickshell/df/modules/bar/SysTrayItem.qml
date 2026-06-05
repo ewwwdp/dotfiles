@@ -16,6 +16,7 @@ MouseArea {
     implicitWidth: trayItemWidth
     implicitHeight: 20
     onClicked: event => {
+        event.accepted = true;
         switch (event.button) {
         case Qt.LeftButton:
             item.activate();
@@ -25,7 +26,6 @@ MouseArea {
                 menu.open();
             break;
         }
-        event.accepted = true;
     }
 
     QsMenuAnchor {
