@@ -6,6 +6,7 @@ import qs.modules.bar
 import qs.modules.overlay
 import qs.modules.sidebar
 import qs.modules.session
+import qs.modules.lockscreen
 import qs.modules.notificationPopup
 
 import QtQuick
@@ -32,5 +33,9 @@ ShellRoot {
     LazyLoader {
         active: true
         component: NotificationPopup {}
+    }
+    LazyLoader {
+        active: true
+        component: LockScreen {}
     }
 }

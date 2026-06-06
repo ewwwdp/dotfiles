@@ -12,12 +12,17 @@ Singleton {
     property bool isSessionOpen: false
     property bool dndEnabled: false
     property bool gamemodeEnabled: false
+    property bool screenLocked: false
 
     IpcHandler {
         target: "root"
 
         function sidebar(): void {
             root.sidebarOpen = !root.sidebarOpen;
+        }
+
+        function lock() {
+            root.screenLocked = true;
         }
     }
 }

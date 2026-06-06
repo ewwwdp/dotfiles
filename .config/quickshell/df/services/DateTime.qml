@@ -7,6 +7,7 @@ import Quickshell.Io
 
 Singleton {
     id: root
+    readonly property date date: clock.date
     property string time: Qt.locale().toString(clock.date, "hh:mm")
     property string uptime: "0h, 0m"
 

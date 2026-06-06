@@ -17,7 +17,6 @@ hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + ALT + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + P", hl.dsp.window.pin({ action = "toggle" }))
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))
-hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("hyprlock"))
 
 -- Focus movement
 hl.bind(mainMod .. " + left", hl.dsp.focus({ direction = "left" }))
@@ -40,6 +39,7 @@ hl.bind(mainMod .. " + ALT + left", hl.dsp.focus({ workspace = "r-1" }))
 -- Quickshell
 hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd(barReload))
 hl.bind(mainMod .. "+ Escape", hl.dsp.exec_cmd(values.qs .. " ipc call root sidebar"))
+hl.bind(mainMod .. "+ L", hl.dsp.exec_cmd(values.qs .. " ipc call root lock"))
 
 -- Swap windows
 hl.bind(mainMod .. " + SHIFT + left", hl.dsp.window.swap({ direction = "left" }))
