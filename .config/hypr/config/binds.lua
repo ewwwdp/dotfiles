@@ -37,8 +37,9 @@ hl.bind(mainMod .. " + ALT + right", hl.dsp.focus({ workspace = "r+1" }))
 
 hl.bind(mainMod .. " + ALT + left", hl.dsp.focus({ workspace = "r-1" }))
 
--- Reload quickshell
+-- Quickshell
 hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd(barReload))
+hl.bind(mainMod .. "+ Escape", hl.dsp.exec_cmd(values.qs .. " ipc call root sidebar"))
 
 -- Swap windows
 hl.bind(mainMod .. " + SHIFT + left", hl.dsp.window.swap({ direction = "left" }))

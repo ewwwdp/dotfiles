@@ -7,12 +7,19 @@ import Quickshell.Io
 Rectangle {
     id: root
 
+    property bool isFocused: false
+
+    function activate() {
+        Quickshell.execDetached(["sh", "-c", `${Quickshell.shellDir}/scripts/gamemode.sh`]);
+        GlobalStates.gamemodeEnabled = !GlobalStates.gamemodeEnabled;
+    }
+
     width: 48
     height: 48
     radius: 24
     color: GlobalStates.gamemodeEnabled ? Appearence.colors.accentColor : "#11111b"
-    border.width: 1
-    border.color: "#6c7086"
+    border.width: 2
+    border.color: isFocused ? "#89b4fa" : "#6c7086"
     scale: mouseArea.containsMouse ? 1.1 : 1.0
 
     StyledText {
@@ -28,8 +35,7 @@ Rectangle {
         hoverEnabled: true
         onClicked: event => {
             event.accepted = true;
-            Quickshell.execDetached(["sh", "-c", `${Quickshell.shellDir}/scripts/gamemode.sh`]);
-            GlobalStates.gamemodeEnabled = !GlobalStates.gamemodeEnabled;
+            root.activate();
         }
     }
 

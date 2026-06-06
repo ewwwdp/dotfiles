@@ -7,12 +7,24 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Rectangle {
+    id: notifRoot
     Layout.fillWidth: true
     Layout.fillHeight: true
     color: "#181825"
     radius: 12
     border.width: 1
     border.color: "#313244"
+
+    property bool isDndFocused: false
+    property bool isClearFocused: false
+
+    function activateDnd() {
+        GlobalStates.dndEnabled = !GlobalStates.dndEnabled;
+    }
+
+    function activateClear() {
+        NotificationService.discardAllNotifications();
+    }
 
     ColumnLayout {
         anchors.fill: parent
@@ -55,12 +67,12 @@ Rectangle {
                 Button {
                     id: silentBtn
                     hoverEnabled: true
-                    onClicked: GlobalStates.dndEnabled = !GlobalStates.dndEnabled
+                    onClicked: notifRoot.activateDnd()
                     background: Rectangle {
                         color: GlobalStates.dndEnabled ? (silentBtn.hovered ? "#585b70" : "#45475a") : (silentBtn.hovered ? "#45475a" : "#313244")
                         radius: 6
-                        border.width: 1
-                        border.color: silentBtn.hovered ? "#6c7086" : "#45475a"
+                        border.width: notifRoot.isDndFocused ? 2 : 1
+                        border.color: silentBtn.hovered || notifRoot.isDndFocused ? "#6c7086" : "#45475a"
 
                         Behavior on color {
                             animation: Appearence.animation.elementMoveFast.colorAnimation.createObject(this)
@@ -91,8 +103,8 @@ Rectangle {
                     background: Rectangle {
                         color: clearBtn.hovered ? "#f38ba8" : "#313244"
                         radius: 6
-                        border.width: 1
-                        border.color: clearBtn.hovered ? "#f38ba8" : "#45475a"
+                        border.width: notifRoot.isClearFocused ? 2 : 1
+                        border.color: clearBtn.hovered || notifRoot.isClearFocused ? "#f38ba8" : "#45475a"
 
                         Behavior on color {
                             animation: Appearence.animation.elementMoveFast.colorAnimation.createObject(this)
@@ -111,7 +123,7 @@ Rectangle {
                             animation: Appearence.animation.elementMoveFast.colorAnimation.createObject(this)
                         }
                     }
-                    onClicked: NotificationService.discardAllNotifications()
+                    onClicked: notifRoot.activateClear()
                 }
             }
         }

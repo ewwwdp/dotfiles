@@ -4,12 +4,33 @@ import qs.modules.common
 
 Rectangle {
     id: root
+
+    property bool isFocused: false
+
+    function activate() {
+        if (PowerProfiles.hasPerformanceProfile) {
+            switch (PowerProfiles.profile) {
+            case PowerProfile.PowerSaver:
+                PowerProfiles.profile = PowerProfile.Balanced;
+                break;
+            case PowerProfile.Balanced:
+                PowerProfiles.profile = PowerProfile.Performance;
+                break;
+            case PowerProfile.Performance:
+                PowerProfiles.profile = PowerProfile.PowerSaver;
+                break;
+            }
+        } else {
+            PowerProfiles.profile = PowerProfiles.profile == PowerProfile.Balanced ? PowerProfile.PowerSaver : PowerProfile.Balanced;
+        }
+    }
+
     width: 48
     height: 48
     radius: 24
     color: "#11111b"
-    border.width: 1
-    border.color: "#6c7086"
+    border.width: 2
+    border.color: isFocused ? "#89b4fa" : "#6c7086"
     scale: mouseArea.containsMouse ? 1.1 : 1.0
     StyledText {
         color: "#cdd6f4"
@@ -32,21 +53,7 @@ Rectangle {
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         onClicked: event => {
             event.accepted = true;
-            if (PowerProfiles.hasPerformanceProfile) {
-                switch (PowerProfiles.profile) {
-                case PowerProfile.PowerSaver:
-                    PowerProfiles.profile = PowerProfile.Balanced;
-                    break;
-                case PowerProfile.Balanced:
-                    PowerProfiles.profile = PowerProfile.Performance;
-                    break;
-                case PowerProfile.Performance:
-                    PowerProfiles.profile = PowerProfile.PowerSaver;
-                    break;
-                }
-            } else {
-                PowerProfiles.profile = PowerProfiles.profile == PowerProfile.Balanced ? PowerProfile.PowerSaver : PowerProfile.Balanced;
-            }
+            root.activate();
         }
     }
 
