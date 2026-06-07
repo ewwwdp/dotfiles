@@ -17,6 +17,13 @@ Singleton {
         property color accentColor: "#c0caf5"
         property color hoverColor: "#13131D"
         property color barBackgroundColor: "#060709"
+        property color polkitAccent: "#89b4fa"
+        property color polkitBackground: "#1e1e2e"
+        property color polkitText: "#cdd6f4"
+        property color polkitBorder: "#313244"
+        property color polkitBorderError: "#f38ba8"
+        property color polkitScrim: "#80000000"
+        property color polkitTextError: "#f38ba8"
     }
 
     font: QtObject {
