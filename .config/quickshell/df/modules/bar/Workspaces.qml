@@ -46,7 +46,7 @@ Item {
                 event.accepted = true;
                 const direction = event.angleDelta.y > 0 ? "r+1" : event.angleDelta.y < 0 ? "r-1" : null;
                 if (direction)
-                    Hyprland.dispatch(`hl.dispatch(hl.dsp.focus({ workspace = "${direction}" }))`);
+                    Hyprland.dispatch(`hl.dsp.focus({ workspace = "${direction}" })`);
             }
 
             acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
@@ -79,7 +79,8 @@ Item {
                 MouseArea {
                     hoverEnabled: true
                     anchors.fill: parent
-                    onClicked: Hyprland.dispatch(`hl.dispatch(hl.dsp.focus({ workspace = ${workspaceId} }))`)
+                    onClicked: Hyprland.dispatch(`hl.dsp.focus({ workspace = ${workspaceId} })`)
+
                     onHoveredChanged: rect.isHovered = !rect.isHovered
                 }
 

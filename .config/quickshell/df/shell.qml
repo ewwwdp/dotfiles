@@ -7,6 +7,7 @@ import qs.modules.overlay
 import qs.modules.sidebar
 import qs.modules.session
 import qs.modules.lockscreen
+import qs.modules.background
 import qs.modules.notificationPopup
 
 import QtQuick
@@ -14,6 +15,10 @@ import Quickshell
 
 ShellRoot {
     id: root
+    LazyLoader {
+        active: true
+        component: Background {}
+    }
     LazyLoader {
         active: true
         component: Bar {}

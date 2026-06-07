@@ -10,7 +10,7 @@ import qs.services
 Rectangle {
     id: root
     required property LockContext context
-
+    property var screenName
     readonly property color backgroundFallback: "#11111b"
     readonly property color textColor: "#cdd6f4"
     readonly property color textMuted: Qt.rgba(0xcd / 255, 0xd6 / 255, 0xf4 / 255, 0.75)
@@ -25,14 +25,21 @@ Rectangle {
     Image {
         id: blurPass1
         anchors.fill: parent
-        source: Directories.wallpaperPath
+        source: WallpaperConfig.wallpaperForScreen(root.screenName)
         fillMode: Image.PreserveAspectCrop
+        asynchronous: true
+        cache: false
+        opacity: status === Image.Ready ? 1 : 0
+
         layer.enabled: true
         layer.effect: MultiEffect {
             blurEnabled: true
             blur: 2.0
             blurMax: 30
             blurMultiplier: 1
+        }
+        Behavior on opacity {
+            animation: Appearence.animation.elementMoveEnter.numberAnimation.createObject(this)
         }
     }
 
@@ -146,6 +153,7 @@ Rectangle {
                     bottomPadding: 4
 
                     onTextChanged: root.context.currentText = this.text
+
                     onAccepted: root.context.tryUnlock()
 
                     Connections {
@@ -166,7 +174,6 @@ Rectangle {
             font.pixelSize: 16
         }
 
-        // fail_text = $FAIL ($ATTEMPTS)
         Text {
             visible: root.context.showFailure
             Layout.alignment: Qt.AlignHCenter
