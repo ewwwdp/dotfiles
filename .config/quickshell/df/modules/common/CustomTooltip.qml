@@ -15,16 +15,17 @@ Window {
     color: "transparent"
     visible: false
 
-    property var _timerObj: null
+    Timer {
+        id: showTimer
+        interval: tooltipWindow.delay
+        repeat: false
+        onTriggered: tooltipWindow._showNow()
+    }
 
     onTooltipVisibleChanged: {
         if (tooltipVisible) {
             if (delay > 0) {
-                if (_timerObj) {
-                    _timerObj.destroy();
-                    _timerObj = null;
-                }
-                _timerObj = Qt.createQmlObject('import QtQuick 2.0; Timer { interval: ' + delay + '; running: true; repeat: false; onTriggered: tooltipWindow._showNow() }', tooltipWindow);
+                showTimer.restart();
             } else {
                 _showNow();
             }
@@ -40,26 +41,22 @@ Window {
         if (!targetItem)
             return;
 
+        var pos;
         if (positionAbove) {
-            // Position tooltip above the target item
-            var pos = targetItem.mapToGlobal(0, 0);
+            pos = targetItem.mapToGlobal(0, 0);
             x = pos.x - width / 2 + targetItem.width / 2;
-            y = pos.y - height - 12; // 12 px margin above
+            y = pos.y - height - 12;
         } else {
-            // Position tooltip below the target item
-            var pos = targetItem.mapToGlobal(0, targetItem.height);
+            pos = targetItem.mapToGlobal(0, targetItem.height);
             x = pos.x - width / 2 + targetItem.width / 2;
-            y = pos.y + 12; // 12 px margin below
+            y = pos.y + 12;
         }
         visible = true;
     }
 
     function _hideNow() {
         visible = false;
-        if (_timerObj) {
-            _timerObj.destroy();
-            _timerObj = null;
-        }
+        showTimer.stop();
     }
 
     Connections {
@@ -85,8 +82,8 @@ Window {
     Rectangle {
         anchors.fill: parent
         radius: 10
-        color: "#222"
-        border.color: "#444"
+        color: Appearence.colors.barBackgroundColor
+        border.color: Appearence.colors.accentColor
         border.width: 1
         opacity: 0.97
         z: 1
@@ -95,7 +92,7 @@ Window {
     StyledText {
         id: tooltipText
         text: tooltipWindow.text
-        color: "white"
+        color: Appearence.colors.accentColor
         font.family: tooltipWindow.textFont
         font.pixelSize: 11
         anchors.centerIn: parent

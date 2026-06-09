@@ -13,17 +13,17 @@ Singleton {
     property QtObject sizes
 
     colors: QtObject {
-        property color pureBlackColor: "#000000"
-        property color accentColor: "#c0caf5"
-        property color hoverColor: "#13131D"
-        property color barBackgroundColor: "#060709"
-        property color polkitAccent: "#89b4fa"
-        property color polkitBackground: "#1e1e2e"
-        property color polkitText: "#cdd6f4"
-        property color polkitBorder: "#313244"
-        property color polkitBorderError: "#f38ba8"
-        property color polkitScrim: "#80000000"
-        property color polkitTextError: "#f38ba8"
+        readonly property color pureBlackColor: "#000000"
+        readonly property color accentColor: "#c0caf5"
+        readonly property color hoverColor: "#13131D"
+        readonly property color barBackgroundColor: "#060709"
+        readonly property color polkitAccent: "#89b4fa"
+        readonly property color polkitBackground: "#1e1e2e"
+        readonly property color polkitText: "#cdd6f4"
+        readonly property color polkitBorder: "#313244"
+        readonly property color polkitBorderError: "#f38ba8"
+        readonly property color polkitScrim: "#80000000"
+        readonly property color polkitTextError: "#f38ba8"
     }
 
     font: QtObject {

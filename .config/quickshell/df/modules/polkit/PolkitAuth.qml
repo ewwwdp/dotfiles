@@ -1,6 +1,5 @@
 import QtQuick
 import Quickshell
-import Quickshell.Io
 import Quickshell.Services.Polkit
 
 Scope {
@@ -17,37 +16,12 @@ Scope {
     property bool responseVisible: false
     property bool failed: false
     property bool errorFlash: false
-    property bool fingerprintFirst: false
     property int shakeOffset: 0
     property string currentMessage: ""
     property string currentPrompt: ""
     property string currentSupplementary: ""
 
     readonly property bool dialogVisible: polkitAgent.isActive || closing
-    readonly property bool fingerprintWaiting: dialogVisible && !responseRequired && !submitted && (fingerprintFirst || promptLooksFingerprint(currentPrompt + " " + currentSupplementary))
-
-    function promptLooksFingerprint(text) {
-        var lower = text.toLowerCase();
-        return lower.indexOf("finger") !== -1 || lower.indexOf("print") !== -1 || lower.indexOf("swipe") !== -1 || lower.indexOf("scan") !== -1;
-    }
-
-    function loadPamConfig(raw) {
-        var lines = raw.split("\n");
-        for (var i = 0; i < lines.length; i++) {
-            var line = lines[i].trim();
-            if (line === "" || line.startsWith("#"))
-                continue;
-            if (line.indexOf("pam_fprintd.so") !== -1) {
-                fingerprintFirst = true;
-                return;
-            }
-            if (line.indexOf("pam_unix.so") !== -1 || line.indexOf("pam_pwquality.so") !== -1) {
-                fingerprintFirst = false;
-                return;
-            }
-        }
-        fingerprintFirst = false;
-    }
 
     function resetSnapshot() {
         currentMessage = "";
@@ -153,15 +127,6 @@ Scope {
             duration: 55
             easing.type: Easing.OutQuad
         }
-    }
-
-    FileView {
-        path: "/etc/pam.d/polkit-1"
-        watchChanges: true
-        printErrors: false
-        onLoaded: root.loadPamConfig(text())
-        onLoadFailed: root.fingerprintFirst = false
-        onFileChanged: reload()
     }
 
     PolkitAgent {

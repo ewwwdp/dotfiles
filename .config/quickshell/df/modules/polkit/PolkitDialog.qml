@@ -110,8 +110,8 @@ PanelWindow {
                     color: auth.errorFlash ? Appearence.colors.polkitTextError : root.foreground
                     cursorVisible: activeFocus && !auth.submitted && !auth.errorFlash
                     readOnly: auth.submitted || auth.errorFlash
-                    enabled: auth.dialogVisible && !auth.fingerprintWaiting
-                    visible: !auth.fingerprintWaiting
+                    enabled: auth.dialogVisible
+                    visible: true
                     onAccepted: auth.submitResponse(passwordInput.text)
                     Keys.onPressed: function (event) {
                         if (event.key === Qt.Key_Escape) {
@@ -156,10 +156,7 @@ PanelWindow {
     function refocus() {
         if (!auth.dialogVisible)
             return;
-        if (auth.fingerprintWaiting)
-            keyCatcher.forceActiveFocus();
-        else
-            passwordInput.forceActiveFocus();
+        passwordInput.forceActiveFocus();
     }
 
     Connections {
