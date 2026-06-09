@@ -30,7 +30,8 @@ Rectangle {
         asynchronous: true
         cache: false
         opacity: status === Image.Ready ? 1 : 0
-
+        sourceSize.width: parent.width
+        sourceSize.height: parent.height
         layer.enabled: true
         layer.effect: MultiEffect {
             blurEnabled: true

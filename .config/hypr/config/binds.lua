@@ -5,7 +5,6 @@ local fileManager = "thunar"
 local menu =
 'app=$(wofi --show drun --define=drun-print_desktop_file=true | sed -E \'s/(\\.desktop) /\\1:/\'); [[ -n "$app" ]] && uwsm app -- "$app"'
 local barReload = "killall qs; " .. values.qs
-local screenshot = "hyprshot"
 
 -- Apps / system
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
@@ -55,9 +54,7 @@ hl.bind(mainMod .. " + CTRL + up", hl.dsp.window.resize({ relative = true, x = 0
 hl.bind(mainMod .. " + CTRL + down", hl.dsp.window.resize({ relative = true, x = 0, y = 30 }))
 
 -- Screenshots
-hl.bind(mainMod .. " + S", hl.dsp.exec_cmd(screenshot .. " -m window --clipboard-only"))
-hl.bind("PRINT", hl.dsp.exec_cmd(screenshot .. " -m output --clipboard-only"))
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd(screenshot .. " -m region --clipboard-only"))
+hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd(values.qs .. " ipc call screenshot takeScreenshot"))
 
 -- Clipboard terminal
 hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd(terminal .. " --class " .. values.clipse .. " -e " .. values.clipse))

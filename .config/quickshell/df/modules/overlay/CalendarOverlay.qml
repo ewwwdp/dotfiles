@@ -30,7 +30,7 @@ Scope {
         PanelWindow {
             id: panelWindow
             anchors.top: true
-            margins.top: 20
+            margins.top: 5
             exclusiveZone: 0
             implicitWidth: 280
             implicitHeight: 280

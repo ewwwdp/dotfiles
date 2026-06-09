@@ -36,6 +36,8 @@ Item {
                 fillMode: Image.PreserveAspectCrop
                 asynchronous: true
                 cache: true
+                sourceSize.width: panel.width
+                sourceSize.height: panel.height
             }
         }
     }

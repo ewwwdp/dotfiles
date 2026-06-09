@@ -10,6 +10,7 @@ import qs.modules.lockscreen
 import qs.modules.background
 import qs.modules.notificationPopup
 import qs.modules.polkit
+import qs.modules.screenshot as Screenshot
 
 import QtQuick
 import Quickshell
@@ -55,5 +56,9 @@ ShellRoot {
     LazyLoader {
         active: true
         component: CalendarOverlay {}
+    }
+    LazyLoader {
+        active: true
+        component: Screenshot.Controller {}
     }
 }
