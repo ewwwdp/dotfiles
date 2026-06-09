@@ -52,4 +52,8 @@ ShellRoot {
         active: true
         component: Polkit {}
     }
+    LazyLoader {
+        active: true
+        component: CalendarOverlay {}
+    }
 }

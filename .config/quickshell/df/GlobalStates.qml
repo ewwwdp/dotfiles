@@ -13,6 +13,7 @@ Singleton {
     property bool dndEnabled: false
     property bool gamemodeEnabled: false
     property bool screenLocked: false
+    property bool calendarOpen: false
 
     IpcHandler {
         target: "root"

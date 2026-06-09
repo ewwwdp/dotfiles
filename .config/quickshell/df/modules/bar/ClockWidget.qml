@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell
+import qs
 import qs.modules.common
 import qs.services
 
@@ -8,17 +9,18 @@ Item {
     implicitWidth: innerItem.implicitWidth
     implicitHeight: 20
     Rectangle {
-        property bool hovered: mouseArea.hovered
         width: innerItem.width + 16
         height: innerItem.height + 6
-        color: hovered ? Appearence.colors.hoverColor : Appearence.colors.pureBlackColor
+        color: mouseArea.containsMouse ? Appearence.colors.hoverColor : Appearence.colors.pureBlackColor
         radius: 10
         anchors.centerIn: parent
 
-        HoverHandler {
+        MouseArea {
             id: mouseArea
+            anchors.fill: parent
+            hoverEnabled: true
+            onClicked: GlobalStates.calendarOpen = !GlobalStates.calendarOpen
         }
-        onHoveredChanged: balTooltip.tooltipVisible = hovered
 
         StyledText {
             id: innerItem
@@ -33,13 +35,5 @@ Item {
         Behavior on color {
             animation: Appearence.animation.elementMoveFast.colorAnimation.createObject(this)
         }
-    }
-    CustomTooltip {
-        id: balTooltip
-        textFont: "monospace"
-        text: DateTime.getCalendar()
-        tooltipVisible: false
-        targetItem: root
-        positionAbove: false
     }
 }
