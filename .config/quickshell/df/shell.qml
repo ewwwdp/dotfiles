@@ -30,6 +30,10 @@ ShellRoot {
     }
     LazyLoader {
         active: true
+        component: MonitorsOverlay {}
+    }
+    LazyLoader {
+        active: true
         component: Sidebar {}
     }
     LazyLoader {
