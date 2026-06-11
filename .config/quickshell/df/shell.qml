@@ -11,6 +11,7 @@ import qs.modules.background
 import qs.modules.notificationPopup
 import qs.modules.polkit
 import qs.modules.screenshot as Screenshot
+import qs.modules.launcher as Launcher
 
 import QtQuick
 import Quickshell
@@ -60,5 +61,9 @@ ShellRoot {
     LazyLoader {
         active: true
         component: Screenshot.Controller {}
+    }
+    LazyLoader {
+        active: true
+        component: Launcher.Controller {}
     }
 }

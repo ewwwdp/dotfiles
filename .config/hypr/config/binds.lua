@@ -2,9 +2,6 @@ local values = require("config.locals")
 local mainMod = "SUPER"
 local terminal = "alacritty"
 local fileManager = "thunar"
-local menu =
-'app=$(wofi --show drun --define=drun-print_desktop_file=true | sed -E \'s/(\\.desktop) /\\1:/\'); [[ -n "$app" ]] && uwsm app -- "$app"'
-local barReload = "killall qs; " .. values.qs
 
 -- Apps / system
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
@@ -12,7 +9,7 @@ hl.bind(mainMod .. " + C", hl.dsp.window.close())
 hl.bind(mainMod .. " + SHIFT + END", hl.dsp.exit())
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
-hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
+hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(values.qs .. " ipc call launcher toggle"))
 hl.bind(mainMod .. " + ALT + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + P", hl.dsp.window.pin({ action = "toggle" }))
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))
@@ -36,7 +33,7 @@ hl.bind(mainMod .. " + ALT + right", hl.dsp.focus({ workspace = "r+1" }))
 hl.bind(mainMod .. " + ALT + left", hl.dsp.focus({ workspace = "r-1" }))
 
 -- Quickshell
-hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd(barReload))
+hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd("killall qs; " .. values.qs))
 hl.bind(mainMod .. "+ Escape", hl.dsp.exec_cmd(values.qs .. " ipc call root sidebar"))
 hl.bind(mainMod .. "+ L", hl.dsp.exec_cmd(values.qs .. " ipc call root lock"))
 hl.bind(mainMod .. "+ M", hl.dsp.exec_cmd(values.qs .. " ipc call changeMonitor showOsd"))

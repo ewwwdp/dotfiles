@@ -14,6 +14,7 @@ Singleton {
     property bool gamemodeEnabled: false
     property bool screenLocked: false
     property bool calendarOpen: false
+    property bool launcherOpen: false
 
     IpcHandler {
         target: "root"
@@ -24,6 +25,22 @@ Singleton {
 
         function lock() {
             root.screenLocked = true;
+        }
+    }
+
+    IpcHandler {
+        target: "launcher"
+
+        function open(): void {
+            root.launcherOpen = true;
+        }
+
+        function close(): void {
+            root.launcherOpen = false;
+        }
+
+        function toggle(): void {
+            root.launcherOpen = !root.launcherOpen;
         }
     }
 }

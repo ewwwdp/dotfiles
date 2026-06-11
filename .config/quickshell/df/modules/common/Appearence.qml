@@ -17,6 +17,7 @@ Singleton {
         readonly property color accentColor: "#c0caf5"
         readonly property color hoverColor: "#13131D"
         readonly property color barBackgroundColor: "#060709"
+        readonly property color barBorderColor: "#313244"
         readonly property color polkitAccent: "#89b4fa"
         readonly property color polkitBackground: "#1e1e2e"
         readonly property color polkitText: "#cdd6f4"
