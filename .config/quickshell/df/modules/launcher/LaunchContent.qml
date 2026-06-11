@@ -12,12 +12,121 @@ Item {
     width: 450
 
     property var launcherHistory: []
+    property var __sortedApps: []
+
+    function refreshApps() {
+        const _history = root.launcherHistory;
+        const _search = search.text;
+
+        const counts = {};
+        for (const entry of _history)
+            counts[entry.name] = entry.count;
+
+        function scoreEntry(object) {
+            const stxt = _search.toLowerCase();
+            const ntxt = object.name.toLowerCase();
+            let ni = 0;
+
+            let matches = [];
+            let startMatch = -1;
+
+            for (let si = 0; si != stxt.length; ++si) {
+                const sc = stxt[si];
+
+                while (true) {
+                    if (ni == ntxt.length)
+                        return null;
+
+                    const nc = ntxt[ni++];
+
+                    if (nc == sc) {
+                        if (startMatch == -1)
+                            startMatch = ni;
+                        break;
+                    } else {
+                        if (startMatch != -1) {
+                            matches.push({
+                                index: startMatch,
+                                length: ni - startMatch
+                            });
+
+                            startMatch = -1;
+                        }
+                    }
+                }
+            }
+
+            if (startMatch != -1) {
+                matches.push({
+                    index: startMatch,
+                    length: ni - startMatch + 1
+                });
+            }
+
+            return { object, matches };
+        }
+
+        root.__sortedApps = DesktopEntries.applications.values
+            .map(scoreEntry)
+            .filter(entry => entry !== null)
+            .sort((a, b) => {
+                const ca = counts[a.object.name] ?? 0;
+                const cb = counts[b.object.name] ?? 0;
+
+                if (ca !== cb)
+                    return cb - ca;
+
+                let ai = 0;
+                let bi = 0;
+                let s = 0;
+
+                while (ai != a.matches.length && bi != b.matches.length) {
+                    const am = a.matches[ai];
+                    const bm = b.matches[bi];
+
+                    s = bm.length - am.length;
+                    if (s != 0)
+                        return s;
+
+                    s = am.index - bm.index;
+                    if (s != 0)
+                        return s;
+
+                    ++ai;
+                    ++bi;
+                }
+
+                s = a.matches.length - b.matches.length;
+                if (s != 0)
+                    return s;
+
+                s = a.object.name.length - b.object.name.length;
+                if (s != 0)
+                    return s;
+
+                return a.object.name.localeCompare(b.object.name);
+            })
+            .map(entry => entry.object);
+    }
+
+    Component.onCompleted: root.refreshApps()
+
+    Connections {
+        target: DesktopEntries
+        function onApplicationsChanged() { root.refreshApps(); }
+    }
+
+    Connections {
+        target: search
+        function onTextChanged() { root.refreshApps(); }
+    }
 
     FileView {
         id: launcherFileView
         path: Qt.resolvedUrl(Directories.launcherCache)
         onLoaded: {
             root.launcherHistory = JSON.parse(launcherFileView.text());
+            root.refreshApps();
         }
         onLoadFailed: error => {
             if (error == FileViewError.FileNotFound) {
@@ -134,96 +243,7 @@ Item {
                 clip: true
                 cacheBuffer: 0
                 model: ScriptModel {
-                    values: DesktopEntries.applications.values.map(object => {
-                        const stxt = search.text.toLowerCase();
-                        const ntxt = object.name.toLowerCase();
-                        let si = 0;
-                        let ni = 0;
-
-                        let matches = [];
-                        let startMatch = -1;
-
-                        for (let si = 0; si != stxt.length; ++si) {
-                            const sc = stxt[si];
-
-                            while (true) {
-                                if (ni == ntxt.length)
-                                    return null;
-
-                                const nc = ntxt[ni++];
-
-                                if (nc == sc) {
-                                    if (startMatch == -1)
-                                        startMatch = ni;
-                                    break;
-                                } else {
-                                    if (startMatch != -1) {
-                                        matches.push({
-                                            index: startMatch,
-                                            length: ni - startMatch
-                                        });
-
-                                        startMatch = -1;
-                                    }
-                                }
-                            }
-                        }
-
-                        if (startMatch != -1) {
-                            matches.push({
-                                index: startMatch,
-                                length: ni - startMatch + 1
-                            });
-                        }
-
-                        return {
-                            object: object,
-                            matches: matches
-                        };
-                    }).filter(entry => entry !== null).sort((() => {
-                            const history = root.launcherHistory;
-                            const counts = {};
-                            for (const entry of history)
-                                counts[entry.name] = entry.count;
-
-                            return (a, b) => {
-                                const ca = counts[a.object.name] ?? 0;
-                                const cb = counts[b.object.name] ?? 0;
-
-                                if (ca !== cb)
-                                    return cb - ca;
-
-                                let ai = 0;
-                                let bi = 0;
-                                let s = 0;
-
-                                while (ai != a.matches.length && bi != b.matches.length) {
-                                    const am = a.matches[ai];
-                                    const bm = b.matches[bi];
-
-                                    s = bm.length - am.length;
-                                    if (s != 0)
-                                        return s;
-
-                                    s = am.index - bm.index;
-                                    if (s != 0)
-                                        return s;
-
-                                    ++ai;
-                                    ++bi;
-                                }
-
-                                s = a.matches.length - b.matches.length;
-                                if (s != 0)
-                                    return s;
-
-                                s = a.object.name.length - b.object.name.length;
-                                if (s != 0)
-                                    return s;
-
-                                return a.object.name.localeCompare(b.object.name);
-                            };
-                        })()).map(entry => entry.object)
+                    values: root.__sortedApps
 
                     onValuesChanged: list.currentIndex = 0
                 }
