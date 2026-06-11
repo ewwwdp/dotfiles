@@ -1,9 +1,8 @@
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls
 import Quickshell
+import Quickshell.Io
 import Quickshell.Widgets
-import Quickshell.Wayland
 import qs
 import qs.modules.common
 
@@ -11,6 +10,45 @@ Item {
     id: root
     height: 7 + searchContainer.implicitHeight + list.topMargin * 2 + list.delegateHeight * 10
     width: 450
+
+    property var launcherHistory: []
+
+    FileView {
+        id: launcherFileView
+        path: Qt.resolvedUrl(Directories.launcherCache)
+        onLoaded: {
+            root.launcherHistory = JSON.parse(launcherFileView.text());
+        }
+        onLoadFailed: error => {
+            if (error == FileViewError.FileNotFound) {
+                root.launcherHistory = [];
+                launcherFileView.setText("[]");
+            }
+        }
+    }
+
+    function recordLaunch(appName: string): void {
+        let history = [...root.launcherHistory];
+        let found = false;
+        for (let i = 0; i < history.length; i++) {
+            if (history[i].name === appName) {
+                history[i].count++;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            history.push({
+                name: appName,
+                count: 1
+            });
+        }
+        history.sort((a, b) => b.count - a.count);
+        if (history.length > 50)
+            history = history.slice(0, 50);
+        root.launcherHistory = history;
+        launcherFileView.setText(JSON.stringify(history));
+    }
 
     Rectangle {
         id: content
@@ -142,37 +180,50 @@ Item {
                             object: object,
                             matches: matches
                         };
-                    }).filter(entry => entry !== null).sort((a, b) => {
-                        let ai = 0;
-                        let bi = 0;
-                        let s = 0;
+                    }).filter(entry => entry !== null).sort((() => {
+                            const history = root.launcherHistory;
+                            const counts = {};
+                            for (const entry of history)
+                                counts[entry.name] = entry.count;
 
-                        while (ai != a.matches.length && bi != b.matches.length) {
-                            const am = a.matches[ai];
-                            const bm = b.matches[bi];
+                            return (a, b) => {
+                                const ca = counts[a.object.name] ?? 0;
+                                const cb = counts[b.object.name] ?? 0;
 
-                            s = bm.length - am.length;
-                            if (s != 0)
-                                return s;
+                                if (ca !== cb)
+                                    return cb - ca;
 
-                            s = am.index - bm.index;
-                            if (s != 0)
-                                return s;
+                                let ai = 0;
+                                let bi = 0;
+                                let s = 0;
 
-                            ++ai;
-                            ++bi;
-                        }
+                                while (ai != a.matches.length && bi != b.matches.length) {
+                                    const am = a.matches[ai];
+                                    const bm = b.matches[bi];
 
-                        s = a.matches.length - b.matches.length;
-                        if (s != 0)
-                            return s;
+                                    s = bm.length - am.length;
+                                    if (s != 0)
+                                        return s;
 
-                        s = a.object.name.length - b.object.name.length;
-                        if (s != 0)
-                            return s;
+                                    s = am.index - bm.index;
+                                    if (s != 0)
+                                        return s;
 
-                        return a.object.name.localeCompare(b.object.name);
-                    }).map(entry => entry.object)
+                                    ++ai;
+                                    ++bi;
+                                }
+
+                                s = a.matches.length - b.matches.length;
+                                if (s != 0)
+                                    return s;
+
+                                s = a.object.name.length - b.object.name.length;
+                                if (s != 0)
+                                    return s;
+
+                                return a.object.name.localeCompare(b.object.name);
+                            };
+                        })()).map(entry => entry.object)
 
                     onValuesChanged: list.currentIndex = 0
                 }
@@ -253,7 +304,8 @@ Item {
                     implicitWidth: ListView.view.width
 
                     onClicked: {
-                        Quickshell.execDetached(["uwsm", "app", "--", modelData.command]);
+                        root.recordLaunch(modelData.name);
+                        Quickshell.execDetached(["uwsm", "app", "--"].concat(modelData.command));
                         GlobalStates.launcherOpen = false;
                     }
 
