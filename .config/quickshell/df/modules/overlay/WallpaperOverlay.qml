@@ -72,11 +72,9 @@ Scope {
                     id: container
                     anchors {
                         horizontalCenter: parent.horizontalCenter
-                        bottom: parent.bottom
-                        bottomMargin: 48
                     }
-                    width: Math.min(parent.width - 80, 900)
-                    height: root.thumbnailSize + 40
+                    width: Math.min(parent.width - 80, 885)
+                    height: root.thumbnailSize + 30
                     radius: 16
                     color: "#ee11111b"
                     border.width: 1
@@ -134,7 +132,7 @@ Scope {
                                         Rectangle {
                                             anchors.fill: parent
                                             anchors.margins: 4
-                                            radius: 8
+                                            radius: 6
                                             clip: true
 
                                             Image {
@@ -143,8 +141,8 @@ Scope {
                                                 fillMode: Image.PreserveAspectCrop
                                                 asynchronous: true
                                                 cache: false
-                                                sourceSize.width: root.thumbnailSize
-                                                sourceSize.height: root.thumbnailSize
+                                                sourceSize.width: root.thumbnailSize * 2
+                                                sourceSize.height: root.thumbnailSize * 2
                                             }
                                         }
 
