@@ -88,6 +88,7 @@ Scope {
                         spacing: 8
 
                         Flickable {
+                            id: wallpaperFlickable
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             clip: true
@@ -96,6 +97,14 @@ Scope {
                             boundsBehavior: Flickable.StopAtBounds
                             interactive: true
                             flickDeceleration: 2500
+
+                            WheelHandler {
+                                onWheel: event => {
+                                    event.accepted = true;
+                                    wallpaperFlickable.contentX = Math.max(0, Math.min(wallpaperFlickable.contentWidth - wallpaperFlickable.width, wallpaperFlickable.contentX - event.angleDelta.y));
+                                }
+                                acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                            }
 
                             Row {
                                 id: row
@@ -163,6 +172,7 @@ Scope {
     Process {
         id: wallpaperLister
         command: ["ls", "-1", Directories.wallpapersPath]
+        running: false
 
         stdout: SplitParser {
             onRead: data => {
@@ -181,7 +191,6 @@ Scope {
         function onWallpaperPickerOpenChanged() {
             if (GlobalStates.wallpaperPickerOpen) {
                 wallpaperModel.clear();
-                wallpaperLister.running = false;
                 wallpaperLister.running = true;
             }
         }
