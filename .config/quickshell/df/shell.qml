@@ -64,6 +64,10 @@ ShellRoot {
     }
     LazyLoader {
         active: true
+        component: WallpaperOverlay {}
+    }
+    LazyLoader {
+        active: true
         component: Launcher.Controller {}
     }
 }

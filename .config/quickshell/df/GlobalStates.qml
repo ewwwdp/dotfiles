@@ -15,6 +15,7 @@ Singleton {
     property bool screenLocked: false
     property bool calendarOpen: false
     property bool launcherOpen: false
+    property bool wallpaperPickerOpen: false
 
     IpcHandler {
         target: "root"
@@ -25,6 +26,10 @@ Singleton {
 
         function lock() {
             root.screenLocked = true;
+        }
+
+        function wallpaper() {
+            root.wallpaperPickerOpen = !root.wallpaperPickerOpen;
         }
     }
 

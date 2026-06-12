@@ -1,1 +1,1 @@
-require("config.monitors.default")
+require("config.monitors.both-vertical")

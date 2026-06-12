@@ -36,6 +36,7 @@ hl.bind(mainMod .. " + ALT + left", hl.dsp.focus({ workspace = "r-1" }))
 hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd("killall qs; " .. values.qs))
 hl.bind(mainMod .. "+ Escape", hl.dsp.exec_cmd(values.qs .. " ipc call root sidebar"))
 hl.bind(mainMod .. "+ L", hl.dsp.exec_cmd(values.qs .. " ipc call root lock"))
+hl.bind(mainMod .. "+ SHIFT + W", hl.dsp.exec_cmd(values.qs .. " ipc call root wallpaper"))
 hl.bind(mainMod .. "+ M", hl.dsp.exec_cmd(values.qs .. " ipc call changeMonitor showOsd"))
 
 -- Swap windows
