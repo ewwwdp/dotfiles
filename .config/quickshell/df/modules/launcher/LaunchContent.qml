@@ -25,45 +25,14 @@ Item {
         function scoreEntry(object) {
             const stxt = _search.toLowerCase();
             const ntxt = object.name.toLowerCase();
-            let ni = 0;
 
-            let matches = [];
-            let startMatch = -1;
+            if (stxt.length === 0)
+                return { object, matches: [] };
 
-            for (let si = 0; si != stxt.length; ++si) {
-                const sc = stxt[si];
+            if (ntxt.startsWith(stxt))
+                return { object, matches: [{ index: 1, length: stxt.length }] };
 
-                while (true) {
-                    if (ni == ntxt.length)
-                        return null;
-
-                    const nc = ntxt[ni++];
-
-                    if (nc == sc) {
-                        if (startMatch == -1)
-                            startMatch = ni;
-                        break;
-                    } else {
-                        if (startMatch != -1) {
-                            matches.push({
-                                index: startMatch,
-                                length: ni - startMatch
-                            });
-
-                            startMatch = -1;
-                        }
-                    }
-                }
-            }
-
-            if (startMatch != -1) {
-                matches.push({
-                    index: startMatch,
-                    length: ni - startMatch + 1
-                });
-            }
-
-            return { object, matches };
+            return null;
         }
 
         root.__sortedApps = DesktopEntries.applications.values
