@@ -23,71 +23,94 @@ Item {
             counts[entry.name] = entry.count;
 
         function scoreEntry(object) {
-            const stxt = _search.toLowerCase();
+            const stxt = _search.trim().toLowerCase();
             const ntxt = object.name.toLowerCase();
+            const gtxt = (object.genericName || "").toLowerCase();
+            const ctxt = (object.comment || "").toLowerCase();
+            const kw = object.keywords || [];
 
             if (stxt.length === 0)
-                return { object, matches: [] };
+                return { object, score: 0, matches: [] };
 
+            // Tier 1: Exact name match
+            if (ntxt === stxt)
+                return { object, score: 100, matches: [{ index: 0, length: stxt.length }] };
+
+            // Tier 2: Name starts with query
             if (ntxt.startsWith(stxt))
-                return { object, matches: [{ index: 1, length: stxt.length }] };
+                return { object, score: 90, matches: [{ index: 0, length: stxt.length }] };
+
+            // Tier 3: Any word in name starts with query
+            for (const token of ntxt.split(/\s+/)) {
+                if (token.startsWith(stxt))
+                    return { object, score: 80, matches: [{ index: ntxt.indexOf(token), length: stxt.length }] };
+            }
+
+            // Tier 4: Substring anywhere in name
+            const nameIdx = ntxt.indexOf(stxt);
+            if (nameIdx >= 0)
+                return { object, score: 70, matches: [{ index: nameIdx, length: stxt.length }] };
+
+            // Tier 5: Substring in genericName (e.g. "Web Browser")
+            if (gtxt.length > 0 && gtxt.indexOf(stxt) >= 0)
+                return { object, score: 60, matches: [] };
+
+            // Tier 6: Keyword match
+            for (const keyword of kw) {
+                if (keyword.toLowerCase().indexOf(stxt) >= 0)
+                    return { object, score: 50, matches: [] };
+            }
+
+            // Tier 7: Substring in comment
+            if (ctxt.length > 0 && ctxt.indexOf(stxt) >= 0)
+                return { object, score: 40, matches: [] };
 
             return null;
         }
 
-        root.__sortedApps = DesktopEntries.applications.values
-            .map(scoreEntry)
-            .filter(entry => entry !== null)
-            .sort((a, b) => {
-                const ca = counts[a.object.name] ?? 0;
-                const cb = counts[b.object.name] ?? 0;
+        root.__sortedApps = DesktopEntries.applications.values.map(scoreEntry).filter(entry => entry !== null).sort((a, b) => {
+            // Primary: match quality tier (higher = better)
+            if (a.score !== b.score) return b.score - a.score;
 
-                if (ca !== cb)
-                    return cb - ca;
+            // Secondary: launch frequency
+            const ca = counts[a.object.name] ?? 0;
+            const cb = counts[b.object.name] ?? 0;
+            if (ca !== cb) return cb - ca;
 
-                let ai = 0;
-                let bi = 0;
-                let s = 0;
+            // Within same tier+count: better match position/length wins
+            let ai = 0, bi = 0, s = 0;
+            while (ai < a.matches.length && bi < b.matches.length) {
+                s = b.matches[ai].length - a.matches[ai].length;
+                if (s !== 0) return s;
+                s = a.matches[ai].index - b.matches[ai].index;
+                if (s !== 0) return s;
+                ai++; bi++;
+            }
 
-                while (ai != a.matches.length && bi != b.matches.length) {
-                    const am = a.matches[ai];
-                    const bm = b.matches[bi];
+            s = a.matches.length - b.matches.length;
+            if (s !== 0) return s;
 
-                    s = bm.length - am.length;
-                    if (s != 0)
-                        return s;
+            s = a.object.name.length - b.object.name.length;
+            if (s !== 0) return s;
 
-                    s = am.index - bm.index;
-                    if (s != 0)
-                        return s;
-
-                    ++ai;
-                    ++bi;
-                }
-
-                s = a.matches.length - b.matches.length;
-                if (s != 0)
-                    return s;
-
-                s = a.object.name.length - b.object.name.length;
-                if (s != 0)
-                    return s;
-
-                return a.object.name.localeCompare(b.object.name);
-            })
-            .map(entry => entry.object);
+            return a.object.name.localeCompare(b.object.name);
+        }).map(entry => entry.object);
     }
 
     Component.onCompleted: root.refreshApps()
 
     Connections {
         target: DesktopEntries
-        function onApplicationsChanged() { root.refreshApps(); }
+        function onApplicationsChanged() {
+            root.refreshApps();
+        }
     }
 
     Connections {
         target: search
-        function onTextChanged() { root.refreshApps(); }
+        function onTextChanged() {
+            root.refreshApps();
+        }
     }
 
     FileView {
