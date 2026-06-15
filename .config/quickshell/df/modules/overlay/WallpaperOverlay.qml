@@ -11,7 +11,7 @@ import qs.modules.common
 Scope {
     id: root
 
-    property string selectedScreen: Hyprland.focusedMonitor.name
+    property string selectedScreen: Hyprland.focusedMonitor?.name ?? ""
     property int thumbnailSize: 140
 
     ListModel {

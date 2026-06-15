@@ -20,17 +20,16 @@ Singleton {
         }
     }
     Timer {
-        interval: 10
-        running: root.ready || GlobalStates.sidebarOpen
+        interval: root.updateInterval
+        running: root.ready
         repeat: true
-        onTriggered: {
-            root.update();
-            interval = root.updateInterval;
-        }
+        onTriggered: root.update()
     }
 
+    Component.onCompleted: root.update()
+
     function update() {
-        let devices = Bluetooth.defaultAdapter?.devices?.values.filter(d => d.connected) || {};
+        let devices = Bluetooth.defaultAdapter?.devices?.values.filter(d => d.connected) || [];
         if (devices?.length > 0) {
             connectedDevicesText = devices.map(d => `${d.name || d.deviceName} (${d.address})`).join("\n");
             materialSymbol = "󰂱";

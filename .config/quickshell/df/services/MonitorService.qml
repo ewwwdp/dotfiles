@@ -99,8 +99,7 @@ Singleton {
     function switchMode(mode) {
         if (root.availableModes.indexOf(mode) < 0)
             return;
-        Quickshell.execDetached(["sh", "-c",
-            `sed -i 's/config\\.monitors\\.[a-z-]*/config.monitors.${mode}/' "$HOME/.config/hypr/config/monitors.lua" && hyprctl reload`]);
+        Quickshell.execDetached(["sh", "-c", `sed -i 's/config\\.monitors\\.[a-z-]*/config.monitors.${mode}/' "$HOME/.config/hypr/config/monitors.lua" && hyprctl reload`]);
         root.currentMode = mode;
     }
 }
