@@ -16,6 +16,7 @@ Singleton {
     property bool calendarOpen: false
     property bool launcherOpen: false
     property bool wallpaperPickerOpen: false
+    property bool clipboardOpen: false
 
     IpcHandler {
         target: "root"
@@ -30,6 +31,10 @@ Singleton {
 
         function wallpaper() {
             root.wallpaperPickerOpen = !root.wallpaperPickerOpen;
+        }
+
+        function clipboard() {
+            root.clipboardOpen = !root.clipboardOpen;
         }
     }
 

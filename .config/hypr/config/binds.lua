@@ -55,7 +55,7 @@ hl.bind(mainMod .. " + CTRL + down", hl.dsp.window.resize({ relative = true, x =
 hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd(values.qs .. " ipc call screenshot takeScreenshot"))
 
 -- Clipboard terminal
-hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd(terminal .. " --class " .. values.clipse .. " -e " .. values.clipse))
+hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd(values.qs .. " ipc call root clipboard"))
 
 -- Window grouping
 hl.bind(mainMod .. " + G", hl.dsp.group.toggle())

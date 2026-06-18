@@ -12,6 +12,7 @@ import qs.modules.notificationPopup
 import qs.modules.polkit
 import qs.modules.screenshot as Screenshot
 import qs.modules.launcher as Launcher
+import qs.modules.clipboard
 
 import QtQuick
 import Quickshell
@@ -69,5 +70,9 @@ ShellRoot {
     LazyLoader {
         active: true
         component: Launcher.Controller {}
+    }
+    LazyLoader {
+        active: true
+        component: Cliphist {}
     }
 }
