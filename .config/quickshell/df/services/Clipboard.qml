@@ -9,6 +9,7 @@ Singleton {
     property ListModel list: ListModel {}
 
     property bool fetchListProc: false
+    property bool pendingListReset: false
     signal listUpdated()
 
     property var imageQueue: []

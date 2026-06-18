@@ -32,7 +32,7 @@ Scope {
             color: "transparent"
             exclusiveZone: 0
 
-            WlrLayershell.namespace: "quickshell:wallpaper"
+            WlrLayershell.namespace: "quickshell:wallpaperoverlay"
             WlrLayershell.layer: WlrLayer.Overlay
 
             HyprlandFocusGrab {

@@ -103,7 +103,7 @@ Scope {
                 screen: modelData
                 visible: root.visible
                 exclusionMode: ExclusionMode.Ignore
-                WlrLayershell.namespace: "shell:screenshot"
+                WlrLayershell.namespace: "quickshell:screenshot"
                 WlrLayershell.layer: WlrLayer.Overlay
                 WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
 

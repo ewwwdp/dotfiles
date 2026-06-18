@@ -22,7 +22,7 @@ PanelWindow {
     visible: auth.dialogVisible
     anchors { top: true; bottom: true; left: true; right: true }
     color: "transparent"
-    WlrLayershell.namespace: "df-polkit"
+    WlrLayershell.namespace: "quickshell:polkitdialog"
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
     exclusionMode: ExclusionMode.Ignore

@@ -36,7 +36,7 @@ Scope {
             implicitHeight: 280
             color: "transparent"
 
-            WlrLayershell.namespace: "quickshell:calendar"
+            WlrLayershell.namespace: "quickshell:calendaroverlay"
 
             HyprlandFocusGrab {
                 windows: [panelWindow]

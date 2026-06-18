@@ -28,7 +28,7 @@ LazyLoader {
                 color: "transparent"
                 updatesEnabled: true
 
-                WlrLayershell.namespace: "background"
+                WlrLayershell.namespace: "quickshell:background"
                 WlrLayershell.layer: WlrLayer.Background
                 WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
                 exclusionMode: ExclusionMode.Ignore

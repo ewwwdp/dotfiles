@@ -17,7 +17,7 @@ Scope {
             color: "transparent"
             implicitWidth: content.width
             implicitHeight: content.height
-            WlrLayershell.namespace: "shell:launcher"
+            WlrLayershell.namespace: "quickshell:launcher"
 
             HyprlandFocusGrab {
                 windows: [launcherWindow]
