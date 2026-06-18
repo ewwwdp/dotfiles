@@ -159,7 +159,6 @@ Scope {
         onTriggered: root.shouldShowOsd = false
     }
 
-    // Auto-hide timer (if no selection is made)
     Timer {
         id: autoHideTimer
         interval: 5000

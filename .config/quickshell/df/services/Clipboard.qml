@@ -9,16 +9,9 @@ Singleton {
     property ListModel list: ListModel {}
 
     property bool fetchListProc: false
+    signal listUpdated()
 
     property var imageQueue: []
-
-    IpcHandler {
-        target: "cliphist"
-
-        function update() {
-            root.fetchListProc = true;
-        }
-    }
 
     Process {
         id: decodeProc
@@ -31,7 +24,7 @@ Singleton {
             id: imageDecoder
         }
 
-        onExited: {
+        onExited: function (exitCode) {
             if (exitCode === 0 && targetIndex >= 0 && targetIndex < root.list.count) {
                 var base64 = imageDecoder.text.trim();
                 var item = root.list.get(targetIndex);
@@ -56,12 +49,6 @@ Singleton {
                 root.parseClipboardList(this.text);
             }
         }
-
-        onExited: {
-            if (exitCode !== 0) {
-                console.error("cliphist list failed with code:", exitCode);
-            }
-        }
     }
 
     Process {
@@ -69,7 +56,7 @@ Singleton {
         property int targetId: -1
         command: ['sh', '-c', `cliphist decode ${targetId} | wl-copy`]
 
-        onExited: {
+        onExited: function (exitCode) {
             if (exitCode !== 0) {
                 console.error("cliphist decode/copy failed with code:", exitCode);
             }
@@ -81,7 +68,7 @@ Singleton {
         property int targetId: -1
         command: ['sh', '-c', `echo ${targetId} | cliphist delete`]
 
-        onExited: {
+        onExited: function (exitCode) {
             if (exitCode === 0) {
                 root.fetchListProc = true;
             } else {
@@ -94,7 +81,7 @@ Singleton {
         id: wipeProc
         command: ['cliphist', 'wipe']
 
-        onExited: {
+        onExited: function (exitCode) {
             if (exitCode === 0) {
                 root.list.clear();
             } else {
@@ -166,6 +153,7 @@ Singleton {
                 root.list.move(existingIndex, j, 1);
             }
         }
+        root.listUpdated();
     }
 
     function copyToClipboard(id) {

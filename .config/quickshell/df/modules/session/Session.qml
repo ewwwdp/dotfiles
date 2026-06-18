@@ -3,9 +3,9 @@ import QtQuick
 import Quickshell
 
 Scope {
-    Loader {
+    LazyLoader {
         active: GlobalStates.isSessionOpen
-        sourceComponent: WLogout {
+        component: WLogout {
             LogoutButton {
                 command: "loginctl lock-session"
                 keybind: Qt.Key_L

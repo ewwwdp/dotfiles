@@ -2,12 +2,11 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Hyprland
 import Quickshell.Wayland
-import Quickshell.Io
+import Quickshell.Hyprland
+import qs
 import qs.services
 import qs.modules.common
-import qs
 
 Scope {
     id: root
@@ -15,430 +14,299 @@ Scope {
     LazyLoader {
         active: GlobalStates.clipboardOpen
 
+        onActiveChanged: {
+            if (active) Clipboard.fetchListProc = true;
+        }
+
         PanelWindow {
-            id: window
-            implicitWidth: 400
-            implicitHeight: 560
-            anchors {
-                right: true
-                bottom: true
-                top: true
-                left: true
-            }
+            id: clipboardWindow
             color: "transparent"
-            WlrLayershell.layer: WlrLayer.Overlay
+            implicitWidth: content.width
+            implicitHeight: content.height
+            WlrLayershell.namespace: "shell:clipboard"
 
-            Item {
-                id: rootItem
+            HyprlandFocusGrab {
+                windows: [clipboardWindow]
+                active: true
+                onCleared: GlobalStates.clipboardOpen = false
+            }
+
+            MouseArea {
                 anchors.fill: parent
-                anchors.margins: 10
-                focus: true
+                onPressed: GlobalStates.clipboardOpen = false
 
-                property var filteredItems: []
+                MouseArea {
+                    anchors.centerIn: parent
+                    width: content.width
+                    height: content.height
 
-                function getItem(idx) {
-                    var items = searchField.text === "" ? Clipboard.list : filteredItems;
-                    if (items.get !== undefined) {
-                        return items.get(idx);
-                    } else {
-                        return items[idx];
-                    }
-                }
+                    Rectangle {
+                        id: content
+                        width: 450
+                        height: Math.min(clipboardList.contentHeight + headerRow.implicitHeight + 50, 600)
+                        color: "#171717"
+                        radius: 10
+                        border.color: "#262626"
+                        border.width: 1
 
-                function updateFilter() {
-                    var query = searchField.text.toLowerCase().trim();
-                    if (query === "") {
-                        filteredItems = [];
-                        return;
-                    }
+                        ColumnLayout {
+                            anchors.fill: parent
+                            anchors.margins: 8
+                            spacing: 0
 
-                    var result = [];
-                    for (var i = 0; i < Clipboard.list.count; i++) {
-                        var item = Clipboard.list.get(i);
-                        var match = false;
-
-                        if (!item.isBinary && item.content.toLowerCase().includes(query)) {
-                            match = true;
-                        } else if (item.isBinary && item.binaryType.toLowerCase().includes(query)) {
-                            match = true;
-                        }
-
-                        if (match) {
-                            result.push({
-                                id: item.id,
-                                content: item.content,
-                                isBinary: item.isBinary,
-                                binaryType: item.binaryType,
-                                binarySize: item.binarySize,
-                                binaryDimensions: item.binaryDimensions,
-                                previewSource: item.previewSource,
-                                originalIndex: i
-                            });
-                        }
-                    }
-                    filteredItems = result;
-                }
-
-                Connections {
-                    target: Clipboard.list
-                    function onCountChanged() {
-                        rootItem.updateFilter();
-                    }
-                }
-
-                Keys.onPressed: event => {
-                    if (event.key === Qt.Key_Escape) {
-                        GlobalStates.clipboardOpen = false;
-                        event.accepted = true;
-                    } else if (event.key === Qt.Key_Delete && (event.modifiers & Qt.ControlModifier)) {
-                        Clipboard.clearHistory();
-                        event.accepted = true;
-                    } else if (event.key === Qt.Key_Up) {
-                        if (clipboardList.currentIndex > 0) {
-                            clipboardList.currentIndex--;
-                        }
-                        event.accepted = true;
-                    } else if (event.key === Qt.Key_Down) {
-                        if (clipboardList.currentIndex < clipboardList.count - 1) {
-                            clipboardList.currentIndex++;
-                        }
-                        event.accepted = true;
-                    } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                        if (clipboardList.currentIndex >= 0 && clipboardList.count > 0) {
-                            var item = rootItem.getItem(clipboardList.currentIndex);
-                            if (item) {
-                                Clipboard.copyToClipboard(item.id);
-                                GlobalStates.clipboardOpen = false;
-                            }
-                        }
-                        event.accepted = true;
-                    } else if (event.key === Qt.Key_Delete) {
-                        if (clipboardList.currentIndex >= 0 && clipboardList.count > 0) {
-                            var item = rootItem.getItem(clipboardList.currentIndex);
-                            if (item) {
-                                Clipboard.deleteEntry(item.id);
-                            }
-                        }
-                        event.accepted = true;
-                    } else if (event.key === Qt.Key_F && (event.modifiers & Qt.ControlModifier)) {
-                        searchField.forceActiveFocus();
-                        event.accepted = true;
-                    }
-                }
-
-                Rectangle {
-                    id: shadow
-                    anchors.fill: parent
-                    anchors.topMargin: 4
-                    anchors.leftMargin: 4
-                    color: "#20000000"
-                    radius: 25
-                }
-
-                Rectangle {
-                    id: bg
-                    anchors.fill: parent
-                    color: Appearence.colors.barBackgroundColor
-                    radius: 25
-                }
-
-                ColumnLayout {
-                    anchors.fill: bg
-                    anchors.topMargin: 20
-                    anchors.bottomMargin: 15
-                    anchors.leftMargin: 20
-                    anchors.rightMargin: 20
-                    spacing: 10
-
-                    RowLayout {
-                        Layout.fillWidth: true
-                        spacing: 10
-
-                        Text {
-                            text: "\uf0ea"
-                            font.family: Appearence.font.nerdFont
-                            font.pixelSize: 20
-                            color: Appearence.colors.accentColor
-                        }
-
-                        RowLayout {
-                            Text {
-                                text: "Clipboard"
-                                font.family: "Outfit SemiBold"
-                                font.pixelSize: 18
-                                color: Appearence.colors.polkitText
-                            }
-
-                            Text {
-                                text: "• " + clipboardList.count + (clipboardList.count === 1 ? " item" : " items")
-                                font.pixelSize: 12
-                                color: Appearence.colors.barBorderColor
-                            }
-                        }
-
-                        Item {
-                            Layout.fillWidth: true
-                        }
-
-                        Button {
-                            text: "\uf1f8"
-                            font.family: Appearence.font.nerdFont
-                            flat: true
-                            implicitWidth: 35
-                            implicitHeight: 35
-                            onClicked: Clipboard.clearHistory()
-                        }
-
-                        Button {
-                            text: "\uf00d"
-                            font.family: Appearence.font.nerdFont
-                            flat: true
-                            implicitWidth: 35
-                            implicitHeight: 35
-                            onClicked: GlobalStates.clipboardOpen = false
-                        }
-                    }
-
-                    RowLayout {
-                        Layout.fillWidth: true
-                        spacing: 8
-
-                        Text {
-                            text: "\uf002"
-                            font.family: Appearence.font.nerdFont
-                            font.pixelSize: 14
-                            color: Appearence.colors.barBorderColor
-                        }
-
-                        TextField {
-                            id: searchField
-                            Layout.fillWidth: true
-                            placeholderText: "Search..."
-                            font.pixelSize: 14
-                            color: Appearence.colors.polkitText
-                            background: Rectangle {
-                                color: "transparent"
-                            }
-
-                            onTextChanged: {
-                                clipboardList.currentIndex = -1;
-                                rootItem.updateFilter();
-                            }
-
-                            Keys.onPressed: event => {
-                                if (event.key === Qt.Key_Escape) {
-                                    searchField.text = "";
-                                    searchField.focus = false;
-                                    event.accepted = true;
-                                } else if (event.key === Qt.Key_Down) {
-                                    if (clipboardList.count > 0) {
-                                        clipboardList.currentIndex = 0;
-                                    }
-                                    event.accepted = true;
-                                } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                                    event.accepted = false;
-                                }
-                            }
-                        }
-
-                        ListView {
-                            id: clipboardList
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            spacing: 5
-                            clip: true
-                            model: searchField.text === "" ? Clipboard.list : rootItem.filteredItems
-                            boundsBehavior: Flickable.DragAndOvershootBounds
-
-                            ScrollBar.vertical: ScrollBar {
-                                policy: ScrollBar.AsNeeded
-                                width: 6
-                            }
-
-                            ColumnLayout {
-                                anchors.centerIn: parent
-                                visible: clipboardList.count === 0
+                            RowLayout {
+                                id: headerRow
+                                Layout.fillWidth: true
+                                spacing: 8
 
                                 Text {
-                                    color: Appearence.colors.barBorderColor
-                                    text: searchField.text === "" ? "You haven't copied anything!" : "Nothing found"
+                                    text: "\uf0ea"
+                                    font.family: Appearence.font.nerdFont
+                                    font.pixelSize: 20
+                                    color: Appearence.colors.accentColor
+                                }
+
+                                Text {
+                                    Layout.fillWidth: true
+                                    text: "Clipboard"
+                                    font.pixelSize: 16
+                                    color: "#ffffff"
+                                }
+
+                                Text {
+                                    text: "(" + Clipboard.list.count + ")"
+                                    font.pixelSize: 12
+                                    color: "#888888"
+                                    verticalAlignment: Text.AlignVCenter
+                                }
+
+                                Button {
+                                    text: "\uf1f8"
+                                    font.family: Appearence.font.nerdFont
                                     font.pixelSize: 14
+                                    flat: true
+                                    implicitWidth: 32
+                                    implicitHeight: 32
+                                    onClicked: Clipboard.clearHistory()
+                                }
+
+                                Button {
+                                    text: "\uf00d"
+                                    font.family: Appearence.font.nerdFont
+                                    font.pixelSize: 14
+                                    flat: true
+                                    implicitWidth: 32
+                                    implicitHeight: 32
+                                    onClicked: GlobalStates.clipboardOpen = false
                                 }
                             }
 
-                            add: Transition {
-                                NumberAnimation {
-                                    property: "opacity"
-                                    from: 0
-                                    to: 1
-                                    duration: 150
-                                    easing.type: Easing.OutExpo
-                                }
-                            }
+                            ListView {
+                                id: clipboardList
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                clip: true
+                                focus: true
+                                model: Clipboard.list
 
-                            remove: Transition {
-                                NumberAnimation {
-                                    property: "opacity"
-                                    to: 0
-                                    duration: 150
-                                    easing.type: Easing.OutExpo
-                                }
-                            }
+                                topMargin: 4
+                                bottomMargin: clipboardList.count === 0 ? 0 : 4
 
-                            displaced: Transition {
-                                NumberAnimation {
-                                    properties: "y"
-                                    duration: 350
-                                    easing.type: Easing.OutExpo
-                                }
-                            }
-
-                            delegate: Rectangle {
-                                required property var modelData
-                                required property int index
-
-                                width: ListView.view.width
-                                height: contentLayout.height + 20
-                                radius: 20
-                                border.width: clipboardList.currentIndex === index ? 1 : 0
-                                border.color: Qt.rgba(Appearence.colors.polkitText.r, Appearence.colors.polkitText.g, Appearence.colors.polkitText.b, 0.2)
-                                color: {
-                                    if (clipboardList.currentIndex === index) {
-                                        return Appearence.colors.polkitBackground;
-                                    }
-                                    return mouseArea.containsMouse ? Appearence.colors.polkitBackground : Appearence.colors.hoverColor;
+                                ScrollBar.vertical: ScrollBar {
+                                    policy: ScrollBar.AsNeeded
+                                    width: 6
                                 }
 
-                                Behavior on color {
-                                    ColorAnimation {
-                                        duration: 150
-                                        easing.type: Easing.OutExpo
+                                ColumnLayout {
+                                    anchors.centerIn: parent
+                                    visible: clipboardList.count === 0
+
+                                    Text {
+                                        color: "#ffffff"
+                                        opacity: 0.5
+                                        text: "You haven't copied anything!"
+                                        font.pixelSize: 14
                                     }
                                 }
 
-                                Behavior on border.width {
+                                displaced: Transition {
                                     NumberAnimation {
-                                        duration: 150
-                                        easing.type: Easing.OutExpo
+                                        property: "y"
+                                        duration: 200
+                                        easing.type: Easing.OutCubic
+                                    }
+                                    NumberAnimation {
+                                        property: "opacity"
+                                        to: 1
+                                        duration: 100
                                     }
                                 }
 
-                                Component.onCompleted: {
-                                    var idx = modelData.originalIndex !== undefined ? modelData.originalIndex : index;
-                                    if (modelData.isBinary && modelData.previewSource === "") {
-                                        Clipboard.loadImagePreview(idx);
+                                move: Transition {
+                                    NumberAnimation {
+                                        property: "y"
+                                        duration: 200
+                                        easing.type: Easing.OutCubic
+                                    }
+                                    NumberAnimation {
+                                        property: "opacity"
+                                        to: 1
+                                        duration: 100
                                     }
                                 }
 
-                                RowLayout {
-                                    id: contentLayout
-                                    anchors {
-                                        left: parent.left
-                                        right: parent.right
-                                        top: parent.top
-                                        margins: 10
+                                remove: Transition {
+                                    NumberAnimation {
+                                        property: "y"
+                                        duration: 200
+                                        easing.type: Easing.OutCubic
                                     }
-                                    spacing: 5
+                                    NumberAnimation {
+                                        property: "opacity"
+                                        to: 0
+                                        duration: 100
+                                    }
+                                }
 
-                                    ColumnLayout {
-                                        Layout.fillWidth: true
-                                        spacing: 5
+                                highlight: Rectangle {
+                                    radius: 8
+                                    color: "#262626"
+                                }
 
-                                        Text {
-                                            visible: !modelData.isBinary
-                                            Layout.fillWidth: true
-                                            text: modelData.content
-                                            wrapMode: Text.Wrap
-                                            maximumLineCount: 3
-                                            elide: Text.ElideRight
-                                            font.pixelSize: 13
-                                            color: Appearence.colors.polkitText
+                                Keys.onPressed: function (event) {
+                                    if (event.key === Qt.Key_Delete || event.key === Qt.Key_Backspace) {
+                                        if (clipboardList.currentIndex >= 0) {
+                                            var model = clipboardList.model;
+                                            if (model && clipboardList.currentIndex < model.count) {
+                                                var item = model.get(clipboardList.currentIndex);
+                                                Clipboard.deleteEntry(item.id);
+                                            }
                                         }
+                                    }
+                                }
 
-                                        Rectangle {
-                                            visible: modelData.isBinary && modelData.previewSource !== ""
+                                Keys.onReturnPressed: {
+                                    if (clipboardList.currentIndex >= 0) {
+                                        var model = clipboardList.model;
+                                        if (model && clipboardList.currentIndex < model.count) {
+                                            var item = model.get(clipboardList.currentIndex);
+                                            Clipboard.copyToClipboard(item.id);
+                                            GlobalStates.clipboardOpen = false;
+                                        }
+                                    }
+                                }
+
+                                Keys.onEscapePressed: GlobalStates.clipboardOpen = false
+
+                                keyNavigationEnabled: true
+                                keyNavigationWraps: true
+                                highlightMoveVelocity: -1
+                                highlightMoveDuration: 100
+                                highlightRangeMode: ListView.ApplyRange
+                                snapMode: ListView.SnapToItem
+
+                                Connections {
+                                    target: Clipboard
+                                    function onListUpdated() {
+                                        clipboardList.currentIndex = 0;
+                                    }
+                                }
+
+                                delegate: MouseArea {
+                                    required property var modelData
+                                    required property int index
+
+                                    implicitHeight: modelData.isBinary ? 64 : 44
+                                    implicitWidth: ListView.view.width
+
+                                    onClicked: {
+                                        Clipboard.copyToClipboard(modelData.id);
+                                        GlobalStates.clipboardOpen = false;
+                                    }
+
+                                    RowLayout {
+                                        anchors {
+                                            left: parent.left
+                                            leftMargin: 10
+                                            right: parent.right
+                                            rightMargin: 10
+                                            verticalCenter: parent.verticalCenter
+                                        }
+                                        spacing: 10
+
+                                        ColumnLayout {
                                             Layout.fillWidth: true
-                                            Layout.preferredHeight: 150
-                                            radius: 8
-                                            color: Appearence.colors.hoverColor
-                                            clip: true
+                                            spacing: 2
 
-                                            Image {
-                                                anchors.fill: parent
-                                                source: modelData.previewSource
-                                                fillMode: Image.PreserveAspectFit
-                                                asynchronous: true
-                                                smooth: true
-                                                opacity: status === Image.Ready ? 1 : 0
+                                            Text {
+                                                visible: !modelData.isBinary
+                                                Layout.fillWidth: true
+                                                text: modelData.content
+                                                wrapMode: Text.Wrap
+                                                maximumLineCount: 1
+                                                elide: Text.ElideRight
+                                                font.pixelSize: 14
+                                                color: "#ffffff"
+                                            }
 
-                                                Behavior on opacity {
-                                                    NumberAnimation {
-                                                        duration: 350
-                                                        easing.type: Easing.OutExpo
+                                            Text {
+                                                visible: modelData.isBinary
+                                                Layout.fillWidth: true
+                                                text: modelData.binaryType + " (" + modelData.binarySize + ")"
+                                                font.pixelSize: 14
+                                                color: "#ffffff"
+                                            }
+
+                                            RowLayout {
+                                                visible: modelData.isBinary
+                                                Layout.fillWidth: true
+                                                spacing: 4
+
+                                                BusyIndicator {
+                                                    visible: modelData.previewSource === ""
+                                                    Layout.preferredWidth: 10
+                                                    Layout.preferredHeight: 10
+                                                }
+
+                                                Image {
+                                                    visible: modelData.previewSource !== ""
+                                                    Layout.preferredWidth: 60
+                                                    Layout.preferredHeight: 40
+                                                    source: modelData.previewSource
+                                                    fillMode: Image.PreserveAspectFit
+                                                    asynchronous: true
+                                                    smooth: true
+                                                    opacity: status === Image.Ready ? 1 : 0
+
+                                                    Behavior on opacity {
+                                                        NumberAnimation {
+                                                            duration: 200
+                                                            easing.type: Easing.OutCubic
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
 
-                                        RowLayout {
-                                            visible: modelData.isBinary && modelData.previewSource === ""
-                                            Layout.fillWidth: true
-                                            spacing: 5
-
-                                            BusyIndicator {
-                                                Layout.preferredWidth: 12
-                                                Layout.preferredHeight: 12
-                                            }
-
-                                            Text {
-                                                text: `Loading ${modelData.binaryType}...`
-                                                font.pixelSize: 10
-                                                color: Appearence.colors.barBorderColor
-                                            }
+                                        Button {
+                                            text: "\uf00d"
+                                            font.family: Appearence.font.nerdFont
+                                            font.pixelSize: 12
+                                            flat: true
+                                            implicitWidth: 24
+                                            implicitHeight: 24
+                                            Layout.alignment: Qt.AlignTop
+                                            onClicked: Clipboard.deleteEntry(modelData.id)
                                         }
                                     }
 
-                                    Button {
-                                        text: "\uf00d"
-                                        font.family: Appearence.font.nerdFont
-                                        font.pixelSize: 12
-                                        flat: true
-                                        implicitWidth: 25
-                                        implicitHeight: 25
-                                        Layout.alignment: Qt.AlignTop
-                                        onClicked: Clipboard.deleteEntry(modelData.id)
-                                    }
-                                }
-
-                                MouseArea {
-                                    id: mouseArea
-                                    anchors.fill: parent
-                                    hoverEnabled: true
-                                    z: -1
-                                    onClicked: {
-                                        Clipboard.copyToClipboard(modelData.id);
-                                        GlobalStates.clipboardOpen = false;
+                                    Component.onCompleted: {
+                                        var idx = modelData.originalIndex !== undefined ? modelData.originalIndex : index;
+                                        if (modelData.isBinary && modelData.previewSource === "")
+                                            Clipboard.loadImagePreview(idx);
                                     }
                                 }
                             }
-                        }
-                    }
-                }
-                HyprlandFocusGrab {
-                    id: grab
-                    windows: [window]
-                }
-
-                onVisibleChanged: {
-                    if (visible)
-                        grab.active = true;
-                }
-
-                Connections {
-                    target: grab
-                    function onActiveChanged() {
-                        if (!grab.active) {
-                            GlobalStates.clipboardOpen = false;
                         }
                     }
                 }

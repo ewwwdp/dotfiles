@@ -19,30 +19,22 @@ import Quickshell
 
 ShellRoot {
     id: root
-    LazyLoader {
-        active: true
-        component: Background {}
-    }
-    LazyLoader {
-        active: true
-        component: Bar {}
-    }
-    LazyLoader {
-        active: true
-        component: SoundOverlay {}
-    }
-    LazyLoader {
-        active: true
-        component: MonitorsOverlay {}
-    }
+
+    Background {}
+
+    Bar {}
+
+    SoundOverlay {}
+
+    MonitorsOverlay {}
+
     LazyLoader {
         active: true
         component: Sidebar {}
     }
-    LazyLoader {
-        active: true
-        component: Session {}
-    }
+
+    Session {}
+
     LazyLoader {
         active: true
         component: NotificationPopup {}
@@ -55,24 +47,14 @@ ShellRoot {
         active: true
         component: Polkit {}
     }
-    LazyLoader {
-        active: true
-        component: CalendarOverlay {}
-    }
-    LazyLoader {
-        active: true
-        component: Screenshot.Controller {}
-    }
-    LazyLoader {
-        active: true
-        component: WallpaperOverlay {}
-    }
-    LazyLoader {
-        active: true
-        component: Launcher.Controller {}
-    }
-    LazyLoader {
-        active: true
-        component: Cliphist {}
-    }
+
+    CalendarOverlay {}
+
+    Screenshot.Controller {}
+
+    WallpaperOverlay {}
+
+    Launcher.Controller {}
+
+    Cliphist {}
 }

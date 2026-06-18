@@ -4,40 +4,44 @@ import QtQuick
 import qs
 import qs.modules.common
 
-Item {
-    id: root
+LazyLoader {
+    active: true
 
-    Variants {
-        model: Quickshell.screens
+    component: Item {
+        id: root
 
-        PanelWindow {
-            id: panel
-            required property ShellScreen modelData
+        Variants {
+            model: Quickshell.screens
 
-            screen: modelData
-            visible: true
-            anchors {
-                top: true
-                bottom: true
-                left: true
-                right: true
-            }
-            color: "transparent"
-            updatesEnabled: true
+            PanelWindow {
+                id: panel
+                required property ShellScreen modelData
 
-            WlrLayershell.namespace: "background"
-            WlrLayershell.layer: WlrLayer.Background
-            WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
-            exclusionMode: ExclusionMode.Ignore
+                screen: modelData
+                visible: true
+                anchors {
+                    top: true
+                    bottom: true
+                    left: true
+                    right: true
+                }
+                color: "transparent"
+                updatesEnabled: true
 
-            Image {
-                anchors.fill: parent
-                source: WallpaperConfig.wallpaperForScreen(panel.modelData.name)
-                fillMode: Image.PreserveAspectCrop
-                asynchronous: true
-                cache: true
-                sourceSize.width: panel.width
-                sourceSize.height: panel.height
+                WlrLayershell.namespace: "background"
+                WlrLayershell.layer: WlrLayer.Background
+                WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+                exclusionMode: ExclusionMode.Ignore
+
+                Image {
+                    anchors.fill: parent
+                    source: WallpaperConfig.wallpaperForScreen(panel.modelData.name)
+                    fillMode: Image.PreserveAspectCrop
+                    asynchronous: true
+                    cache: true
+                    sourceSize.width: panel.width
+                    sourceSize.height: panel.height
+                }
             }
         }
     }
