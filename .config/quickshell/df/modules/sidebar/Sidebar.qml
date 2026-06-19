@@ -9,6 +9,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
+import Quickshell.Bluetooth
 
 Scope {
     id: root
@@ -64,13 +65,17 @@ Scope {
                 } else if (sidebarContentLoader.item) {
                     if (event.key === Qt.Key_Down || event.key === Qt.Key_Right) {
                         let idx = sidebarContentLoader.item.focusedIndex;
-                        if (idx < 0) idx = 0;
-                        else idx = (idx + 1) % 5;
+                        if (idx < 0)
+                            idx = 0;
+                        else
+                            idx = (idx + 1) % 6;
                         sidebarContentLoader.item.focusedIndex = idx;
                     } else if (event.key === Qt.Key_Up || event.key === Qt.Key_Left) {
                         let idx = sidebarContentLoader.item.focusedIndex;
-                        if (idx < 0) idx = 4;
-                        else idx = (idx - 1 + 5) % 5;
+                        if (idx < 0)
+                            idx = 5;
+                        else
+                            idx = (idx - 1 + 6) % 6;
                         sidebarContentLoader.item.focusedIndex = idx;
                     } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
                         if (sidebarContentLoader.item.focusedIndex >= 0) {
@@ -86,17 +91,30 @@ Scope {
                 color: Appearence.colors.baseColor
                 radius: 12
                 border.width: 1
-                    border.color: Appearence.colors.borderColor
+                border.color: Appearence.colors.borderColor
 
                 property int focusedIndex: -1
 
                 function activateItem(index) {
                     switch (index) {
-                    case 0: powerBtn.clicked(); break;
-                    case 1: ppdToggle.activate(); break;
-                    case 2: gamemodeToggle.activate(); break;
-                    case 3: notifComponent.activateDnd(); break;
-                    case 4: notifComponent.activateClear(); break;
+                    case 0:
+                        powerBtn.clicked();
+                        break;
+                    case 1:
+                        ppdToggle.activate();
+                        break;
+                    case 2:
+                        gamemodeToggle.activate();
+                        break;
+                    case 3:
+                        bluetoothToggle.activate();
+                        break;
+                    case 4:
+                        notifComponent.activateDnd();
+                        break;
+                    case 5:
+                        notifComponent.activateClear();
+                        break;
                     }
                 }
 
@@ -176,29 +194,37 @@ Scope {
                         color: Appearence.colors.surfaceColor
                         radius: 12
                         border.width: 1
-                border.color: Appearence.colors.borderColor
+                        border.color: Appearence.colors.borderColor
 
                         GridLayout {
                             anchors.centerIn: parent
                             columns: 5
                             columnSpacing: 12
                             rowSpacing: 12
-
+                            BluetoothMenu {
+                                id: bluetoothToggle
+                                isFocused: contentRect.focusedIndex === 1
+                            }
                             PpdToggleMenu {
                                 id: ppdToggle
-                                isFocused: contentRect.focusedIndex === 1
+                                isFocused: contentRect.focusedIndex === 2
                             }
                             GamemodeToggleMenu {
                                 id: gamemodeToggle
-                                isFocused: contentRect.focusedIndex === 2
+                                isFocused: contentRect.focusedIndex === 3
                             }
                         }
                     }
 
+                    BluetoothMenuContent {
+                        Layout.fillWidth: true
+                        open: bluetoothToggle.showMenu && BluetoothService.ready
+                    }
+
                     Notifications {
                         id: notifComponent
-                        isDndFocused: contentRect.focusedIndex === 3
-                        isClearFocused: contentRect.focusedIndex === 4
+                        isDndFocused: contentRect.focusedIndex === 4
+                        isClearFocused: contentRect.focusedIndex === 5
                     }
                 }
             }

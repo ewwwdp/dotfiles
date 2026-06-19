@@ -29,12 +29,11 @@ Rectangle {
     onHoveredChanged: updateTimerState()
     Component.onCompleted: updateTimerState()
 
-    // Hover effect overlay
     Rectangle {
         anchors.fill: parent
         radius: 10
-                    color: Appearence.colors.whiteColor
-                    opacity: parent.hovered ? 0.05 : 0
+        color: Appearence.colors.whiteColor
+        opacity: parent.hovered ? 0.05 : 0
         visible: parent.hovered || opacity > 0
         Behavior on opacity {
             NumberAnimation {
@@ -70,7 +69,6 @@ Rectangle {
             smooth: true
         }
 
-        // Enhanced content
         ColumnLayout {
             Layout.fillWidth: true
             spacing: 4
@@ -131,7 +129,7 @@ Rectangle {
 
             background: Rectangle {
                 radius: 12
-                    color: dismissBtn.hovered ? Appearence.colors.errorColor : "transparent"
+                color: dismissBtn.hovered ? Appearence.colors.errorColor : "transparent"
 
                 Behavior on color {
                     animation: Appearence.animation.elementMoveFast.colorAnimation.createObject(this)
