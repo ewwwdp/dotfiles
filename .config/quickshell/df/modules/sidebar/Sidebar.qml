@@ -101,13 +101,13 @@ Scope {
                         powerBtn.clicked();
                         break;
                     case 1:
-                        ppdToggle.activate();
+                        bluetoothToggle.activate();
                         break;
                     case 2:
-                        gamemodeToggle.activate();
+                        ppdToggle.activate();
                         break;
                     case 3:
-                        bluetoothToggle.activate();
+                        gamemodeToggle.activate();
                         break;
                     case 4:
                         notifComponent.activateDnd();
