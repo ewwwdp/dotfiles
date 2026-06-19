@@ -4,12 +4,61 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
+import QtQml.Models
 import qs
 import qs.services
 import qs.modules.common
 
 Scope {
     id: root
+
+    property bool showPinnedOnly: false
+
+    function togglePin(id, content) {
+        if (Clipboard.isPinned(id)) {
+            Clipboard.unpinEntry(id);
+        } else {
+            Clipboard.pinEntry(id, content);
+        }
+        visualModel.applyFilter();
+    }
+
+    function getFilteredCount() {
+        if (!showPinnedOnly)
+            return Clipboard.list.count;
+        var count = 0;
+        for (var i = 0; i < Clipboard.list.count; i++) {
+            if (Clipboard.isPinned(Clipboard.list.get(i).id))
+                count++;
+        }
+        return count;
+    }
+
+    DelegateModel {
+        id: visualModel
+        model: Clipboard.list
+
+        groups: [
+            DelegateModelGroup {
+                name: "shown"
+                includeByDefault: true
+            }
+        ]
+
+        filterOnGroup: "shown"
+
+        function applyFilter() {
+            for (var i = 0; i < items.count; i++) {
+                var item = items.get(i);
+                var pinned = Clipboard.isPinned(item.model.id);
+                if (showPinnedOnly && !pinned) {
+                    item.groups = ["items"];
+                } else {
+                    item.groups = ["shown", "items"];
+                }
+            }
+        }
+    }
 
     LazyLoader {
         active: GlobalStates.clipboardOpen
@@ -63,7 +112,7 @@ Scope {
                                 spacing: 8
 
                                 Text {
-                                    text: "\uf0ea"
+                                    text: showPinnedOnly ? "\uf276" : "\uf0ea"
                                     font.family: Appearence.font.nerdFont
                                     font.pixelSize: 20
                                     color: Appearence.colors.accentColor
@@ -71,13 +120,13 @@ Scope {
 
                                 Text {
                                     Layout.fillWidth: true
-                                    text: "Clipboard"
+                                    text: showPinnedOnly ? "Pinned" : "Clipboard"
                                     font.pixelSize: 16
                                     color: "#ffffff"
                                 }
 
                                 Text {
-                                    text: "(" + Clipboard.list.count + ")"
+                                    text: "(" + (showPinnedOnly ? getFilteredCount() + "/" + Clipboard.list.count : Clipboard.list.count) + ")"
                                     font.pixelSize: 12
                                     color: "#888888"
                                     verticalAlignment: Text.AlignVCenter
@@ -133,7 +182,7 @@ Scope {
                                     anchors.fill: parent
                                     clip: true
                                     focus: true
-                                    model: Clipboard.list
+                                    model: visualModel
 
                                     topMargin: 4
                                     bottomMargin: clipboardList.count === 0 ? 0 : 4
@@ -189,25 +238,28 @@ Scope {
                                     }
 
                                     Keys.onPressed: function (event) {
-                                        if (event.key === Qt.Key_Delete || event.key === Qt.Key_Backspace) {
-                                            if (clipboardList.currentIndex >= 0) {
-                                                var model = clipboardList.model;
-                                                if (model && clipboardList.currentIndex < model.count) {
-                                                    var item = model.get(clipboardList.currentIndex);
-                                                    Clipboard.deleteEntry(item.id);
-                                                }
+                                        if (event.key === Qt.Key_Delete || event.key === Qt.Key_Backspace || event.key === Qt.Key_X) {
+                                            var item = clipboardList.itemAtIndex(clipboardList.currentIndex);
+                                            if (item && !Clipboard.isPinned(item.model.id)) {
+                                                Clipboard.deleteEntry(item.model.id);
                                             }
+                                        } else if (event.key === Qt.Key_Space) {
+                                            var item = clipboardList.itemAtIndex(clipboardList.currentIndex);
+                                            if (item) {
+                                                root.togglePin(item.model.id, item.model.content);
+                                            }
+                                        } else if (event.key === Qt.Key_P) {
+                                            root.showPinnedOnly = !root.showPinnedOnly;
+                                            visualModel.applyFilter();
+                                            clipboardList.currentIndex = 0;
                                         }
                                     }
 
                                     Keys.onReturnPressed: {
-                                        if (clipboardList.currentIndex >= 0) {
-                                            var model = clipboardList.model;
-                                            if (model && clipboardList.currentIndex < model.count) {
-                                                var item = model.get(clipboardList.currentIndex);
-                                                Clipboard.copyToClipboard(item.id);
-                                                GlobalStates.clipboardOpen = false;
-                                            }
+                                        var item = clipboardList.itemAtIndex(clipboardList.currentIndex);
+                                        if (item) {
+                                            Clipboard.copyToClipboard(item.model.id);
+                                            GlobalStates.clipboardOpen = false;
                                         }
                                     }
 
@@ -223,6 +275,7 @@ Scope {
                                     Connections {
                                         target: Clipboard
                                         function onListUpdated() {
+                                            visualModel.applyFilter();
                                             if (Clipboard.pendingListReset) {
                                                 clipboardList.currentIndex = 0;
                                                 Clipboard.pendingListReset = false;
@@ -231,14 +284,13 @@ Scope {
                                     }
 
                                     delegate: MouseArea {
-                                        required property var modelData
-                                        required property int index
+                                        required property var model
 
-                                        implicitHeight: modelData.isBinary ? 64 : 44
+                                        implicitHeight: model.isBinary ? 64 : 44
                                         implicitWidth: ListView.view.width
 
                                         onClicked: {
-                                            Clipboard.copyToClipboard(modelData.id);
+                                            Clipboard.copyToClipboard(model.id);
                                             GlobalStates.clipboardOpen = false;
                                         }
 
@@ -252,14 +304,24 @@ Scope {
                                             }
                                             spacing: 10
 
+                                            Text {
+                                                text: "\uf08d"
+                                                font.family: Appearence.font.nerdFont
+                                                font.pixelSize: 12
+                                                color: Appearence.colors.accentColor
+                                                visible: Clipboard.pinnedIds.indexOf(model.id) >= 0
+                                                Layout.alignment: Qt.AlignTop
+                                                Layout.topMargin: 2
+                                            }
+
                                             ColumnLayout {
                                                 Layout.fillWidth: true
                                                 spacing: 2
 
                                                 Text {
-                                                    visible: !modelData.isBinary
+                                                    visible: !model.isBinary
                                                     Layout.fillWidth: true
-                                                    text: modelData.content
+                                                    text: model.content
                                                     wrapMode: Text.Wrap
                                                     maximumLineCount: 1
                                                     elide: Text.ElideRight
@@ -268,29 +330,29 @@ Scope {
                                                 }
 
                                                 Text {
-                                                    visible: modelData.isBinary
+                                                    visible: model.isBinary
                                                     Layout.fillWidth: true
-                                                    text: modelData.binaryType + " (" + modelData.binarySize + ")"
+                                                    text: model.binaryType + " (" + model.binarySize + ")"
                                                     font.pixelSize: 14
                                                     color: "#ffffff"
                                                 }
 
                                                 RowLayout {
-                                                    visible: modelData.isBinary
+                                                    visible: model.isBinary
                                                     Layout.fillWidth: true
                                                     spacing: 4
 
                                                     BusyIndicator {
-                                                        visible: modelData.previewSource === ""
+                                                        visible: model.previewSource === ""
                                                         Layout.preferredWidth: 20
                                                         Layout.preferredHeight: 20
                                                     }
 
                                                     Image {
-                                                        visible: modelData.previewSource !== ""
+                                                        visible: model.previewSource !== ""
                                                         Layout.preferredWidth: 60
                                                         Layout.preferredHeight: 40
-                                                        source: modelData.previewSource
+                                                        source: model.previewSource
                                                         fillMode: Image.PreserveAspectFit
                                                         asynchronous: true
                                                         smooth: true
@@ -310,6 +372,8 @@ Scope {
                                                 implicitWidth: 24
                                                 implicitHeight: 24
                                                 hoverEnabled: true
+                                                enabled: Clipboard.pinnedIds.indexOf(model.id) === -1
+                                                opacity: enabled ? 1.0 : 0.3
                                                 Layout.alignment: Qt.AlignTop
                                                 background: Rectangle {
                                                     radius: 6
@@ -332,13 +396,17 @@ Scope {
                                                     horizontalAlignment: Text.AlignHCenter
                                                     verticalAlignment: Text.AlignVCenter
                                                 }
-                                                onClicked: Clipboard.deleteEntry(modelData.id)
+                                                onClicked: {
+                                                    if (!Clipboard.isPinned(model.id)) {
+                                                        Clipboard.deleteEntry(model.id);
+                                                    }
+                                                }
                                             }
                                         }
 
                                         Component.onCompleted: {
-                                            if (modelData.isBinary && modelData.previewSource === "")
-                                                Clipboard.loadImagePreview(index);
+                                            if (model.isBinary && model.previewSource === "")
+                                                Clipboard.loadImagePreview(Clipboard.findIndex(model.id));
                                         }
                                     }
                                 }
@@ -348,7 +416,7 @@ Scope {
                                     visible: clipboardList.count === 0
                                     color: "#ffffff"
                                     opacity: 0.5
-                                    text: "You haven't copied anything!"
+                                    text: showPinnedOnly ? "No pinned items" : "You haven't copied anything!"
                                     font.pixelSize: 14
                                 }
                             }

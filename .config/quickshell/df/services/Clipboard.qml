@@ -1,7 +1,10 @@
 pragma Singleton
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import qs
 
 Singleton {
     id: root
@@ -10,9 +13,29 @@ Singleton {
 
     property bool fetchListProc: false
     property bool pendingListReset: false
-    signal listUpdated()
+    signal listUpdated
 
+    property var filePath: Directories.clipboardPath
+    property var pinnedEntries: []
+    property var pinnedIds: []
     property var imageQueue: []
+
+    FileView {
+        id: pinFileView
+        path: Qt.resolvedUrl(root.filePath)
+        onLoaded: {
+            root.setPinnedEntries(JSON.parse(pinFileView.text()));
+            root.remapPinnedEntries();
+        }
+        onLoadFailed: error => {
+            if (error == FileViewError.FileNotFound) {
+                root.setPinnedEntries([]);
+                savePinned();
+            } else {
+                console.error("[Clipboard] Error loading pins: " + error);
+            }
+        }
+    }
 
     Process {
         id: decodeProc
@@ -91,6 +114,20 @@ Singleton {
         }
     }
 
+    Process {
+        id: batchDeleteProc
+        property string ids: ""
+        command: ['sh', '-c', `printf '%s\\n' ${ids} | cliphist delete`]
+
+        onExited: function (exitCode) {
+            if (exitCode === 0) {
+                root.fetchListProc = true;
+            } else {
+                console.error("cliphist batch delete failed with code:", exitCode);
+            }
+        }
+    }
+
     function parseClipboardList(text) {
         var lines = text.trim().split('\n');
         var newList = [];
@@ -154,7 +191,47 @@ Singleton {
                 root.list.move(existingIndex, j, 1);
             }
         }
+
+        remapPinnedEntries();
+
         root.listUpdated();
+    }
+
+    function remapPinnedEntries() {
+        var newEntries = [];
+        for (var p = 0; p < pinnedEntries.length; p++) {
+            var entry = pinnedEntries[p];
+            var found = false;
+            for (var i = 0; i < root.list.count; i++) {
+                if (root.list.get(i).id === entry.id) {
+                    newEntries.push(entry);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                for (var i = 0; i < root.list.count; i++) {
+                    if (root.list.get(i).content === entry.content) {
+                        newEntries.push({id: root.list.get(i).id, content: entry.content});
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    newEntries.push(entry);
+                }
+            }
+        }
+        setPinnedEntries(newEntries);
+    }
+
+    function setPinnedEntries(entries) {
+        pinnedEntries = entries;
+        var ids = [];
+        for (var i = 0; i < entries.length; i++) {
+            ids.push(entries[i].id);
+        }
+        pinnedIds = ids;
     }
 
     function copyToClipboard(id) {
@@ -205,11 +282,65 @@ Singleton {
         processNextImage();
     }
 
+    function savePinned() {
+        pinFileView.setText(JSON.stringify(root.pinnedEntries));
+    }
+
+    function pinEntry(id, content) {
+        for (var i = 0; i < pinnedEntries.length; i++) {
+            if (pinnedEntries[i].id === id) return;
+        }
+        setPinnedEntries(pinnedEntries.concat([{id: id, content: content}]));
+        savePinned();
+    }
+
+    function unpinEntry(id) {
+        var idx = -1;
+        for (var i = 0; i < pinnedEntries.length; i++) {
+            if (pinnedEntries[i].id === id) {
+                idx = i;
+                break;
+            }
+        }
+        if (idx >= 0) {
+            var arr = pinnedEntries.slice();
+            arr.splice(idx, 1);
+            setPinnedEntries(arr);
+            savePinned();
+        }
+    }
+
+    function isPinned(id) {
+        for (var i = 0; i < pinnedEntries.length; i++) {
+            if (pinnedEntries[i].id === id) return true;
+        }
+        return false;
+    }
+
+    function findIndex(id) {
+        for (var i = 0; i < root.list.count; i++) {
+            if (root.list.get(i).id === id)
+                return i;
+        }
+        return -1;
+    }
+
     function clearHistory() {
-        wipeProc.running = true;
+        var ids = [];
+        for (var i = 0; i < root.list.count; i++) {
+            var item = root.list.get(i);
+            if (!isPinned(item.id)) {
+                ids.push(item.id);
+            }
+        }
+        if (ids.length > 0) {
+            batchDeleteProc.ids = ids.join(' ');
+            batchDeleteProc.running = true;
+        }
     }
 
     Component.onCompleted: {
+        pinFileView.reload();
         root.fetchListProc = true;
     }
 }
