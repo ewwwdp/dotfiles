@@ -83,10 +83,10 @@ Scope {
             sourceComponent: Rectangle {
                 id: contentRect
                 anchors.fill: parent
-                color: "#11111b" // Darker base background
+                color: Appearence.colors.baseColor
                 radius: 12
                 border.width: 1
-                border.color: "#313244"
+                    border.color: Appearence.colors.borderColor
 
                 property int focusedIndex: -1
 
@@ -125,7 +125,7 @@ Scope {
                             }
                             StyledText {
                                 text: `Uptime ${DateTime.uptime}`
-                                color: "#cdd6f4"
+                                color: Appearence.colors.textColor
                                 font.pixelSize: 13
                                 font.family: Appearence.font.readFont
                                 font.weight: Font.Medium
@@ -143,8 +143,8 @@ Scope {
                                 }
                                 background: Rectangle {
                                     radius: 32
-                                    color: powerBtn.hovered ? "#f38ba8" : "#313244"
-                                    border.color: powerBtn.hovered || contentRect.focusedIndex === 0 ? "#f38ba8" : "#45475a"
+                                    color: powerBtn.hovered ? Appearence.colors.errorColor : Appearence.colors.borderColor
+                                    border.color: powerBtn.hovered || contentRect.focusedIndex === 0 ? Appearence.colors.errorColor : Appearence.colors.surfaceHoverColor
                                     border.width: contentRect.focusedIndex === 0 ? 2 : 1
 
                                     Behavior on color {
@@ -157,7 +157,7 @@ Scope {
 
                                 contentItem: StyledText {
                                     text: "⏻"
-                                    color: powerBtn.hovered ? "#11111b" : "#cdd6f4"
+                                    color: powerBtn.hovered ? Appearence.colors.baseColor : Appearence.colors.textColor
                                     font.pixelSize: 16
                                     anchors.centerIn: parent
 
@@ -173,10 +173,10 @@ Scope {
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 80
-                        color: "#181825"
+                        color: Appearence.colors.surfaceColor
                         radius: 12
                         border.width: 1
-                        border.color: "#313244"
+                border.color: Appearence.colors.borderColor
 
                         GridLayout {
                             anchors.centerIn: parent

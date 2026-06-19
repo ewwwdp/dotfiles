@@ -104,7 +104,7 @@ Scope {
                                             family: Appearence.font.nerdFont
                                         }
                                         text: modelData.icon
-                                        color: (mouseArea.containsMouse || index === panelWindow.selectedIndex) ? "#000000" : "#ffffff"
+                                        color: (mouseArea.containsMouse || index === panelWindow.selectedIndex) ? Appearence.colors.pureBlackColor : Appearence.colors.whiteColor
                                     }
 
                                     StyledText {
@@ -115,7 +115,7 @@ Scope {
                                             family: Appearence.font.readFont
                                             pixelSize: 11
                                         }
-                                        color: (mouseArea.containsMouse || index === panelWindow.selectedIndex) ? "#000000" : "#ffffff"
+                                        color: (mouseArea.containsMouse || index === panelWindow.selectedIndex) ? Appearence.colors.pureBlackColor : Appearence.colors.whiteColor
                                         horizontalAlignment: Text.AlignHCenter
                                         wrapMode: Text.WordWrap
                                     }
@@ -139,6 +139,7 @@ Scope {
                                         }
                                     }
                                     onClicked: {
+                                        panelWindow.selectedIndex = index;
                                         MonitorService.currentMode = modelData.mode;
                                         Quickshell.execDetached(["sh", "-c", `${Quickshell.shellDir}/scripts/change-monitor.sh ${modelData.mode}`]);
                                         closeTimer.start();

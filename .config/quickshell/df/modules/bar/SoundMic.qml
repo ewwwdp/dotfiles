@@ -4,10 +4,15 @@ import Quickshell
 import qs.modules.common
 import qs.services
 
-Item {
+BarButton {
     id: root
+    text: (isMutedSink ? "󰟎" : "") + " " + (isMutedSource ? "󰍭" : "")
+    useNerdFont: true
+    fontSize: 12
+
     property bool isMutedSink: Audio.sink?.audio?.muted ?? true
     property bool isMutedSource: Audio.source?.audio?.muted ?? true
+
     Connections {
         target: Audio.sink?.audio ?? null
         function onMutedChanged() {
@@ -25,78 +30,36 @@ Item {
             root.isMutedSource = Audio.source.audio.muted;
         }
     }
-    implicitWidth: idleText.implicitWidth
-    implicitHeight: 20
-    Rectangle {
-        id: statusLayout
-        width: idleText.width + 16
-        height: idleText.height + 5
-        color: mouseArea.containsMouse ? Appearence.colors.hoverColor : "transparent"
-        radius: 10
-        anchors.centerIn: parent
-        WheelHandler {
-            onWheel: event => {
-                event.accepted = true;
-                const step = 0.01;
-                if (event.angleDelta.y > 0) {
-                    Audio.sink.audio.volume = Math.min(Audio.sink.audio.volume + step, 1);
-                }
-                if (event.angleDelta.y < 0) {
-                    Audio.sink.audio.volume -= step;
-                }
-            }
-            acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-        }
-        MouseArea {
-            id: mouseArea
-            hoverEnabled: true
-            anchors.fill: parent
-            acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
 
-            onClicked: mouse => {
-                if (mouse.button === Qt.LeftButton) {
-                    Audio.sink.audio.muted = !Audio.sink.audio.muted;
-                }
-                if (mouse.button === Qt.RightButton) {
-                    Audio.source.audio.muted = !Audio.source.audio.muted;
-                }
-                if (mouse.button === Qt.MiddleButton) {
-                    Quickshell.execDetached(["pavucontrol"]);
-                }
-                mouse.accepted = true;
-            }
-            onEntered: balTooltip.tooltipVisible = true
-            onExited: balTooltip.tooltipVisible = false
-        }
-        RowLayout {
-            id: idleText
-            anchors.centerIn: parent
-            spacing: 4
+    onClicked: Audio.sink.audio.muted = !Audio.sink.audio.muted
+    onEntered: tooltip.tooltipVisible = true
+    onExited: tooltip.tooltipVisible = false
 
-            // Sound/Speaker status
-            StyledText {
-                id: soundIcon
-                font.family: Appearence.font.nerdFont
-                font.pixelSize: 12
-                color: Appearence.colors.accentColor
-                text: root.isMutedSink ? "󰟎" : ""
-            }
-
-            // Microphone status
-            StyledText {
-                id: micIcon
-                font.family: Appearence.font.nerdFont
-                font.pixelSize: 12
-                color: Appearence.colors.accentColor
-                text: root.isMutedSource ? "󰍭" : "" // Muted/unmuted mic
-            }
+    WheelHandler {
+        onWheel: event => {
+            event.accepted = true;
+            const step = 0.01;
+            if (event.angleDelta.y > 0)
+                Audio.sink.audio.volume = Math.min(Audio.sink.audio.volume + step, 1);
+            if (event.angleDelta.y < 0)
+                Audio.sink.audio.volume -= step;
         }
-        Behavior on color {
-            animation: Appearence.animation.elementMoveFast.colorAnimation.createObject(this)
+        acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+    }
+
+    MouseArea {
+        acceptedButtons: Qt.RightButton | Qt.MiddleButton
+        anchors.fill: parent
+        onClicked: mouse => {
+            if (mouse.button === Qt.RightButton)
+                Audio.source.audio.muted = !Audio.source.audio.muted;
+            else if (mouse.button === Qt.MiddleButton)
+                Quickshell.execDetached(["pavucontrol"]);
         }
     }
+
     CustomTooltip {
-        id: balTooltip
+        id: tooltip
         text: `${Math.round((Audio.sink?.audio.volume ?? 0) * 100)}% | ${Audio.sink?.description}`
         tooltipVisible: false
         targetItem: root

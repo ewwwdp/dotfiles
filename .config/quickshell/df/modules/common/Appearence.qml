@@ -19,6 +19,19 @@ Singleton {
         readonly property color barBackgroundColor: "#060709"
         readonly property color barBorderColor: "#313244"
 
+        readonly property color baseColor: "#11111b"
+        readonly property color surfaceColor: "#181825"
+        readonly property color surfaceHoverColor: "#45475a"
+        readonly property color borderColor: "#313244"
+        readonly property color textColor: "#cdd6f4"
+        readonly property color textMutedColor: "#6c7086"
+        readonly property color errorColor: "#f38ba8"
+        readonly property color focusColor: "#89b4fa"
+        readonly property color popupBgColor: "#171717"
+        readonly property color popupBorderColor: "#262626"
+        readonly property color whiteColor: "#ffffff"
+        readonly property color scrimColor: "#80000000"
+
     }
 
     font: QtObject {

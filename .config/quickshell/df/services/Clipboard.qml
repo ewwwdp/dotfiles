@@ -162,34 +162,9 @@ Singleton {
     }
 
     function updateList(newList) {
-        for (var i = root.list.count - 1; i >= 0; i--) {
-            var found = false;
-            for (var j = 0; j < newList.length; j++) {
-                if (root.list.get(i).id === newList[j].id) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                root.list.remove(i);
-            }
-        }
-
+        root.list.clear();
         for (var j = 0; j < newList.length; j++) {
-            var exists = false;
-            var existingIndex = -1;
-            for (var i = 0; i < root.list.count; i++) {
-                if (root.list.get(i).id === newList[j].id) {
-                    exists = true;
-                    existingIndex = i;
-                    break;
-                }
-            }
-            if (!exists) {
-                root.list.insert(j, newList[j]);
-            } else if (existingIndex !== j) {
-                root.list.move(existingIndex, j, 1);
-            }
+            root.list.append(newList[j]);
         }
 
         remapPinnedEntries();

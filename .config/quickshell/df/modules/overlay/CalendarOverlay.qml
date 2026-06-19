@@ -51,9 +51,9 @@ Scope {
                 id: container
                 anchors.fill: parent
                 radius: 12
-                color: "#11111b"
+                color: Appearence.colors.baseColor
                 border.width: 1
-                border.color: "#313244"
+                border.color: Appearence.colors.borderColor
                 focus: true
 
                 Keys.onPressed: event => {
@@ -74,7 +74,7 @@ Scope {
                             implicitWidth: 28
                             implicitHeight: 28
                             radius: 6
-                            color: prevBtn.containsMouse ? "#45475a" : "transparent"
+                            color: prevBtn.containsMouse ? Appearence.colors.surfaceHoverColor : "transparent"
 
                             Behavior on color {
                                 animation: Appearence.animation.elementMoveFast.colorAnimation.createObject(this)
@@ -104,8 +104,8 @@ Scope {
                         StyledText {
                             Layout.fillWidth: true
                             text: root.monthNames[root.viewMonth] + " " + root.viewYear
-                            color: "#cdd6f4"
-                            font.pixelSize: 14
+                    color: Appearence.colors.textColor
+                    font.pixelSize: 14
                             font.weight: Font.Medium
                             horizontalAlignment: Text.AlignHCenter
                         }
@@ -114,7 +114,7 @@ Scope {
                             implicitWidth: 28
                             implicitHeight: 28
                             radius: 6
-                            color: nextBtn.containsMouse ? "#45475a" : "transparent"
+                            color: nextBtn.containsMouse ? Appearence.colors.surfaceHoverColor : "transparent"
 
                             Behavior on color {
                                 animation: Appearence.animation.elementMoveFast.colorAnimation.createObject(this)
@@ -145,7 +145,7 @@ Scope {
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 1
-                        color: "#313244"
+                        color: Appearence.colors.borderColor
                     }
 
                     Item {
@@ -168,7 +168,7 @@ Scope {
                                     width: calendarGrid.cellWidth
                                     height: 24
                                     text: modelData
-                                    color: "#6c7086"
+                                    color: Appearence.colors.textMutedColor
                                     font.pixelSize: 11
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
@@ -199,7 +199,7 @@ Scope {
                                     width: calendarGrid.cellWidth
                                     height: calendarGrid.cellHeight
                                     radius: 6
-                                    color: isToday ? Appearence.colors.accentColor : (dayMouse.containsMouse ? "#45475a" : "transparent")
+                                    color: isToday ? Appearence.colors.accentColor : (dayMouse.containsMouse ? Appearence.colors.surfaceHoverColor : "transparent")
 
                                     Behavior on color {
                                         animation: Appearence.animation.elementMoveFast.colorAnimation.createObject(this)
@@ -208,7 +208,7 @@ Scope {
                                     StyledText {
                                         anchors.centerIn: parent
                                         text: parent.dayNumber.toString()
-                                        color: parent.isToday ? "#11111b" : "#cdd6f4"
+                                        color: parent.isToday ? Appearence.colors.baseColor : Appearence.colors.textColor
                                         font.pixelSize: 12
                                         horizontalAlignment: Text.AlignHCenter
                                         verticalAlignment: Text.AlignVCenter

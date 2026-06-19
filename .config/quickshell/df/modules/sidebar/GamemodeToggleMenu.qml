@@ -17,13 +17,13 @@ Rectangle {
     width: 48
     height: 48
     radius: 24
-    color: GlobalStates.gamemodeEnabled ? Appearence.colors.accentColor : "#11111b"
+    color: GlobalStates.gamemodeEnabled ? Appearence.colors.accentColor : Appearence.colors.baseColor
     border.width: 2
-    border.color: isFocused ? "#89b4fa" : "#6c7086"
+    border.color: isFocused ? Appearence.colors.focusColor : Appearence.colors.textMutedColor
     scale: mouseArea.containsMouse ? 1.1 : 1.0
 
     StyledText {
-        color: GlobalStates.gamemodeEnabled ? "#45475a" : "#cdd6f4"
+        color: GlobalStates.gamemodeEnabled ? Appearence.colors.surfaceHoverColor : Appearence.colors.textColor
         anchors.centerIn: parent
         text: GlobalStates.gamemodeEnabled ? "" : ""
         font.family: Appearence.font.nerdFont

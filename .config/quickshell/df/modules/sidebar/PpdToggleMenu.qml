@@ -28,12 +28,12 @@ Rectangle {
     width: 48
     height: 48
     radius: 24
-    color: "#11111b"
+    color: Appearence.colors.baseColor
     border.width: 2
-    border.color: isFocused ? "#89b4fa" : "#6c7086"
+    border.color: isFocused ? Appearence.colors.focusColor : Appearence.colors.textMutedColor
     scale: mouseArea.containsMouse ? 1.1 : 1.0
     StyledText {
-        color: "#cdd6f4"
+        color: Appearence.colors.textColor
         anchors.centerIn: parent
         text: switch (PowerProfiles.profile) {
         case PowerProfile.PowerSaver:

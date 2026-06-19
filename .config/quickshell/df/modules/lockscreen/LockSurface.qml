@@ -11,14 +11,14 @@ Rectangle {
     id: root
     required property LockContext context
     property var screenName
-    readonly property color backgroundFallback: "#11111b"
-    readonly property color textColor: "#cdd6f4"
+    readonly property color backgroundFallback: Appearence.colors.baseColor
+    readonly property color textColor: Appearence.colors.textColor
     readonly property color textMuted: Qt.rgba(0xcd / 255, 0xd6 / 255, 0xf4 / 255, 0.75)
-    readonly property color inputBg: "#181825"
-    readonly property color inputText: "#cdd6f4"
-    readonly property color borderColor: "#313244"
-    readonly property color failColor: "#f38ba8"
-    readonly property color accentColor: "#89b4fa"
+    readonly property color inputBg: Appearence.colors.surfaceColor
+    readonly property color inputText: Appearence.colors.textColor
+    readonly property color borderColor: Appearence.colors.borderColor
+    readonly property color failColor: Appearence.colors.errorColor
+    readonly property color accentColor: Appearence.colors.focusColor
 
     color: backgroundFallback
 

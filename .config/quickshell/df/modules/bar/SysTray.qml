@@ -5,9 +5,7 @@ import Quickshell.Services.SystemTray
 
 Item {
     id: root
-    visible: {
-        SystemTray.items.values.length > 0;
-    }
+    visible: SystemTray.items.values.length > 0
     required property var bar
 
     implicitWidth: rowLayout.implicitWidth

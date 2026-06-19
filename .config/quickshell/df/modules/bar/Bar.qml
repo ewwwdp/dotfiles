@@ -66,7 +66,7 @@ Scope {
 
                             RowLayout {
                                 id: rightSideLayout
-                                spacing: 16
+                                spacing: 14
                                 anchors.centerIn: rightBackground
                                 anchors.verticalCenter: rightBackground.verticalCenter
 

@@ -10,7 +10,6 @@ Item {
     readonly property int workspaceGroup: Math.floor((monitor.activeWorkspace?.id - 1) / maxInGroup)
     property list<bool> workspaceOccupied: []
     property int workspaceButtonWidth: 12
-    property int workspaceIndexInGroup: (monitor.activeWorkspace?.id - 1) % maxInGroup
     readonly property string inactiveColor: "transparent"
     readonly property string occupiedColor: "#2b2b2b"
     readonly property string backgroundColor: "transparent"

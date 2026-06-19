@@ -2,41 +2,15 @@ import QtQuick
 import qs.modules.common
 import qs.services
 
-Item {
+BarButton {
     id: root
-    implicitWidth: innerItem.implicitWidth
-    implicitHeight: 20
-    Rectangle {
-        width: innerItem.width + 16
-        height: innerItem.height + 6
-        color: mouseArea.containsMouse ? Appearence.colors.hoverColor : "transparent"
-        radius: 10
-        anchors.centerIn: parent
+    text: Network.materialSymbol
 
-        MouseArea {
-            id: mouseArea
-            hoverEnabled: true
-            anchors.fill: parent
-            onEntered: balTooltip.tooltipVisible = true
-            onExited: balTooltip.tooltipVisible = false
-        }
-
-        StyledText {
-            id: innerItem
-            anchors.centerIn: parent
-            font.family: Appearence.font.readFont
-            font.pixelSize: 13
-            color: Appearence.colors.accentColor
-            text: Network.materialSymbol
-            elide: Text.ElideRight
-        }
-        Behavior on color {
-            animation: Appearence.animation.elementMoveFast.colorAnimation.createObject(this)
-        }
-    }
+    onEntered: tooltip.tooltipVisible = true
+    onExited: tooltip.tooltipVisible = false
 
     CustomTooltip {
-        id: balTooltip
+        id: tooltip
         text: Network.networkName
         tooltipVisible: false
         targetItem: root

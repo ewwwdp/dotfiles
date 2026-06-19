@@ -10,10 +10,10 @@ Rectangle {
     id: notificationItem
     width: parent.width
     height: 90
-    color: "#11111b"
+    color: Appearence.colors.baseColor
     radius: 10
     border.width: 1
-    border.color: "#313244"
+    border.color: Appearence.colors.borderColor
     property var notificationService: NotificationService
     property bool hovered: myHandler.hovered
     property var notificationData
@@ -33,8 +33,8 @@ Rectangle {
     Rectangle {
         anchors.fill: parent
         radius: 10
-        color: "#ffffff"
-        opacity: parent.hovered ? 0.05 : 0
+                    color: Appearence.colors.whiteColor
+                    opacity: parent.hovered ? 0.05 : 0
         visible: parent.hovered || opacity > 0
         Behavior on opacity {
             NumberAnimation {
@@ -80,7 +80,7 @@ Rectangle {
 
                 StyledText {
                     text: notificationData?.appName || "App"
-                    color: "#cdd6f4"
+                    color: Appearence.colors.textColor
                     font.pixelSize: 14
                     font.family: Appearence.font.readFont
                     font.weight: Font.Bold
@@ -92,7 +92,7 @@ Rectangle {
 
                 StyledText {
                     text: notificationData?.time ? formatTimestamp(notificationData.time) : "Now"
-                    color: "#6c7086"
+                    color: Appearence.colors.textMutedColor
                     font.pixelSize: 10
                     font.family: Appearence.font.readFont
                     font.weight: Font.Medium
@@ -101,7 +101,7 @@ Rectangle {
 
             StyledText {
                 text: notificationData?.summary || "Notification"
-                color: "#cdd6f4"
+                color: Appearence.colors.textColor
                 font.pixelSize: 12
                 font.weight: Font.Medium
                 font.family: Appearence.font.readFont
@@ -111,7 +111,7 @@ Rectangle {
 
             StyledText {
                 text: notificationData?.body || ""
-                color: "#9399b2"
+                color: Appearence.colors.textMutedColor
                 font.pixelSize: 12
                 Layout.fillWidth: true
                 wrapMode: Text.WordWrap
@@ -131,7 +131,7 @@ Rectangle {
 
             background: Rectangle {
                 radius: 12
-                color: dismissBtn.hovered ? "#f38ba8" : "transparent"
+                    color: dismissBtn.hovered ? Appearence.colors.errorColor : "transparent"
 
                 Behavior on color {
                     animation: Appearence.animation.elementMoveFast.colorAnimation.createObject(this)
@@ -140,7 +140,7 @@ Rectangle {
 
             contentItem: StyledText {
                 text: "✕"
-                color: dismissBtn.hovered ? "#11111b" : "#6c7086"
+                color: dismissBtn.hovered ? Appearence.colors.baseColor : Appearence.colors.textMutedColor
                 font.pixelSize: 10
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter

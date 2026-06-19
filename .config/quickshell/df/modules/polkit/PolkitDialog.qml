@@ -10,11 +10,11 @@ PanelWindow {
     required property PolkitAuth auth
 
     property color accent: Appearence.colors.accentColor
-    property color background: "#171717"
-    property color foreground: "#ffffff"
-    property color borderColor: "#262626"
-    property color borderError: "#f38ba8"
-    property color scrim: "#80000000"
+    property color background: Appearence.colors.popupBgColor
+    property color foreground: Appearence.colors.whiteColor
+    property color borderColor: Appearence.colors.popupBorderColor
+    property color borderError: Appearence.colors.errorColor
+    property color scrim: Appearence.colors.scrimColor
 
     readonly property int cornerRadius: 10
 
@@ -129,7 +129,7 @@ PanelWindow {
             Rectangle {
                 Layout.fillWidth: true
                 implicitHeight: inputRow.implicitHeight + 10
-                color: "#262626"
+                color: Appearence.colors.popupBorderColor
                 radius: 0
 
                 RowLayout {

@@ -210,9 +210,9 @@ Item {
             }
         }
         width: 450
-        color: "#171717"
+        color: Appearence.colors.popupBgColor
         radius: 10
-        border.color: "#262626"
+        border.color: Appearence.colors.popupBorderColor
         border.width: 1
 
         ColumnLayout {
@@ -225,7 +225,7 @@ Item {
                 id: searchContainer
                 Layout.fillWidth: true
                 implicitHeight: searchbox.implicitHeight + 10
-                color: "#262626"
+                color: Appearence.colors.popupBorderColor
                 radius: 0
                 border.color: "transparent"
                 border.width: 0
@@ -246,7 +246,7 @@ Item {
                     TextInput {
                         id: search
                         Layout.fillWidth: true
-                        color: "#ffffff"
+                        color: Appearence.colors.whiteColor
 
                         focus: true
                         Keys.forwardTo: [list]
@@ -342,7 +342,7 @@ Item {
 
                 highlight: Rectangle {
                     radius: 8
-                    color: "#262626"
+                    color: Appearence.colors.popupBorderColor
                     border.color: "transparent"
                     border.width: 0
                 }
@@ -387,14 +387,14 @@ Item {
                             source: Quickshell.iconPath(modelData.icon)
                             Rectangle {
                                 anchors.fill: parent
-                                color: "#262626"
+                                color: Appearence.colors.popupBorderColor
                                 radius: 6
                                 z: -1
                             }
                         }
                         Text {
                             text: modelData.name
-                            color: "#ffffff"
+                            color: Appearence.colors.whiteColor
                             Layout.fillWidth: true
                             horizontalAlignment: Text.AlignLeft
                             Layout.alignment: Qt.AlignVCenter

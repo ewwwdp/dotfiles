@@ -3,16 +3,14 @@ import qs.modules.common
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Io
 import Quickshell.Wayland
 
 Item {
     id: root
 
-    // Updated colors to match CSS
-    property color backgroundColor: "#13141c"  // window background-color
-    property color buttonColor: "#06060d"     // button background-color
-    property color buttonHoverColor: "#181923" // button:hover background-color
+    property color backgroundColor: "#13141c"
+    property color buttonColor: "#06060d"
+    property color buttonHoverColor: "#181923"
 
     default property list<LogoutButton> buttons
 
@@ -68,8 +66,6 @@ Item {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             color: ma.containsMouse ? buttonHoverColor : buttonColor
-
-                            // Removed border to match CSS (no border specified)
                             border.width: 0
 
                             MouseArea {
@@ -99,7 +95,7 @@ Item {
                                 font.pixelSize: 14
                                 font.weight: Font.Bold
 
-                                color: "#ffffff"
+                                color: Appearence.colors.whiteColor
                             }
                         }
                     }

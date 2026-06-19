@@ -96,9 +96,9 @@ Scope {
                         id: content
                         width: 450
                         height: Math.min(clipboardList.contentHeight + headerRow.implicitHeight + 50, 600)
-                        color: "#171717"
+                        color: Appearence.colors.popupBgColor
                         radius: 10
-                        border.color: "#262626"
+                        border.color: Appearence.colors.popupBorderColor
                         border.width: 1
 
                         ColumnLayout {
@@ -122,13 +122,13 @@ Scope {
                                     Layout.fillWidth: true
                                     text: showPinnedOnly ? "Pinned" : "Clipboard"
                                     font.pixelSize: 16
-                                    color: "#ffffff"
+                                    color: Appearence.colors.whiteColor
                                 }
 
                                 Text {
                                     text: "(" + (showPinnedOnly ? getFilteredCount() + "/" + Clipboard.list.count : Clipboard.list.count) + ")"
                                     font.pixelSize: 12
-                                    color: "#888888"
+                                    color: Appearence.colors.textMutedColor
                                     verticalAlignment: Text.AlignVCenter
                                 }
 
@@ -326,7 +326,7 @@ Scope {
                                                     maximumLineCount: 1
                                                     elide: Text.ElideRight
                                                     font.pixelSize: 14
-                                                    color: "#ffffff"
+                                                    color: Appearence.colors.whiteColor
                                                 }
 
                                                 Text {
@@ -334,7 +334,7 @@ Scope {
                                                     Layout.fillWidth: true
                                                     text: model.binaryType + " (" + model.binarySize + ")"
                                                     font.pixelSize: 14
-                                                    color: "#ffffff"
+                                                    color: Appearence.colors.whiteColor
                                                 }
 
                                                 RowLayout {
@@ -414,7 +414,7 @@ Scope {
                                 Text {
                                     anchors.centerIn: parent
                                     visible: clipboardList.count === 0
-                                    color: "#ffffff"
+                                    color: Appearence.colors.whiteColor
                                     opacity: 0.5
                                     text: showPinnedOnly ? "No pinned items" : "You haven't copied anything!"
                                     font.pixelSize: 14

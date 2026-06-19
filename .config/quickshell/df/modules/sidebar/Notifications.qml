@@ -10,10 +10,10 @@ Rectangle {
     id: notifRoot
     Layout.fillWidth: true
     Layout.fillHeight: true
-    color: "#181825"
+    color: Appearence.colors.surfaceColor
     radius: 12
     border.width: 1
-    border.color: "#313244"
+    border.color: Appearence.colors.borderColor
 
     property bool isDndFocused: false
     property bool isClearFocused: false
@@ -37,7 +37,7 @@ Rectangle {
 
             StyledText {
                 text: "Notifications"
-                color: "#cdd6f4"
+                        color: Appearence.colors.textColor
                 font.pixelSize: 18
                 font.weight: Font.Bold
             }
@@ -46,12 +46,12 @@ Rectangle {
                 Layout.preferredWidth: 24
                 Layout.preferredHeight: 16
                 radius: 8
-                color: "#f38ba8"
+                color: Appearence.colors.errorColor
 
                 StyledText {
                     anchors.centerIn: parent
                     text: NotificationService.list.length
-                    color: "#11111b"
+                    color: Appearence.colors.baseColor
                     font.pixelSize: 10
                     font.weight: Font.Bold
                 }
@@ -69,10 +69,10 @@ Rectangle {
                     hoverEnabled: true
                     onClicked: notifRoot.activateDnd()
                     background: Rectangle {
-                        color: GlobalStates.dndEnabled ? (silentBtn.hovered ? "#585b70" : "#45475a") : (silentBtn.hovered ? "#45475a" : "#313244")
+                        color: GlobalStates.dndEnabled ? (silentBtn.hovered ? "#585b70" : Appearence.colors.surfaceHoverColor) : (silentBtn.hovered ? Appearence.colors.surfaceHoverColor : Appearence.colors.borderColor)
                         radius: 6
                         border.width: notifRoot.isDndFocused ? 2 : 1
-                        border.color: silentBtn.hovered || notifRoot.isDndFocused ? "#6c7086" : "#45475a"
+                        border.color: silentBtn.hovered || notifRoot.isDndFocused ? Appearence.colors.textMutedColor : Appearence.colors.surfaceHoverColor
 
                         Behavior on color {
                             animation: Appearence.animation.elementMoveFast.colorAnimation.createObject(this)
@@ -84,7 +84,7 @@ Rectangle {
 
                     contentItem: StyledText {
                         text: GlobalStates.dndEnabled ? "🔔 Notify" : "🔕 Silent"
-                        color: "#cdd6f4"
+                color: Appearence.colors.textColor
                         font.pixelSize: 11
                         font.weight: Font.Medium
                         horizontalAlignment: Text.AlignHCenter
@@ -101,10 +101,10 @@ Rectangle {
                     hoverEnabled: true
 
                     background: Rectangle {
-                        color: clearBtn.hovered ? "#f38ba8" : "#313244"
+                        color: clearBtn.hovered ? Appearence.colors.errorColor : Appearence.colors.borderColor
                         radius: 6
                         border.width: notifRoot.isClearFocused ? 2 : 1
-                        border.color: clearBtn.hovered || notifRoot.isClearFocused ? "#f38ba8" : "#45475a"
+                        border.color: clearBtn.hovered || notifRoot.isClearFocused ? Appearence.colors.errorColor : Appearence.colors.surfaceHoverColor
 
                         Behavior on color {
                             animation: Appearence.animation.elementMoveFast.colorAnimation.createObject(this)
@@ -113,7 +113,7 @@ Rectangle {
 
                     contentItem: StyledText {
                         text: "✕ Clear"
-                        color: clearBtn.hovered ? "#11111b" : "#cdd6f4"
+                        color: clearBtn.hovered ? Appearence.colors.baseColor : Appearence.colors.textColor
                         font.pixelSize: 11
                         font.weight: Font.Medium
                         horizontalAlignment: Text.AlignHCenter
@@ -151,7 +151,7 @@ Rectangle {
                 contentItem: Rectangle {
                     radius: 3
                     height: 10
-                    color: "#ffffff"
+                    color: Appearence.colors.whiteColor
                 }
             }
         }
@@ -174,7 +174,7 @@ Rectangle {
                 StyledText {
                     text: "No new notifications"
                     font.family: Appearence.font.readFont
-                    color: "#6c7086"
+                    color: Appearence.colors.textMutedColor
                     font.pixelSize: 14
                     Layout.alignment: Qt.AlignHCenter
                 }
