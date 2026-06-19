@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
 import qs.modules.common
@@ -8,27 +9,30 @@ PanelWindow {
 
     required property PolkitAuth auth
 
-    property color accent: Appearence.colors.polkitAccent
-    property color background: Appearence.colors.polkitBackground
-    property color foreground: Appearence.colors.polkitText
-    property color borderColor: Appearence.colors.polkitBorder
-    property color borderError: Appearence.colors.polkitBorderError
-    property color scrim: Appearence.colors.polkitScrim
+    property color accent: Appearence.colors.accentColor
+    property color background: "#171717"
+    property color foreground: "#ffffff"
+    property color borderColor: "#262626"
+    property color borderError: "#f38ba8"
+    property color scrim: "#80000000"
 
-    readonly property int cornerRadius: 12
-    property int contentMargin: 12
-    property int fieldHeight: 42
+    readonly property int cornerRadius: 10
 
     visible: auth.dialogVisible
-    anchors { top: true; bottom: true; left: true; right: true }
+    anchors {
+        top: true
+        bottom: true
+        left: true
+        right: true
+    }
     color: "transparent"
     WlrLayershell.namespace: "quickshell:polkitdialog"
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
     exclusionMode: ExclusionMode.Ignore
 
-    readonly property int cardWidth: Math.min(312, Math.max(260, root.width - 16))
-    readonly property int cardHeight: root.height > 0 ? Math.min(fieldHeight + contentMargin * 2, root.height - 16) : fieldHeight + contentMargin * 2
+    readonly property int cardWidth: Math.min(400, Math.max(320, root.width - 16))
+    readonly property int cardHeight: Math.min(contentColumn.implicitHeight + 16, root.height - 16)
 
     Rectangle {
         anchors.fill: parent
@@ -48,11 +52,13 @@ PanelWindow {
         anchors.centerIn: parent
         anchors.horizontalCenterOffset: auth.shakeOffset
         color: root.background
-        border.width: Math.max(1, 2)
+        border.width: 1
         border.color: auth.errorFlash ? root.borderError : root.borderColor
 
         Behavior on border.color {
-            ColorAnimation { duration: 200 }
+            ColorAnimation {
+                duration: 200
+            }
         }
 
         clip: true
@@ -75,79 +81,115 @@ PanelWindow {
             }
         }
 
-        Row {
+        ColumnLayout {
+            id: contentColumn
             anchors.fill: parent
-            anchors.margins: root.contentMargin
-            spacing: 14
+            anchors.margins: 8
+            spacing: 8
 
-            Text {
-                text: "\uf023"
-                color: auth.errorFlash ? Appearence.colors.polkitTextError : root.accent
-                font.family: Appearence.font.nerdFont
-                font.pixelSize: 24
-                width: 26
-                height: root.fieldHeight
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 8
 
-            Item {
-                width: parent.width - 40
-                height: root.fieldHeight
-
-                TextInput {
-                    id: passwordInput
-                    anchors.fill: parent
-                    verticalAlignment: TextInput.AlignVCenter
-                    activeFocusOnPress: true
-                    clip: true
-                    selectionColor: Qt.rgba(root.accent.r, root.accent.g, root.accent.b, 0.45)
-                    selectedTextColor: root.foreground
+                Text {
+                    text: "\uf023"
                     font.family: Appearence.font.nerdFont
-                    font.pixelSize: 24
-                    echoMode: auth.responseVisible ? TextInput.Normal : TextInput.Password
-                    passwordCharacter: "\u2022"
-                    color: auth.errorFlash ? Appearence.colors.polkitTextError : root.foreground
-                    cursorVisible: activeFocus && !auth.submitted && !auth.errorFlash
-                    readOnly: auth.submitted || auth.errorFlash
-                    enabled: auth.dialogVisible
-                    visible: true
-                    onAccepted: auth.submitResponse(passwordInput.text)
-                    Keys.onPressed: function (event) {
-                        if (event.key === Qt.Key_Escape) {
-                            auth.cancelRequest();
-                            event.accepted = true;
-                        }
-                    }
+                    font.pixelSize: 20
+                    color: auth.errorFlash ? root.borderError : root.accent
                 }
 
                 Text {
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: auth.errorFlash ? "Wrong" : (auth.submitted ? "Checking..." : "Enter password")
-                    color: auth.errorFlash ? Appearence.colors.polkitTextError : root.foreground
-                    opacity: auth.errorFlash ? 1 : 0.36
-                    font.family: Appearence.font.nerdFont
-                    font.pixelSize: 24
-                    elide: Text.ElideRight
-                    visible: passwordInput.visible && passwordInput.text.length === 0
+                    Layout.fillWidth: true
+                    text: "Authentication"
+                    font.pixelSize: 16
+                    color: root.foreground
                 }
+            }
 
-                Rectangle {
-                    width: Math.max(1, 2)
-                    height: 24
-                    anchors.left: parent.left
-                    anchors.verticalCenter: parent.verticalCenter
-                    color: auth.errorFlash ? Appearence.colors.polkitTextError : root.foreground
-                    visible: passwordInput.visible && passwordInput.activeFocus && passwordInput.text.length === 0 && !auth.submitted && !auth.errorFlash
-                }
+            Text {
+                Layout.fillWidth: true
+                text: auth.currentMessage
+                font.pixelSize: 13
+                color: root.foreground
+                opacity: 0.7
+                wrapMode: Text.Wrap
+                visible: auth.currentMessage.length > 0
+            }
 
-                MouseArea {
+            Text {
+                Layout.fillWidth: true
+                text: auth.currentSupplementary
+                font.pixelSize: 12
+                color: root.foreground
+                opacity: 0.5
+                wrapMode: Text.Wrap
+                visible: auth.currentSupplementary.length > 0
+            }
+
+            Rectangle {
+                Layout.fillWidth: true
+                implicitHeight: inputRow.implicitHeight + 10
+                color: "#262626"
+                radius: 0
+
+                RowLayout {
+                    id: inputRow
                     anchors.fill: parent
-                    acceptedButtons: Qt.LeftButton
-                    enabled: passwordInput.visible
-                    onClicked: passwordInput.forceActiveFocus()
+                    anchors.margins: 5
+                    spacing: 5
+
+                    Text {
+                        text: "\uf13e"
+                        font.family: Appearence.font.nerdFont
+                        font.pixelSize: 16
+                        color: auth.errorFlash ? root.borderError : root.accent
+                    }
+
+                    TextInput {
+                        id: passwordInput
+                        Layout.fillWidth: true
+                        verticalAlignment: TextInput.AlignVCenter
+                        activeFocusOnPress: true
+                        clip: true
+                        selectionColor: Qt.rgba(root.accent.r, root.accent.g, root.accent.b, 0.45)
+                        selectedTextColor: root.foreground
+                        font.family: Appearence.font.nerdFont
+                        font.pixelSize: 16
+                        echoMode: auth.responseVisible ? TextInput.Normal : TextInput.Password
+                        passwordCharacter: "\u2022"
+                        color: auth.errorFlash ? root.borderError : root.foreground
+                        cursorVisible: activeFocus && !auth.submitted && !auth.errorFlash
+                        readOnly: auth.submitted || auth.errorFlash
+                        enabled: auth.dialogVisible
+                        visible: true
+                        onAccepted: auth.submitResponse(passwordInput.text)
+                        Keys.onPressed: function (event) {
+                            if (event.key === Qt.Key_Escape) {
+                                auth.cancelRequest();
+                                event.accepted = true;
+                            }
+                        }
+
+                        Text {
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: auth.errorFlash ? "Wrong password" : (auth.submitted ? "Checking..." : "Enter password")
+                            color: auth.errorFlash ? root.borderError : root.foreground
+                            opacity: auth.errorFlash ? 1 : 0.36
+                            font.family: Appearence.font.nerdFont
+                            font.pixelSize: 16
+                            elide: Text.ElideRight
+                            visible: passwordInput.visible && passwordInput.text.length === 0
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            acceptedButtons: Qt.LeftButton
+                            enabled: passwordInput.visible
+                            onClicked: passwordInput.forceActiveFocus()
+                        }
+                    }
                 }
             }
         }

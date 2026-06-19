@@ -18,13 +18,7 @@ Singleton {
         readonly property color hoverColor: "#13131D"
         readonly property color barBackgroundColor: "#060709"
         readonly property color barBorderColor: "#313244"
-        readonly property color polkitAccent: "#89b4fa"
-        readonly property color polkitBackground: "#1e1e2e"
-        readonly property color polkitText: "#cdd6f4"
-        readonly property color polkitBorder: "#313244"
-        readonly property color polkitBorderError: "#f38ba8"
-        readonly property color polkitScrim: "#80000000"
-        readonly property color polkitTextError: "#f38ba8"
+
     }
 
     font: QtObject {
