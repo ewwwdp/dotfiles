@@ -15,7 +15,7 @@ Singleton {
     property bool ready: Bluetooth.defaultAdapter?.enabled ?? false
 
     Connections {
-        target: Bluetooth.defaultAdapter ?? null
+        target: root.adapter
         function onEnabledChanged() {
             root.update();
         }
@@ -32,6 +32,7 @@ Singleton {
     }
 
     Component.onCompleted: root.update()
+    onHasConnectedChanged: root.update()
 
     readonly property BluetoothAdapter adapter: Bluetooth.defaultAdapter
     property bool hasConnected: adapter?.devices?.values?.some(d => d.connected) ?? false
@@ -48,13 +49,18 @@ Singleton {
     }
 
     function getSortedDevices() {
-        if (!adapter) return [];
+        if (!adapter)
+            return [];
         let devices = [...adapter.devices.values];
         devices.sort((a, b) => {
-            if (a.connected && !b.connected) return -1;
-            if (b.connected && !a.connected) return 1;
-            if (a.bonded && !b.bonded) return -1;
-            if (b.bonded && !a.bonded) return 1;
+            if (a.connected && !b.connected)
+                return -1;
+            if (b.connected && !a.connected)
+                return 1;
+            if (a.bonded && !b.bonded)
+                return -1;
+            if (b.bonded && !a.bonded)
+                return 1;
             return (a.name || "").localeCompare(b.name || "");
         });
         return devices;

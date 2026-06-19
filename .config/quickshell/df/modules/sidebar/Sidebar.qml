@@ -1,15 +1,13 @@
-import qs
-import qs.services
-import qs.modules.common
-import qs.modules.session
-
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
-import Quickshell.Bluetooth
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.session
 
 Scope {
     id: root
@@ -68,14 +66,14 @@ Scope {
                         if (idx < 0)
                             idx = 0;
                         else
-                            idx = (idx + 1) % 6;
+                            idx = (idx + 1) % 7;
                         sidebarContentLoader.item.focusedIndex = idx;
                     } else if (event.key === Qt.Key_Up || event.key === Qt.Key_Left) {
                         let idx = sidebarContentLoader.item.focusedIndex;
                         if (idx < 0)
-                            idx = 5;
+                            idx = 6;
                         else
-                            idx = (idx - 1 + 6) % 6;
+                            idx = (idx - 1 + 7) % 7;
                         sidebarContentLoader.item.focusedIndex = idx;
                     } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
                         if (sidebarContentLoader.item.focusedIndex >= 0) {
@@ -101,18 +99,21 @@ Scope {
                         powerBtn.clicked();
                         break;
                     case 1:
-                        bluetoothToggle.activate();
+                        networkToggle.activate();
                         break;
                     case 2:
-                        ppdToggle.activate();
+                        bluetoothToggle.activate();
                         break;
                     case 3:
-                        gamemodeToggle.activate();
+                        ppdToggle.activate();
                         break;
                     case 4:
-                        notifComponent.activateDnd();
+                        gamemodeToggle.activate();
                         break;
                     case 5:
+                        notifComponent.activateDnd();
+                        break;
+                    case 6:
                         notifComponent.activateClear();
                         break;
                     }
@@ -201,17 +202,21 @@ Scope {
                             columns: 5
                             columnSpacing: 12
                             rowSpacing: 12
+                            NetworkMenu {
+                                id: networkToggle
+                                isFocused: contentRect.focusedIndex === 1
+                            }
                             BluetoothMenu {
                                 id: bluetoothToggle
-                                isFocused: contentRect.focusedIndex === 1
+                                isFocused: contentRect.focusedIndex === 2
                             }
                             PpdToggleMenu {
                                 id: ppdToggle
-                                isFocused: contentRect.focusedIndex === 2
+                                isFocused: contentRect.focusedIndex === 3
                             }
                             GamemodeToggleMenu {
                                 id: gamemodeToggle
-                                isFocused: contentRect.focusedIndex === 3
+                                isFocused: contentRect.focusedIndex === 4
                             }
                         }
                     }
@@ -221,10 +226,15 @@ Scope {
                         open: bluetoothToggle.showMenu && BluetoothService.ready
                     }
 
+                    NetworkMenuContent {
+                        Layout.fillWidth: true
+                        open: networkToggle.showMenu && (NetworkService.hasWifi ? NetworkService.wifiEnabled : NetworkService.hasEth)
+                    }
+
                     Notifications {
                         id: notifComponent
-                        isDndFocused: contentRect.focusedIndex === 4
-                        isClearFocused: contentRect.focusedIndex === 5
+                        isDndFocused: contentRect.focusedIndex === 5
+                        isClearFocused: contentRect.focusedIndex === 6
                     }
                 }
             }

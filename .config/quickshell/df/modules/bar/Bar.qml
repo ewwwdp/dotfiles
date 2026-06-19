@@ -85,6 +85,11 @@ Scope {
                                     Layout.preferredWidth: implicitWidth
                                     Layout.alignment: Qt.AlignVCenter
                                 }
+                                BluetoothWidget {
+                                    Layout.fillHeight: true
+                                    Layout.preferredWidth: implicitWidth
+                                    Layout.alignment: Qt.AlignVCenter
+                                }
                                 LangLayout {
                                     Layout.fillHeight: true
                                     Layout.preferredWidth: implicitWidth

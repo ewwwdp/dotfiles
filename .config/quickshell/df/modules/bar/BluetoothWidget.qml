@@ -4,14 +4,16 @@ import qs.services
 
 BarButton {
     id: root
-    text: NetworkService.materialSymbol
+    visible: BluetoothService.ready
+    text: BluetoothService.materialSymbol
+    useNerdFont: true
 
     onEntered: tooltip.tooltipVisible = true
     onExited: tooltip.tooltipVisible = false
 
     CustomTooltip {
         id: tooltip
-        text: NetworkService.networkName
+        text: BluetoothService.connectedDevicesText
         tooltipVisible: false
         targetItem: root
         positionAbove: false
