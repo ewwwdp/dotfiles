@@ -35,7 +35,7 @@ LazyLoader {
 
                 Image {
                     anchors.fill: parent
-                    source: WallpaperConfig.wallpaperForScreen(panel.modelData.name)
+                    source: WallpaperConfig.wallpaperForScreen(panel.modelData?.name ?? "")
                     fillMode: Image.PreserveAspectCrop
                     asynchronous: true
                     cache: true

@@ -1,3 +1,4 @@
+-- @meta icon=f0c51 label=Both
 hl.monitor({
     output = "HDMI-A-1",
     mode = "1920x1080@200.00",

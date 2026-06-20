@@ -1,3 +1,4 @@
+-- @meta icon=f109 label=Vertical
 hl.monitor({
     output = "HDMI-A-1",
     disabled = true

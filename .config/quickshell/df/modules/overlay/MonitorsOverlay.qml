@@ -11,23 +11,6 @@ Scope {
 
     property bool shouldShowOsd: false
 
-    readonly property var monitorModes: [
-        {
-            mode: "default",
-            icon: "\uf26c",
-            label: "Landscape"
-        },
-        {
-            mode: "vertical",
-            icon: "\uf109",
-            label: "Vertical"
-        },
-        {
-            mode: "both-vertical",
-            icon: "\udb83\ude51",
-            label: "Both"
-        }
-    ]
     LazyLoader {
         active: root.shouldShowOsd
 
@@ -44,7 +27,6 @@ Scope {
             implicitWidth: 600
             implicitHeight: 180
             color: "transparent"
-            property int selectedIndex: -1
             Rectangle {
                 focus: true
                 Keys.onPressed: event => {
@@ -65,7 +47,6 @@ Scope {
                     }
                     spacing: 20
 
-                    // Monitor mode buttons
                     GridLayout {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
@@ -74,15 +55,15 @@ Scope {
                         columnSpacing: 10
 
                         Repeater {
-                            model: root.monitorModes
+                            model: MonitorService.monitorModes
 
                             Rectangle {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
                                 Layout.minimumHeight: 80
                                 radius: 12
-                                color: (mouseArea.containsMouse || index === panelWindow.selectedIndex) ? Appearence.colors.accentColor : "#30ffffff"
-                                border.color: (mouseArea.containsMouse || index === panelWindow.selectedIndex) ? Appearence.colors.accentColor : "transparent"
+                                color: (mouseArea.containsMouse || modelData.mode === MonitorService.currentMode) ? Appearence.colors.accentColor : "#30ffffff"
+                                border.color: (mouseArea.containsMouse || modelData.mode === MonitorService.currentMode) ? Appearence.colors.accentColor : "transparent"
                                 border.width: 2
 
                                 Behavior on color {
@@ -104,7 +85,7 @@ Scope {
                                             family: Appearence.font.nerdFont
                                         }
                                         text: modelData.icon
-                                        color: (mouseArea.containsMouse || index === panelWindow.selectedIndex) ? Appearence.colors.pureBlackColor : Appearence.colors.whiteColor
+                                        color: (mouseArea.containsMouse || modelData.mode === MonitorService.currentMode) ? Appearence.colors.pureBlackColor : Appearence.colors.whiteColor
                                     }
 
                                     StyledText {
@@ -115,7 +96,7 @@ Scope {
                                             family: Appearence.font.readFont
                                             pixelSize: 11
                                         }
-                                        color: (mouseArea.containsMouse || index === panelWindow.selectedIndex) ? Appearence.colors.pureBlackColor : Appearence.colors.whiteColor
+                                        color: (mouseArea.containsMouse || modelData.mode === MonitorService.currentMode) ? Appearence.colors.pureBlackColor : Appearence.colors.whiteColor
                                         horizontalAlignment: Text.AlignHCenter
                                         wrapMode: Text.WordWrap
                                     }
@@ -126,22 +107,9 @@ Scope {
                                     anchors.fill: parent
                                     hoverEnabled: true
                                     cursorShape: Qt.PointingHandCursor
-                                    enabled: {
-                                        switch (modelData.mode) {
-                                        case "default":
-                                            return MonitorService.hasExternalMonitor;
-                                        case "vertical":
-                                            return MonitorService.hasInternalMonitor;
-                                        case "both-vertical":
-                                            return MonitorService.hasExternalMonitor && MonitorService.hasInternalMonitor;
-                                        default:
-                                            return false;
-                                        }
-                                    }
+                                    enabled: MonitorService.hasMultipleMonitors
                                     onClicked: {
-                                        panelWindow.selectedIndex = index;
-                                        MonitorService.currentMode = modelData.mode;
-                                        Quickshell.execDetached(["sh", "-c", `${Quickshell.shellDir}/scripts/change-monitor.sh ${modelData.mode}`]);
+                                        MonitorService.switchMode(modelData.mode);
                                         closeTimer.start();
                                     }
                                 }
@@ -153,7 +121,6 @@ Scope {
         }
     }
 
-    // Close timer (short delay for visual feedback)
     Timer {
         id: closeTimer
         interval: 100
@@ -171,6 +138,7 @@ Scope {
         target: "changeMonitor"
         function showOsd() {
             MonitorService.update();
+            MonitorService.refreshModes();
             root.shouldShowOsd = true;
         }
     }

@@ -7,7 +7,7 @@ Item {
     required property var barRoot
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(barRoot.screen)
     readonly property int maxInGroup: 5
-    readonly property int workspaceGroup: Math.floor((monitor.activeWorkspace?.id - 1) / maxInGroup)
+    readonly property int workspaceGroup: Math.floor((monitor?.activeWorkspace?.id - 1) / maxInGroup)
     property list<bool> workspaceOccupied: []
     property int workspaceButtonWidth: 12
     readonly property string inactiveColor: "transparent"
@@ -65,7 +65,7 @@ Item {
                 id: rect
                 property bool isHovered: false
                 property int workspaceId: root.workspaceGroup * root.maxInGroup + index + 1
-                property bool isActive: workspaceId === (monitor.activeWorkspace?.id ?? -1)
+                property bool isActive: workspaceId === (monitor?.activeWorkspace?.id ?? -1)
                 property bool isOccupied: root.workspaceOccupied[index]
 
                 width: workspaceButtonWidth + 18
