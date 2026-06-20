@@ -10,8 +10,12 @@ Singleton {
     id: root
     property var wallpaperConfig: ({})
 
+    property string defaultWallpaper: "sunflowers.png"
+
     function wallpaperForScreen(screenName) {
-        return `${Directories.wallpapersPath}${wallpaperConfig[screenName]}`;
+        const file = wallpaperConfig[screenName];
+        if (file) return `${Directories.wallpapersPath}${file}`;
+        return `${Directories.wallpapersPath}${root.defaultWallpaper}`;
     }
 
     function setWallpaperForScreen(screenName, wallpaperFile) {
