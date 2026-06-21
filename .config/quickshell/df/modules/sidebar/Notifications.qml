@@ -1,4 +1,4 @@
-import qs
+import qs.core
 import qs.services
 import qs.modules.notificationPopup
 import qs.modules.common

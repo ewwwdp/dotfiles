@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Services.UPower
 import QtQuick
 import Quickshell.Io
+import qs.core
 
 Singleton {
     id: root
@@ -23,9 +24,10 @@ Singleton {
     property bool isPluggedIn: chargeState === UPowerDeviceState.Charging || chargeState === UPowerDeviceState.PendingCharge
     property real percentage: (device?.percentage ?? 0) * 100
 
-    property int lowThreshold: 20
-    property int criticalThreshold: 10
-    property int fullThreshold: 95
+    readonly property var _batteryCfg: Config.configData.battery ?? ({})
+    property int lowThreshold: _batteryCfg.lowThreshold ?? 20
+    property int criticalThreshold: _batteryCfg.criticalThreshold ?? 10
+    property int fullThreshold: _batteryCfg.fullThreshold ?? 95
 
     property bool isLow: available && (percentage <= lowThreshold)
     property bool isCritical: available && (percentage <= criticalThreshold)
@@ -56,18 +58,21 @@ Singleton {
     onIsLowAndNotChargingChanged: {
         if (!root.available || !isLowAndNotCharging)
             return;
-        Quickshell.execDetached(["notify-send", "Low battery", "Consider plugging in your device", "-u", "critical", "-a", "Shell", "--hint=int:transient:1",]);
+        const cfg = Config.configData.battery ?? {};
+        Quickshell.execDetached(["notify-send", cfg.lowTitle ?? "Low battery", cfg.lowBody ?? "Consider plugging in your device", "-u", "critical", "-a", "Shell", "--hint=int:transient:1",]);
     }
 
     onIsCriticalAndNotChargingChanged: {
         if (!root.available || !isCriticalAndNotCharging)
             return;
-        Quickshell.execDetached(["notify-send", "Critically low battery", "Please charge!", "-u", "critical", "-a", "Shell", "--hint=int:transient:1",]);
+        const cfg = Config.configData.battery ?? {};
+        Quickshell.execDetached(["notify-send", cfg.criticalTitle ?? "Critically low battery", cfg.criticalBody ?? "Please charge!", "-u", "critical", "-a", "Shell", "--hint=int:transient:1",]);
     }
 
     onIsFullAndChargingChanged: {
         if (!root.available || !isFullAndCharging)
             return;
-        Quickshell.execDetached(["notify-send", "Battery full", "Please unplug the charger", "-a", "Shell", "--hint=int:transient:1",]);
+        const cfg = Config.configData.battery ?? {};
+        Quickshell.execDetached(["notify-send", cfg.fullTitle ?? "Battery full", cfg.fullBody ?? "Please unplug the charger", "-a", "Shell", "--hint=int:transient:1",]);
     }
 }

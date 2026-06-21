@@ -1,5 +1,5 @@
 import QtQuick
-import qs
+import qs.core
 import qs.modules.common
 
 BarButton {

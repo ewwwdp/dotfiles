@@ -1,4 +1,4 @@
-import qs
+import qs.core
 import QtQuick
 import Quickshell
 

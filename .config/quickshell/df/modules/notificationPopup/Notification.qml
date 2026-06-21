@@ -36,9 +36,7 @@ Rectangle {
         opacity: parent.hovered ? 0.05 : 0
         visible: parent.hovered || opacity > 0
         Behavior on opacity {
-            NumberAnimation {
-                duration: 150
-            }
+            animation: Appearence.animation.opacityFade.numberAnimation.createObject(this)
         }
     }
 

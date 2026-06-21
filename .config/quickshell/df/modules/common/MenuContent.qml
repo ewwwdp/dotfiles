@@ -13,16 +13,10 @@ Rectangle {
     scale: open ? 1 : 0.95
 
     Behavior on opacity {
-        NumberAnimation {
-            duration: 200
-            easing.type: Easing.OutCubic
-        }
+        animation: Appearence.animation.standardEnter.numberAnimation.createObject(this)
     }
     Behavior on scale {
-        NumberAnimation {
-            duration: 200
-            easing.type: Easing.OutCubic
-        }
+        animation: Appearence.animation.standardEnter.numberAnimation.createObject(this)
     }
 
     onOpenChanged: {

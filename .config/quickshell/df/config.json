@@ -1,0 +1,26 @@
+{
+  "isLaptop": false,
+  "defaultWallpaper": "sunflowers.png",
+  "wallpapers": {
+    "HDMI-A-1": "sunflowers.png",
+    "DP-1": "sunflowers_9x16.png"
+  },
+  "battery": {
+    "lowThreshold": 20,
+    "criticalThreshold": 10,
+    "fullThreshold": 95,
+    "lowTitle": "Low battery",
+    "lowBody": "Consider plugging in your device",
+    "criticalTitle": "Critically low battery",
+    "criticalBody": "Please charge!",
+    "fullTitle": "Battery full",
+    "fullBody": "Please unplug the charger"
+  },
+  "clipboard": {
+    "deleteKeys": ["Delete", "Backspace", "X"],
+    "pinKey": "Space",
+    "togglePinnedKey": "P",
+    "copyKey": "Return",
+    "closeKey": "Escape"
+  }
+}

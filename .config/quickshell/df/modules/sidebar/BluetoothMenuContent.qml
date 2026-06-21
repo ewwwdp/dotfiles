@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell.Bluetooth
-import qs
 import qs.modules.common
 import qs.services
 
@@ -71,10 +70,7 @@ MenuContent {
             clip: true
 
             Behavior on implicitHeight {
-                NumberAnimation {
-                    duration: 150
-                    easing.type: Easing.OutCubic
-                }
+                animation: Appearence.animation.elementResize.numberAnimation.createObject(this)
             }
 
             MouseArea {

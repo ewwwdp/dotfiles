@@ -148,5 +148,60 @@ Singleton {
             property int duration: 350
             property int type: Easing.OutExpo
         }
+
+        property QtObject colorSnap: QtObject {
+            property int duration: 200
+            property int type: Easing.Linear
+            property Component colorAnimation: Component {
+                ColorAnimation {
+                    duration: root.animation.colorSnap.duration
+                    easing.type: root.animation.colorSnap.type
+                }
+            }
+        }
+        property QtObject opacityFade: QtObject {
+            property int duration: 150
+            property int type: Easing.Linear
+            property Component numberAnimation: Component {
+                NumberAnimation {
+                    duration: root.animation.opacityFade.duration
+                    easing.type: root.animation.opacityFade.type
+                }
+            }
+        }
+        property QtObject elementResize: QtObject {
+            property int duration: 150
+            property int type: Easing.OutCubic
+            property Component numberAnimation: Component {
+                NumberAnimation {
+                    duration: root.animation.elementResize.duration
+                    easing.type: root.animation.elementResize.type
+                }
+            }
+        }
+        property QtObject standardEnter: QtObject {
+            property int duration: 200
+            property int type: Easing.OutCubic
+            property Component numberAnimation: Component {
+                NumberAnimation {
+                    duration: root.animation.standardEnter.duration
+                    easing.type: root.animation.standardEnter.type
+                }
+            }
+        }
+        property QtObject fadeIn: QtObject {
+            property int duration: 200
+            property int type: Easing.OutExpo
+            property Component numberAnimation: Component {
+                NumberAnimation {
+                    duration: root.animation.fadeIn.duration
+                    easing.type: root.animation.fadeIn.type
+                }
+            }
+        }
+        property QtObject listItemFade: QtObject {
+            property int duration: 100
+            property int type: Easing.Linear
+        }
     }
 }

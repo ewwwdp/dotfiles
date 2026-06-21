@@ -1,7 +1,7 @@
 import QtQuick
 import Quickshell
 import qs.services
-import qs
+import qs.core
 
 PanelWindow {
     id: notificationWindow

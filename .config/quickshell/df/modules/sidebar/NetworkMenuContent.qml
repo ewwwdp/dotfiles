@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell.Networking
-import qs
 import qs.modules.common
 import qs.services
 
@@ -193,8 +192,7 @@ MenuContent {
                             if (connecting) {
                                 connecting = false;
                                 showPassword = true;
-                                connectError = reason === ConnectionFailReason.NoSecrets
-                                    ? "Wrong password" : "Connection failed";
+                                connectError = reason === ConnectionFailReason.NoSecrets ? "Wrong password" : "Connection failed";
                             }
                         }
                         function onConnectedChanged() {

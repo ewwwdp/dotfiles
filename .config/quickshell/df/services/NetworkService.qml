@@ -2,7 +2,6 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import qs
 import Quickshell
 import Quickshell.Networking
 
@@ -24,11 +23,15 @@ Singleton {
 
     Connections {
         target: Networking
-        function onWifiEnabledChanged() { root.refresh(); }
+        function onWifiEnabledChanged() {
+            root.refresh();
+        }
     }
     Connections {
         target: Networking.devices
-        function onValuesChanged() { root.refresh(); }
+        function onValuesChanged() {
+            root.refresh();
+        }
     }
 
     Component.onCompleted: root.refresh()
@@ -81,7 +84,9 @@ Singleton {
 
         for (let i = root.watchedDevices.length - 1; i >= 0; i--) {
             if (!currentDevs.includes(root.watchedDevices[i])) {
-                try { root.watchedDevices[i].connectedChanged.disconnect(root.refresh); } catch (e) {}
+                try {
+                    root.watchedDevices[i].connectedChanged.disconnect(root.refresh);
+                } catch (e) {}
                 root.watchedDevices.splice(i, 1);
             }
         }

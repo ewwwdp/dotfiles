@@ -3,7 +3,7 @@ import QtQuick.Layouts
 import QtQuick.Effects
 import Quickshell
 import QtQuick.Controls.Fusion
-import qs
+import qs.core
 import qs.modules.common
 import qs.services
 

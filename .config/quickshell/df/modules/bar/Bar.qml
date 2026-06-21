@@ -2,7 +2,7 @@ import Quickshell
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Wayland
-import qs
+import qs.core
 import qs.modules.common
 
 Scope {
@@ -81,7 +81,7 @@ Scope {
                                     Layout.alignment: Qt.AlignVCenter
                                 }
                                 LazyLoader {
-                                    active: GlobalStates.isLaptop
+                                    active: Config.isLaptop
                                     component: BatteryWidget {
                                         Layout.fillHeight: true
                                         Layout.preferredWidth: implicitWidth

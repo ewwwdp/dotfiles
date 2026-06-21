@@ -3,7 +3,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import Quickshell.Widgets
-import qs
+import qs.core
 import qs.modules.common
 
 Item {
@@ -204,10 +204,7 @@ Item {
         id: content
         height: 7 + searchContainer.implicitHeight + list.topMargin + list.bottomMargin + Math.min(list.contentHeight, list.delegateHeight * 10)
         Behavior on height {
-            NumberAnimation {
-                duration: 200
-                easing.type: Easing.OutCubic
-            }
+            animation: Appearence.animation.standardEnter.numberAnimation.createObject(this)
         }
         width: 450
         color: Appearence.colors.popupBgColor
@@ -297,46 +294,50 @@ Item {
                         property: "opacity"
                         from: 0
                         to: 1
-                        duration: 100
+                        duration: Appearence.animation.listItemFade.duration
+                        easing.type: Appearence.animation.listItemFade.type
                     }
                 }
 
                 displaced: Transition {
                     NumberAnimation {
                         property: "y"
-                        duration: 200
-                        easing.type: Easing.OutCubic
+                        duration: Appearence.animation.standardEnter.duration
+                        easing.type: Appearence.animation.standardEnter.type
                     }
                     NumberAnimation {
                         property: "opacity"
                         to: 1
-                        duration: 100
+                        duration: Appearence.animation.listItemFade.duration
+                        easing.type: Appearence.animation.listItemFade.type
                     }
                 }
 
                 move: Transition {
                     NumberAnimation {
                         property: "y"
-                        duration: 200
-                        easing.type: Easing.OutCubic
+                        duration: Appearence.animation.standardEnter.duration
+                        easing.type: Appearence.animation.standardEnter.type
                     }
                     NumberAnimation {
                         property: "opacity"
                         to: 1
-                        duration: 100
+                        duration: Appearence.animation.listItemFade.duration
+                        easing.type: Appearence.animation.listItemFade.type
                     }
                 }
 
                 remove: Transition {
                     NumberAnimation {
                         property: "y"
-                        duration: 200
-                        easing.type: Easing.OutCubic
+                        duration: Appearence.animation.standardEnter.duration
+                        easing.type: Appearence.animation.standardEnter.type
                     }
                     NumberAnimation {
                         property: "opacity"
                         to: 0
-                        duration: 100
+                        duration: Appearence.animation.listItemFade.duration
+                        easing.type: Appearence.animation.listItemFade.type
                     }
                 }
 

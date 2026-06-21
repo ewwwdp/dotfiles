@@ -4,7 +4,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
-import qs
+import qs.core
 import qs.modules.common
 
 Scope {
@@ -124,8 +124,8 @@ Scope {
                     NumberAnimation on opacity {
                         from: 0.0
                         to: 1.0
-                        duration: 200
-                        easing.type: Easing.OutExpo
+                        duration: Appearence.animation.fadeIn.duration
+                        easing.type: Appearence.animation.fadeIn.type
                         running: root.visible
                     }
                 }
@@ -170,7 +170,7 @@ Scope {
                     PropertyAnimation on innerBorderColor {
                         running: capturing
                         to: "#00ff20"
-                        duration: 200
+                        duration: Appearence.animation.colorSnap.duration
                     }
                 }
 
@@ -188,7 +188,7 @@ Scope {
                     Text {
                         id: txt
                         anchors.centerIn: parent
-                        text: `${selection.w} × ${selection.h}`
+                        text: `${Math.round(selection.w)} × ${Math.round(selection.h)}`
                         color: "white"
                         font.pixelSize: 13
                         font.bold: true

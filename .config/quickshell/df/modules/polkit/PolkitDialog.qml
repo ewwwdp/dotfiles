@@ -56,9 +56,7 @@ PanelWindow {
         border.color: auth.errorFlash ? root.borderError : root.borderColor
 
         Behavior on border.color {
-            ColorAnimation {
-                duration: 200
-            }
+            animation: Appearence.animation.colorSnap.colorAnimation.createObject(this)
         }
 
         clip: true

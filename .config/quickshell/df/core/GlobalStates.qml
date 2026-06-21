@@ -8,7 +8,6 @@ import Quickshell.Io
 Singleton {
     id: root
 
-    readonly property bool isLaptop: true
     property bool sidebarOpen: false
     property bool isSessionOpen: false
     property bool dndEnabled: false

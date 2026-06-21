@@ -1,7 +1,7 @@
 import Quickshell
 import Quickshell.Wayland
 import QtQuick
-import qs
+import qs.core
 import qs.modules.common
 
 LazyLoader {
