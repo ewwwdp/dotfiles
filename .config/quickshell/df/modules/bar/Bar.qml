@@ -80,10 +80,13 @@ Scope {
                                     Layout.preferredWidth: implicitWidth
                                     Layout.alignment: Qt.AlignVCenter
                                 }
-                                BatteryWidget {
-                                    Layout.fillHeight: true
-                                    Layout.preferredWidth: implicitWidth
-                                    Layout.alignment: Qt.AlignVCenter
+                                LazyLoader {
+                                    active: GlobalStates.isLaptop
+                                    component: BatteryWidget {
+                                        Layout.fillHeight: true
+                                        Layout.preferredWidth: implicitWidth
+                                        Layout.alignment: Qt.AlignVCenter
+                                    }
                                 }
                                 NetworkWidget {
                                     Layout.fillHeight: true
