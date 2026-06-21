@@ -80,6 +80,12 @@ Scope {
                                     Layout.preferredWidth: implicitWidth
                                     Layout.alignment: Qt.AlignVCenter
                                 }
+                                BatteryWidget {
+                                    visible: GlobalStates.isLaptop
+                                    Layout.fillHeight: true
+                                    Layout.preferredWidth: implicitWidth
+                                    Layout.alignment: Qt.AlignVCenter
+                                }
                                 NetworkWidget {
                                     Layout.fillHeight: true
                                     Layout.preferredWidth: implicitWidth
