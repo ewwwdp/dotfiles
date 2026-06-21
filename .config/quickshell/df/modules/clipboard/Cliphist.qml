@@ -14,19 +14,57 @@ Scope {
 
     property bool showPinnedOnly: false
 
-    readonly property var _keyNameToKey: ({
-        "Delete": Qt.Key_Delete,
-        "Backspace": Qt.Key_Backspace,
-        "X": Qt.Key_X,
-        "Space": Qt.Key_Space,
-        "P": Qt.Key_P,
-        "Return": Qt.Key_Return,
-        "Escape": Qt.Key_Escape
-    })
-
-    function _parseKeys(names) {
-        return (names ?? []).map(n => _keyNameToKey[n]).filter(k => k !== undefined);
-    }
+    readonly property var _kb: (() => {
+            function key(name) {
+                const named = {
+                    "Escape": Qt.Key_Escape,
+                    "Tab": Qt.Key_Tab,
+                    "Backspace": Qt.Key_Backspace,
+                    "Return": Qt.Key_Return,
+                    "Enter": Qt.Key_Enter,
+                    "Delete": Qt.Key_Delete,
+                    "Space": Qt.Key_Space,
+                    "Insert": Qt.Key_Insert,
+                    "Home": Qt.Key_Home,
+                    "End": Qt.Key_End,
+                    "PageUp": Qt.Key_PageUp,
+                    "PageDown": Qt.Key_PageDown,
+                    "Up": Qt.Key_Up,
+                    "Down": Qt.Key_Down,
+                    "Left": Qt.Key_Left,
+                    "Right": Qt.Key_Right,
+                    "CapsLock": Qt.Key_CapsLock,
+                    "NumLock": Qt.Key_NumLock,
+                    "ScrollLock": Qt.Key_ScrollLock,
+                    "Print": Qt.Key_Print,
+                    "Pause": Qt.Key_Pause,
+                    "Menu": Qt.Key_Menu,
+                    "Period": Qt.Key_Period,
+                    "Comma": Qt.Key_Comma,
+                    "Slash": Qt.Key_Slash,
+                    "Backslash": Qt.Key_Backslash,
+                    "Semicolon": Qt.Key_Semicolon,
+                    "Apostrophe": Qt.Key_Apostrophe,
+                    "Minus": Qt.Key_Minus,
+                    "Equal": Qt.Key_Equal,
+                    "BracketLeft": Qt.Key_BracketLeft,
+                    "BracketRight": Qt.Key_BracketRight,
+                    "QuoteLeft": Qt.Key_QuoteLeft
+                };
+                for (let i = 1; i <= 35; i++)
+                    named["F" + i] = Qt["Key_F" + i];
+                return named[name] ?? (name.length === 1 ? name.toUpperCase().charCodeAt(0) : 0);
+            }
+            const C = Config.configData.clipboard ?? {};
+            const def = ["Delete", "Backspace", "X"];
+            return {
+                deleteKeys: (C.deleteKeys ?? def).map(n => key(n)).filter(k => k),
+                pinKey: key(C.pinKey) || Qt.Key_Space,
+                toggleKey: key(C.togglePinnedKey) || Qt.Key_P,
+                copyKey: key(C.copyKey) || Qt.Key_Return,
+                closeKey: key(C.closeKey) || Qt.Key_Escape
+            };
+        })()
 
     function togglePin(id, content) {
         if (Clipboard.isPinned(id)) {
@@ -252,30 +290,24 @@ Scope {
                                     }
 
                                     Keys.onPressed: function (event) {
-                                        const kb = Config.configData.clipboard ?? {};
-                                        const deleteKeys = root._parseKeys(kb.deleteKeys ?? ["Delete", "Backspace", "X"]);
-                                        const pinKey = root._keyNameToKey[kb.pinKey] ?? Qt.Key_Space;
-                                        const toggleKey = root._keyNameToKey[kb.togglePinnedKey] ?? Qt.Key_P;
-                                        const copyKey = root._keyNameToKey[kb.copyKey] ?? Qt.Key_Return;
-                                        const closeKey = root._keyNameToKey[kb.closeKey] ?? Qt.Key_Escape;
-
-                                        if (event.key === closeKey) {
+                                        const k = event.key;
+                                        if (k === root._kb.closeKey) {
                                             GlobalStates.clipboardOpen = false;
-                                        } else if (deleteKeys.indexOf(event.key) >= 0) {
+                                        } else if (root._kb.deleteKeys.indexOf(k) >= 0) {
                                             var item = clipboardList.itemAtIndex(clipboardList.currentIndex);
                                             if (item && !Clipboard.isPinned(item.model.id)) {
                                                 Clipboard.deleteEntry(item.model.id);
                                             }
-                                        } else if (event.key === pinKey) {
+                                        } else if (k === root._kb.pinKey) {
                                             var item = clipboardList.itemAtIndex(clipboardList.currentIndex);
                                             if (item) {
                                                 root.togglePin(item.model.id, item.model.content);
                                             }
-                                        } else if (event.key === toggleKey) {
+                                        } else if (k === root._kb.toggleKey) {
                                             root.showPinnedOnly = !root.showPinnedOnly;
                                             visualModel.applyFilter();
                                             clipboardList.currentIndex = 0;
-                                        } else if (event.key === copyKey) {
+                                        } else if (k === root._kb.copyKey) {
                                             var item = clipboardList.itemAtIndex(clipboardList.currentIndex);
                                             if (item) {
                                                 Clipboard.copyToClipboard(item.model.id);
