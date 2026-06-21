@@ -29,7 +29,7 @@ Item {
             root.updateWorkspaceOccupied();
         }
     }
-    // Black bacground
+    
     Rectangle {
         z: -1
         anchors.left: parent.left

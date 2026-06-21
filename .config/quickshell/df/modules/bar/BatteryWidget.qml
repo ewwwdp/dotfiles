@@ -6,9 +6,7 @@ import qs.services
 
 BarButton {
     id: root
-
-    visible: BatteryState.available && !BatteryState.isFullAndCharging
-
+    visible: GlobalStates.isLaptop && BatteryState.available && !BatteryState.isFullAndCharging
     text: {
         let pct = BatteryState.percentage;
         let icon;
@@ -52,21 +50,13 @@ BarButton {
         text: {
             let time;
             if (BatteryState.isCharging && BatteryState.timeToFull > 0)
-                time = "full in " + formatTime(BatteryState.timeToFull);
+                time = "full in " + DateTime.formatBatteryTime(BatteryState.timeToFull);
             else if (BatteryState.chargeState === UPowerDeviceState.Discharging && BatteryState.timeToEmpty > 0)
-                time = "empty in " + formatTime(BatteryState.timeToEmpty);
+                time = "empty in " + DateTime.formatBatteryTime(BatteryState.timeToEmpty);
 
             if (time)
                 return Math.round(BatteryState.percentage) + "% | " + time;
             return Math.round(BatteryState.percentage) + "%";
-        }
-
-        function formatTime(seconds) {
-            const h = Math.floor(seconds / 3600);
-            const m = Math.floor((seconds % 3600) / 60);
-            if (h > 0)
-                return h + "h " + m + "m";
-            return m + "m";
         }
     }
 }

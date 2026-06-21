@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 import qs
+import qs.modules.common
 
 Scope {
     id: root
@@ -28,7 +29,7 @@ Scope {
 
     Process {
         id: grimProc
-        command: ["grim", "-l", "0", root.path]
+        command: ["grim", "-l", "0", "-s", "1", root.path]
         onExited: code => {
             if (code == 0) {
                 root.visible = true;
@@ -117,6 +118,7 @@ Scope {
                 Image {
                     anchors.fill: parent
                     source: root.visible ? root.path : ""
+                    fillMode: Image.PreserveAspectCrop
                     sourceClipRect: root.normalizedScreenRect(panel.screen)
 
                     NumberAnimation on opacity {

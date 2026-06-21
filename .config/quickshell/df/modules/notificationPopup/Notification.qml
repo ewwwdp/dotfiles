@@ -89,7 +89,7 @@ Rectangle {
                 }
 
                 StyledText {
-                    text: notificationData?.time ? formatTimestamp(notificationData.time) : "Now"
+                    text: notificationData?.time ? DateTime.formatTimestamp(notificationData.time) : "Now"
                     color: Appearence.colors.textMutedColor
                     font.pixelSize: 10
                     font.family: Appearence.font.readFont
@@ -120,7 +120,7 @@ Rectangle {
             }
         }
 
-        // Dismiss button
+        
         Button {
             id: dismissBtn
             width: 24
@@ -154,30 +154,5 @@ Rectangle {
                 }
             }
         }
-    }
-
-    function formatTimestamp(timestamp) {
-        if (!timestamp)
-            return "Now";
-
-        const now = Date.now();
-        const diffMs = now - timestamp;
-        var diffMins = Math.floor(diffMs / 60000);
-
-        if (diffMins < 1)
-            return "Now";
-        if (diffMins < 60)
-            return diffMins + " min ago";
-
-        var diffHours = Math.floor(diffMins / 60);
-        if (diffHours === 1)
-            return "1 hour ago";
-        if (diffHours < 24)
-            return diffHours + " hours ago";
-
-        var diffDays = Math.floor(diffHours / 24);
-        if (diffDays === 1)
-            return "1 day ago";
-        return diffDays + " days ago";
     }
 }

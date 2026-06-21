@@ -41,4 +41,37 @@ Singleton {
             parts.push(`${minutes}m`);
         return parts.join(", ");
     }
+
+    function formatBatteryTime(seconds) {
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        if (h > 0)
+            return h + "h " + m + "m";
+        return m + "m";
+    }
+
+    function formatTimestamp(timestamp) {
+        if (!timestamp)
+            return "Now";
+
+        const now = Date.now();
+        const diffMs = now - timestamp;
+        var diffMins = Math.floor(diffMs / 60000);
+
+        if (diffMins < 1)
+            return "Now";
+        if (diffMins < 60)
+            return diffMins + " min ago";
+
+        var diffHours = Math.floor(diffMins / 60);
+        if (diffHours === 1)
+            return "1 hour ago";
+        if (diffHours < 24)
+            return diffHours + " hours ago";
+
+        var diffDays = Math.floor(diffHours / 24);
+        if (diffDays === 1)
+            return "1 day ago";
+        return diffDays + " days ago";
+    }
 }

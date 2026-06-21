@@ -81,7 +81,6 @@ Scope {
                                     Layout.alignment: Qt.AlignVCenter
                                 }
                                 BatteryWidget {
-                                    visible: GlobalStates.isLaptop
                                     Layout.fillHeight: true
                                     Layout.preferredWidth: implicitWidth
                                     Layout.alignment: Qt.AlignVCenter

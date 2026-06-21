@@ -135,14 +135,12 @@ Scope {
                                             radius: 6
                                             clip: true
 
-                                            Image {
+                                            StyledImage {
                                                 anchors.fill: parent
                                                 source: `${Directories.wallpapersPath}${fileName}`
                                                 fillMode: Image.PreserveAspectCrop
                                                 asynchronous: true
                                                 cache: false
-                                                sourceSize.width: root.thumbnailSize * 2
-                                                sourceSize.height: root.thumbnailSize * 2
                                             }
                                         }
 

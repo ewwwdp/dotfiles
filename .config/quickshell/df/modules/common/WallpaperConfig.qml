@@ -14,7 +14,8 @@ Singleton {
 
     function wallpaperForScreen(screenName) {
         const file = wallpaperConfig[screenName];
-        if (file) return `${Directories.wallpapersPath}${file}`;
+        if (file)
+            return `${Directories.wallpapersPath}${file}`;
         return `${Directories.wallpapersPath}${root.defaultWallpaper}`;
     }
 

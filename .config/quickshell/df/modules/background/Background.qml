@@ -33,14 +33,12 @@ LazyLoader {
                 WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
                 exclusionMode: ExclusionMode.Ignore
 
-                Image {
+                StyledImage {
                     anchors.fill: parent
                     source: WallpaperConfig.wallpaperForScreen(panel.modelData?.name ?? "")
                     fillMode: Image.PreserveAspectCrop
                     asynchronous: true
                     cache: true
-                    sourceSize.width: panel.width
-                    sourceSize.height: panel.height
                 }
             }
         }

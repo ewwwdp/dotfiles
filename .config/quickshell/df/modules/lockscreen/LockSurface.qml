@@ -22,7 +22,7 @@ Rectangle {
 
     color: backgroundFallback
 
-    Image {
+    StyledImage {
         id: blurPass1
         anchors.fill: parent
         source: WallpaperConfig.wallpaperForScreen(root.screenName)
@@ -30,8 +30,6 @@ Rectangle {
         asynchronous: true
         cache: false
         opacity: status === Image.Ready ? 1 : 0
-        sourceSize.width: parent.width
-        sourceSize.height: parent.height
         layer.enabled: true
         layer.effect: MultiEffect {
             blurEnabled: true
@@ -44,7 +42,7 @@ Rectangle {
         }
     }
 
-    // Date label
+    
     Text {
         id: dateLabel
         anchors {
@@ -66,7 +64,7 @@ Rectangle {
         }
     }
 
-    // Time label
+    
     Text {
         id: timeLabel
         anchors {
@@ -83,7 +81,7 @@ Rectangle {
         text: DateTime.time
     }
 
-    // Password input field
+    
     ColumnLayout {
         anchors {
             horizontalCenter: parent.horizontalCenter

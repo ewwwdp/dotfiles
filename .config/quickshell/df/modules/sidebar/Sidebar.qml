@@ -124,7 +124,6 @@ Scope {
                     anchors.margins: 20
                     spacing: 24
 
-                    // Enhanced Header with uptime
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 25
@@ -133,8 +132,6 @@ Scope {
                         RowLayout {
                             anchors.fill: parent
                             anchors.verticalCenter: parent.verticalCenter
-
-                            // Enhanced uptime section
 
                             Rectangle {
                                 implicitWidth: 8
@@ -188,7 +185,6 @@ Scope {
                         }
                     }
 
-                    // Enhanced quick toggles section
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 80

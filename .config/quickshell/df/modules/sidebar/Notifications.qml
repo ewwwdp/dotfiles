@@ -31,7 +31,7 @@ Rectangle {
         anchors.margins: 16
         spacing: 16
 
-        // Enhanced notifications header
+        
         RowLayout {
             Layout.fillWidth: true
 
@@ -128,7 +128,7 @@ Rectangle {
             }
         }
 
-        // Enhanced notifications list
+        
         ListView {
             id: notifList
             visible: NotificationService.list.length > 0
