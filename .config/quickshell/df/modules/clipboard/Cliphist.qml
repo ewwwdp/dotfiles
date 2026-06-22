@@ -53,7 +53,7 @@ Scope {
                 };
                 for (let i = 1; i <= 35; i++)
                     named["F" + i] = Qt["Key_F" + i];
-                return named[name] ?? (name.length === 1 ? name.toUpperCase().charCodeAt(0) : 0);
+                return named[name] ?? (name && name.length === 1 ? name.toUpperCase().charCodeAt(0) : 0);
             }
             const C = Config.configData.clipboard ?? {};
             const def = ["Delete", "Backspace", "X"];

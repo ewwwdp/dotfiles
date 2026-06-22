@@ -6,7 +6,7 @@ import qs.services
 
 BarButton {
     id: root
-    visible: BatteryState.available && !BatteryState.isFullAndCharging
+    visible: Config.isLaptop && BatteryState.available && !BatteryState.isFullAndCharging
     text: {
         let pct = BatteryState.percentage;
         let icon;
