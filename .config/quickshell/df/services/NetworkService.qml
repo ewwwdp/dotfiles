@@ -69,9 +69,9 @@ Singleton {
                 return -1;
             if (b.connected && !a.connected)
                 return 1;
-            if (a.bonded && !b.bonded)
+            if (a.known && !b.known)
                 return -1;
-            if (b.bonded && !a.bonded)
+            if (b.known && !a.known)
                 return 1;
             return b.signalStrength - a.signalStrength;
         });

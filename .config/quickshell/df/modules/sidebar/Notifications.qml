@@ -17,6 +17,7 @@ Rectangle {
 
     property bool isDndFocused: false
     property bool isClearFocused: false
+    readonly property var reversedModel: NotificationService.list.slice().reverse()
 
     function activateDnd() {
         GlobalStates.dndEnabled = !GlobalStates.dndEnabled;
@@ -136,7 +137,7 @@ Rectangle {
             Layout.fillHeight: true
             spacing: 12
             clip: true
-            model: NotificationService.list.slice().reverse()
+            model: notifRoot.reversedModel
 
             delegate: Notification {
                 width: notifList.width

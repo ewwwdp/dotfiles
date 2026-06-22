@@ -33,7 +33,13 @@ Singleton {
         stdout: StdioCollector {
             id: devicesCollector
             onStreamFinished: {
-                const monitorData = JSON.parse(devicesCollector.text);
+                let monitorData;
+                try {
+                    monitorData = JSON.parse(devicesCollector.text);
+                } catch (e) {
+                    console.error("[MonitorService] Failed to parse hyprctl output:", e);
+                    monitorData = [];
+                }
 
                 root.monitors = monitorData;
                 root.monitorCount = monitorData.length;

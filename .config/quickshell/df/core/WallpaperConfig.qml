@@ -23,6 +23,6 @@ Singleton {
         wallpaperConfig[screenName] = wallpaperFile;
         const path = Directories.configPath;
         const localPath = path.startsWith("file://") ? path.substring(7) : path;
-        Quickshell.execDetached(["sh", "-c", `${Quickshell.shellDir}/scripts/set-wallpaper.sh '${screenName}' '${wallpaperFile}' '${localPath}'`]);
+        Quickshell.execDetached(["sh", `${Quickshell.shellDir}/scripts/set-wallpaper.sh`, screenName, wallpaperFile, localPath]);
     }
 }

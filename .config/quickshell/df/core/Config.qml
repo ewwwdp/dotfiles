@@ -18,7 +18,12 @@ Singleton {
         watchChanges: true
         onFileChanged: this.reload()
         onLoaded: {
-            root.configData = JSON.parse(configFile.text());
+            try {
+                root.configData = JSON.parse(configFile.text());
+            } catch (e) {
+                console.error("[Config] Failed to parse config.json:", e);
+                root.configData = ({});
+            }
         }
     }
 }

@@ -182,7 +182,14 @@ Singleton {
         path: Qt.resolvedUrl(root.filePath)
         onLoaded: {
             const fileContents = notifFileView.text();
-            root.list = JSON.parse(fileContents).map(notif => {
+            let parsed;
+            try {
+                parsed = JSON.parse(fileContents);
+            } catch (e) {
+                console.error("[Notifications] Failed to parse notifications file:", e);
+                parsed = [];
+            }
+            root.list = parsed.map(notif => {
                 return notifComponent.createObject(root, {
                     "notificationId": notif.notificationId,
                     "actions": notif.actions,

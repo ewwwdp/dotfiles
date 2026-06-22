@@ -24,7 +24,14 @@ Singleton {
         id: pinFileView
         path: Qt.resolvedUrl(root.filePath)
         onLoaded: {
-            root.setPinnedEntries(JSON.parse(pinFileView.text()));
+            let entries;
+            try {
+                entries = JSON.parse(pinFileView.text());
+            } catch (e) {
+                console.error("[Clipboard] Failed to parse pinned entries:", e);
+                entries = [];
+            }
+            root.setPinnedEntries(entries);
             root.remapPinnedEntries();
         }
         onLoadFailed: error => {

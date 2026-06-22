@@ -53,7 +53,13 @@ Singleton {
         stdout: StdioCollector {
             id: devicesCollector
             onStreamFinished: {
-                const parsedOutput = JSON.parse(devicesCollector.text);
+                let parsedOutput;
+                try {
+                    parsedOutput = JSON.parse(devicesCollector.text);
+                } catch (e) {
+                    console.error("[XcbLayout] Failed to parse hyprctl devices output:", e);
+                    parsedOutput = {};
+                }
                 const hyprlandKeyboard = parsedOutput["keyboards"].find(kb => kb.main === true);
                 root.layoutCodes = hyprlandKeyboard["layout"].split(",");
                 root.currentLayoutName = hyprlandKeyboard["active_keymap"];
