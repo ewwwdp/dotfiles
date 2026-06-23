@@ -57,7 +57,7 @@ Scope {
                             Rectangle {
                                 id: rightBackground
                                 anchors.centerIn: parent
-                                color: Appearence.colors.pureBlackColor
+                                color: Appearence.colors.backgroundBarColor
                                 width: rightSideLayout.implicitWidth + 22
                                 height: parent.height - 4
                                 radius: height / 2

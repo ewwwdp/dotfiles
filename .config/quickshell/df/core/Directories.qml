@@ -12,5 +12,6 @@ Singleton {
     readonly property string screenshotPath: Quickshell.cachePath("screenshot.png")
     readonly property string launcherCache: `${Directories.cache}/launcher/launcher.json`
     readonly property string wallpapersPath: `${Quickshell.env("HOME")}/.dotfiles/wallpapers/`
+    readonly property string themesPath: Qt.resolvedUrl("../themes")
     readonly property string clipboardPath: `${Directories.cache}/clipboard/pins.json`
 }

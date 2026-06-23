@@ -76,7 +76,7 @@ Scope {
                     width: Math.min(parent.width - 80, 885)
                     height: root.thumbnailSize + 30
                     radius: 16
-                    color: "#ee11111b"
+                    color: Appearence.colors.wallpaperBgColor
                     border.width: 1
                     border.color: Appearence.colors.borderColor
 
@@ -118,7 +118,7 @@ Scope {
                                         width: root.thumbnailSize * 2
                                         height: root.thumbnailSize
                                         radius: 12
-                                        color: wallpaperMouse.containsMouse ? Appearence.colors.surfaceHoverColor : (isCurrent ? "#1e1e2e" : Appearence.colors.surfaceColor)
+                                        color: wallpaperMouse.containsMouse ? Appearence.colors.surfaceHoverColor : (isCurrent ? Appearence.colors.wallpaperCurrentColor : Appearence.colors.surfaceColor)
                                         border.width: isCurrent ? 2 : 1
                                         border.color: isCurrent ? Appearence.colors.accentColor : Appearence.colors.borderColor
 

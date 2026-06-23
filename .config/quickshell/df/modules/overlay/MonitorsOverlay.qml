@@ -85,7 +85,7 @@ Scope {
                                             family: Appearence.font.nerdFont
                                         }
                                         text: modelData.icon
-                                        color: (mouseArea.containsMouse || modelData.mode === MonitorService.currentMode) ? Appearence.colors.pureBlackColor : Appearence.colors.whiteColor
+                                        color: (mouseArea.containsMouse || modelData.mode === MonitorService.currentMode) ? Appearence.colors.backgroundBarColor : Appearence.colors.whiteColor
                                     }
 
                                     StyledText {
@@ -96,7 +96,7 @@ Scope {
                                             family: Appearence.font.readFont
                                             pixelSize: 11
                                         }
-                                        color: (mouseArea.containsMouse || modelData.mode === MonitorService.currentMode) ? Appearence.colors.pureBlackColor : Appearence.colors.whiteColor
+                                        color: (mouseArea.containsMouse || modelData.mode === MonitorService.currentMode) ? Appearence.colors.backgroundBarColor : Appearence.colors.whiteColor
                                         horizontalAlignment: Text.AlignHCenter
                                         wrapMode: Text.WordWrap
                                     }

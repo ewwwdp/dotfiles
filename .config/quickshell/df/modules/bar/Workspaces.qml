@@ -35,7 +35,7 @@ Item {
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
         anchors.leftMargin: -5
-        color: Appearence.colors.pureBlackColor
+        color: Appearence.colors.backgroundBarColor
         width: rowLayout.width
         height: rowLayout.height
 

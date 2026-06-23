@@ -8,9 +8,9 @@ import Quickshell.Wayland
 Item {
     id: root
 
-    property color backgroundColor: "#13141c"
-    property color buttonColor: "#06060d"
-    property color buttonHoverColor: "#181923"
+    property color backgroundColor: Appearence.colors.wlogoutBgColor
+    property color buttonColor: Appearence.colors.wlogoutButtonColor
+    property color buttonHoverColor: Appearence.colors.wlogoutButtonHoverColor
 
     default property list<LogoutButton> buttons
 
@@ -79,7 +79,7 @@ Item {
                                 id: icon
                                 anchors.centerIn: parent
                                 text: modelData.icon
-                                color: "#D4BFF9"
+                                color: Appearence.colors.wlogoutIconColor
                                 font.pixelSize: 150
                             }
 

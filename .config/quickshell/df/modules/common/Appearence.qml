@@ -2,6 +2,8 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
+import Quickshell.Io
+import qs.core
 
 Singleton {
     id: root
@@ -13,25 +15,51 @@ Singleton {
     property QtObject sizes
 
     colors: QtObject {
-        readonly property color pureBlackColor: "#000000"
-        readonly property color accentColor: "#c0caf5"
-        readonly property color hoverColor: "#13131D"
-        readonly property color barBackgroundColor: "#060709"
-        readonly property color barBorderColor: "#313244"
+        property color backgroundBarColor: "#000000"
+        property color accentColor: "#c0caf5"
+        property color hoverColor: "#13131D"
+        property color barBackgroundColor: "#060709"
+        property color barBorderColor: "#313244"
 
-        readonly property color baseColor: "#11111b"
-        readonly property color surfaceColor: "#181825"
-        readonly property color surfaceHoverColor: "#45475a"
-        readonly property color borderColor: "#313244"
-        readonly property color textColor: "#cdd6f4"
-        readonly property color textMutedColor: "#6c7086"
-        readonly property color errorColor: "#f38ba8"
-        readonly property color focusColor: "#89b4fa"
-        readonly property color popupBgColor: "#171717"
-        readonly property color popupBorderColor: "#262626"
-        readonly property color whiteColor: "#ffffff"
-        readonly property color scrimColor: "#80000000"
+        property color baseColor: "#11111b"
+        property color surfaceColor: "#181825"
+        property color surfaceHoverColor: "#45475a"
+        property color borderColor: "#313244"
+        property color textColor: "#cdd6f4"
+        property color textMutedColor: "#6c7086"
+        property color errorColor: "#f38ba8"
+        property color focusColor: "#89b4fa"
+        property color popupBgColor: "#171717"
+        property color popupBorderColor: "#262626"
+        property color whiteColor: "#ffffff"
+        property color scrimColor: "#80000000"
+        property color wlogoutBgColor: "#13141c"
+        property color wlogoutButtonColor: "#06060d"
+        property color wlogoutButtonHoverColor: "#181923"
+        property color wlogoutIconColor: "#D4BFF9"
+        property color wallpaperBgColor: "#ee11111b"
+        property color wallpaperCurrentColor: "#1e1e2e"
+        property color clockColor: "#c0caf5"
+    }
 
+    FileView {
+        id: themeFile
+        path: `${Directories.themesPath}/${Config.configData.theme ?? "catppuccin-mocha"}.json`
+        watchChanges: true
+        onFileChanged: this.reload()
+        onLoaded: {
+            try {
+                const data = JSON.parse(themeFile.text());
+                for (const key in data) {
+                    if (key in root.colors) {
+                        root.colors[key] = data[key];
+                    }
+                }
+                console.info("[Appearence] Theme file loaded");
+            } catch (e) {
+                console.error("[Appearence] Failed to parse theme:", e);
+            }
+        }
     }
 
     font: QtObject {
@@ -40,10 +68,10 @@ Singleton {
     }
 
     animationCurves: QtObject {
-        readonly property list<real> expressiveFastSpatial: [0.42, 1.67, 0.21, 0.90, 1, 1] 
-        readonly property list<real> expressiveDefaultSpatial: [0.38, 1.21, 0.22, 1.00, 1, 1] 
-        readonly property list<real> expressiveSlowSpatial: [0.39, 1.29, 0.35, 0.98, 1, 1] 
-        readonly property list<real> expressiveEffects: [0.34, 0.80, 0.34, 1.00, 1, 1] 
+        readonly property list<real> expressiveFastSpatial: [0.42, 1.67, 0.21, 0.90, 1, 1]
+        readonly property list<real> expressiveDefaultSpatial: [0.38, 1.21, 0.22, 1.00, 1, 1]
+        readonly property list<real> expressiveSlowSpatial: [0.39, 1.29, 0.35, 0.98, 1, 1]
+        readonly property list<real> expressiveEffects: [0.34, 0.80, 0.34, 1.00, 1, 1]
         readonly property list<real> emphasized: [0.05, 0, 2 / 15, 0.06, 1 / 6, 0.4, 5 / 24, 0.82, 0.25, 1, 1, 1]
         readonly property list<real> emphasizedFirstHalf: [0.05, 0, 2 / 15, 0.06, 1 / 6, 0.4, 5 / 24, 0.82]
         readonly property list<real> emphasizedLastHalf: [5 / 24, 0.82, 0.25, 1, 1, 1]
