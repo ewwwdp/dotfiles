@@ -21,8 +21,8 @@ Item {
     implicitHeight: 20
 
     Rectangle {
-        width: textItem.implicitWidth + horizontalPadding
-        height: textItem.implicitHeight + verticalPadding
+        width: textItem.implicitWidth + root.horizontalPadding
+        height: textItem.implicitHeight + root.verticalPadding
         color: mouseArea.containsMouse ? Appearence.colors.hoverColor : root.defaultColor
         radius: 10
         anchors.centerIn: parent
@@ -30,7 +30,7 @@ Item {
         StyledText {
             id: textItem
             anchors.centerIn: parent
-            font.family: useNerdFont ? Appearence.font.nerdFont : Appearence.font.readFont
+            font.family: root.useNerdFont ? Appearence.font.nerdFont : Appearence.font.readFont
             font.pixelSize: 13
             color: Appearence.colors.accentColor
             elide: Text.ElideRight

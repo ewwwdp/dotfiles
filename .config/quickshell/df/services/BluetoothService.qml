@@ -7,7 +7,6 @@ import Quickshell.Bluetooth
 
 Singleton {
     id: root
-    property int updateInterval: 5000
     property string connectedDevicesText
     property string materialSymbol: "󰂲"
     property bool hasDefaultAdapter: Bluetooth.defaultAdapter != null

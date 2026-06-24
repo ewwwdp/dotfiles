@@ -1,5 +1,6 @@
 import qs.modules.common
 import QtQuick
+import QtQuick.Effects
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Services.SystemTray
@@ -44,5 +45,11 @@ MouseArea {
         anchors.centerIn: parent
         width: parent.width
         height: parent.height
+        layer.enabled: true
+        layer.effect: MultiEffect {
+            saturation: -0.2
+            colorization: 1
+            colorizationColor: Appearence.colors.accentColor
+        }
     }
 }

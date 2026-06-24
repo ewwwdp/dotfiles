@@ -29,7 +29,7 @@ Item {
             root.updateWorkspaceOccupied();
         }
     }
-    
+
     Rectangle {
         z: -1
         anchors.left: parent.left
@@ -68,7 +68,7 @@ Item {
                 property bool isActive: workspaceId === (monitor?.activeWorkspace?.id ?? -1)
                 property bool isOccupied: root.workspaceOccupied[index]
 
-                width: workspaceButtonWidth + 18
+                width: root.workspaceButtonWidth + 18
                 height: 24
                 radius: width / (2 / 3)
                 color: (isActive || isHovered) ? Appearence.colors.hoverColor : "transparent"
@@ -78,17 +78,17 @@ Item {
                 MouseArea {
                     hoverEnabled: true
                     anchors.fill: parent
-                    onClicked: Hyprland.dispatch(`hl.dsp.focus({ workspace = ${workspaceId} })`)
+                    onClicked: Hyprland.dispatch(`hl.dsp.focus({ workspace = ${rect.workspaceId} })`)
 
                     onHoveredChanged: rect.isHovered = !rect.isHovered
                 }
 
                 Rectangle {
                     id: circle
-                    width: workspaceButtonWidth
-                    height: workspaceButtonWidth
+                    width: root.workspaceButtonWidth
+                    height: root.workspaceButtonWidth
                     anchors.centerIn: parent
-                    radius: workspaceButtonWidth / 2
+                    radius: root.workspaceButtonWidth / 2
                     border.color: {
                         if (rect.isActive || rect.isOccupied)
                             return Appearence.colors.accentColor;

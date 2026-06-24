@@ -12,7 +12,7 @@ Scope {
     LazyLoader {
         active: GlobalStates.launcherOpen
 
-        PanelWindow {
+        component: PanelWindow {
             id: launcherWindow
             color: "transparent"
             implicitWidth: content.width
@@ -34,7 +34,9 @@ Scope {
                     width: content.width
                     height: content.height
 
-                    LaunchContent { id: content }
+                    LaunchContent {
+                        id: content
+                    }
                 }
             }
         }
