@@ -14,55 +14,84 @@ Scope {
 
     property bool showPinnedOnly: false
 
+    property int _scanOffset: -1
+
+    function _ensureOffset(event) {
+            if (_scanOffset >= 0) return;
+            if (event.nativeScanCode <= 0) { _scanOffset = 0; return; }
+            var dist1 = Math.abs(event.nativeScanCode - 1);
+            var dist9 = Math.abs(event.nativeScanCode - 9);
+            var dist57 = Math.abs(event.nativeScanCode - 57);
+            var dist65 = Math.abs(event.nativeScanCode - 65);
+            if (dist1 <= dist9 && dist1 <= dist57 && dist1 <= dist65)
+                _scanOffset = 0;
+            else if (dist9 <= dist1 && dist9 <= dist57 && dist9 <= dist65)
+                _scanOffset = 8;
+            else if (dist57 <= dist1 && dist57 <= dist9 && dist57 <= dist65)
+                _scanOffset = 0;
+            else
+                _scanOffset = 8;
+        }
+
+    function _nativeScanCode(name) {
+            const evdevCodes = {
+                "Escape": 1, "Tab": 15, "Backspace": 14, "Return": 28, "Enter": 28,
+                "Delete": 111, "Insert": 110, "Home": 102, "End": 107,
+                "PageUp": 104, "PageDown": 109, "Up": 103, "Down": 108,
+                "Left": 105, "Right": 106, "CapsLock": 58, "NumLock": 69,
+                "ScrollLock": 70, "Print": 99, "Pause": 119, "Menu": 127,
+                "Space": 57, "Period": 52, "Comma": 51, "Slash": 53,
+                "Backslash": 43, "Semicolon": 39, "Apostrophe": 40,
+                "Minus": 12, "Equal": 13, "BracketLeft": 26, "BracketRight": 27,
+                "QuoteLeft": 41, "A": 30, "B": 48, "C": 46, "D": 32, "E": 18,
+                "F": 33, "G": 34, "H": 35, "I": 23, "J": 36, "K": 37, "L": 38,
+                "M": 50, "N": 49, "O": 24, "P": 25, "Q": 16, "R": 19, "S": 31,
+                "T": 20, "U": 22, "V": 47, "W": 17, "X": 45, "Y": 21, "Z": 44
+            };
+            for (let i = 1; i <= 35; i++)
+                evdevCodes["F" + i] = 58 + i;
+            var code = evdevCodes[name] ?? 0;
+            return code === 0 ? 0 : code + _scanOffset;
+        }
+
+    function _matchKey(event, keyName) {
+        const named = {
+            "Escape": Qt.Key_Escape, "Tab": Qt.Key_Tab, "Backspace": Qt.Key_Backspace,
+            "Return": Qt.Key_Return, "Enter": Qt.Key_Enter, "Delete": Qt.Key_Delete,
+            "Space": Qt.Key_Space, "Insert": Qt.Key_Insert, "Home": Qt.Key_Home,
+            "End": Qt.Key_End, "PageUp": Qt.Key_PageUp, "PageDown": Qt.Key_PageDown,
+            "Up": Qt.Key_Up, "Down": Qt.Key_Down, "Left": Qt.Key_Left,
+            "Right": Qt.Key_Right, "CapsLock": Qt.Key_CapsLock, "NumLock": Qt.Key_NumLock,
+            "ScrollLock": Qt.Key_ScrollLock, "Print": Qt.Key_Print, "Pause": Qt.Key_Pause,
+            "Menu": Qt.Key_Menu, "Period": Qt.Key_Period, "Comma": Qt.Key_Comma,
+            "Slash": Qt.Key_Slash, "Backslash": Qt.Key_Backslash,
+            "Semicolon": Qt.Key_Semicolon, "Apostrophe": Qt.Key_Apostrophe,
+            "Minus": Qt.Key_Minus, "Equal": Qt.Key_Equal,
+            "BracketLeft": Qt.Key_BracketLeft, "BracketRight": Qt.Key_BracketRight,
+            "QuoteLeft": Qt.Key_QuoteLeft
+        };
+        for (let i = 1; i <= 35; i++)
+            named["F" + i] = Qt["Key_F" + i];
+        const logicalKey = named[keyName] ?? (keyName && keyName.length === 1 ? keyName.toUpperCase().charCodeAt(0) : 0);
+        root._ensureOffset(event);
+        const scanCode = _nativeScanCode(keyName);
+        return event.key === logicalKey || (scanCode !== 0 && event.nativeScanCode === scanCode);
+    }
+
     readonly property var _kb: (() => {
-            function key(name) {
-                const named = {
-                    "Escape": Qt.Key_Escape,
-                    "Tab": Qt.Key_Tab,
-                    "Backspace": Qt.Key_Backspace,
-                    "Return": Qt.Key_Return,
-                    "Enter": Qt.Key_Enter,
-                    "Delete": Qt.Key_Delete,
-                    "Space": Qt.Key_Space,
-                    "Insert": Qt.Key_Insert,
-                    "Home": Qt.Key_Home,
-                    "End": Qt.Key_End,
-                    "PageUp": Qt.Key_PageUp,
-                    "PageDown": Qt.Key_PageDown,
-                    "Up": Qt.Key_Up,
-                    "Down": Qt.Key_Down,
-                    "Left": Qt.Key_Left,
-                    "Right": Qt.Key_Right,
-                    "CapsLock": Qt.Key_CapsLock,
-                    "NumLock": Qt.Key_NumLock,
-                    "ScrollLock": Qt.Key_ScrollLock,
-                    "Print": Qt.Key_Print,
-                    "Pause": Qt.Key_Pause,
-                    "Menu": Qt.Key_Menu,
-                    "Period": Qt.Key_Period,
-                    "Comma": Qt.Key_Comma,
-                    "Slash": Qt.Key_Slash,
-                    "Backslash": Qt.Key_Backslash,
-                    "Semicolon": Qt.Key_Semicolon,
-                    "Apostrophe": Qt.Key_Apostrophe,
-                    "Minus": Qt.Key_Minus,
-                    "Equal": Qt.Key_Equal,
-                    "BracketLeft": Qt.Key_BracketLeft,
-                    "BracketRight": Qt.Key_BracketRight,
-                    "QuoteLeft": Qt.Key_QuoteLeft
-                };
-                for (let i = 1; i <= 35; i++)
-                    named["F" + i] = Qt["Key_F" + i];
-                return named[name] ?? (name && name.length === 1 ? name.toUpperCase().charCodeAt(0) : 0);
-            }
             const C = Config.configData.clipboard ?? {};
             const def = ["Delete", "Backspace", "X"];
+            const deleteKeyNames = C.deleteKeys ?? def;
+            const pinName = C.pinKey || "Space";
+            const toggleName = C.togglePinnedKey || "P";
+            const copyName = C.copyKey || "Return";
+            const closeName = C.closeKey || "Escape";
             return {
-                deleteKeys: (C.deleteKeys ?? def).map(n => key(n)).filter(k => k),
-                pinKey: key(C.pinKey) || Qt.Key_Space,
-                toggleKey: key(C.togglePinnedKey) || Qt.Key_P,
-                copyKey: key(C.copyKey) || Qt.Key_Return,
-                closeKey: key(C.closeKey) || Qt.Key_Escape
+                deleteKeyNames: deleteKeyNames,
+                pinName: pinName,
+                toggleName: toggleName,
+                copyName: copyName,
+                closeName: closeName
             };
         })()
 
@@ -235,6 +264,7 @@ Scope {
                                     clip: true
                                     focus: true
                                     model: visualModel
+                                    Component.onCompleted: forceActiveFocus()
 
                                     topMargin: 4
                                     bottomMargin: clipboardList.count === 0 ? 0 : 4
@@ -290,24 +320,23 @@ Scope {
                                     }
 
                                     Keys.onPressed: function (event) {
-                                        const k = event.key;
-                                        if (k === root._kb.closeKey) {
+                                        if (root._matchKey(event, root._kb.closeName)) {
                                             GlobalStates.clipboardOpen = false;
-                                        } else if (root._kb.deleteKeys.indexOf(k) >= 0) {
+                                        } else if (root._kb.deleteKeyNames.some(n => root._matchKey(event, n))) {
                                             var item = clipboardList.itemAtIndex(clipboardList.currentIndex);
                                             if (item && !Clipboard.isPinned(item.model.id)) {
                                                 Clipboard.deleteEntry(item.model.id);
                                             }
-                                        } else if (k === root._kb.pinKey) {
+                                        } else if (root._matchKey(event, root._kb.pinName)) {
                                             var item = clipboardList.itemAtIndex(clipboardList.currentIndex);
                                             if (item) {
                                                 root.togglePin(item.model.id, item.model.content);
                                             }
-                                        } else if (k === root._kb.toggleKey) {
+                                        } else if (root._matchKey(event, root._kb.toggleName)) {
                                             root.showPinnedOnly = !root.showPinnedOnly;
                                             visualModel.applyFilter();
                                             clipboardList.currentIndex = 0;
-                                        } else if (k === root._kb.copyKey) {
+                                        } else if (root._matchKey(event, root._kb.copyName)) {
                                             var item = clipboardList.itemAtIndex(clipboardList.currentIndex);
                                             if (item) {
                                                 Clipboard.copyToClipboard(item.model.id);
